@@ -23,6 +23,12 @@
             "src": "icons/agrargo_logo.svg",
             "sizes": "88x74",
             "type": "image/svg"
+        },
+        {
+            "src": "icons/agrargo_logo_large.png",
+            "sizes": "1,500x1,261",
+            "type": "image/png"
         }
+
     ]
 }
