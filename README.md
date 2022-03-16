@@ -25,3 +25,10 @@ Um Codeänderungen im master-Branch zu Veröffentlichen:
 1. Commit & Push Änderungen zu github
 2. run "flutter build web" in Android Studio Terminal
 3. run "firebase deploy" in Android Studio Terminal
+
+TODO für Christina & Verena
+Automatischer Code Formatter
+https://stackoverflow.com/questions/27092772/auto-code-formatting-in-android-studio
+
+Aktiviere: File --> Settings --> Language & Frameworks --> Flutter --> 'Format code on save'.
+
