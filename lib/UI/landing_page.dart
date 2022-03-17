@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+const API_KEY = 'b85b91c2ff683c37dcd4ac22dfbf632b';
 
 class LandingPage extends StatefulWidget {
   final String title;
@@ -9,7 +12,18 @@ class LandingPage extends StatefulWidget {
   _LandingPageState createState() => _LandingPageState();
 }
 
+Future<String> getWeatherData() async {
+  final response = await http.get(
+    Uri.parse(
+        'https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=$API_KEY'),
+  );
+  print(response.body);
+  return response.body;
+}
+
 class _LandingPageState extends State<LandingPage> {
+  String response = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,11 +104,17 @@ class _LandingPageState extends State<LandingPage> {
                     ],
                   ),
                 ),
+                Container(child: Text(response)),
                 Container(
                   margin: EdgeInsets.only(top: 0),
                   child: ElevatedButton(
                     child: Text("Find your Jobs!"),
-                    onPressed: () {},
+                    onPressed: () async {
+                      var data = await getWeatherData();
+                      setState(() {
+                        response = data;
+                      });
+                    },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.lightGreen,
                     ),
