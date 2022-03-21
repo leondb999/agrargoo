@@ -91,7 +91,7 @@ class _LandingPageState extends State<LandingPage> {
                             Expanded(
                               child: Center(
                                 child: Text(
-                                  "3. Durchstarten lol",
+                                  "3. Durchstarten lol2",
                                   style: TextStyle(
                                       fontSize: 25.0,
                                       fontWeight: FontWeight.bold),
