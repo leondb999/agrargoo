@@ -85,7 +85,7 @@ class Authentication {
     return user;
   }
 
-  ///Sign Out
+  ///Sign Outasd
   static Future<void> signOut({required BuildContext context}) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
