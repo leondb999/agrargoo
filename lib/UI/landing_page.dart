@@ -1,8 +1,12 @@
+import 'dart:html';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:agrargo/services/api_helpers.dart';
 
-const API_KEY = 'b85b91c2ff683c37dcd4ac22dfbf632b';
+const API_KEY = 'sk_sand-79116408b11c4d3e8ca691a8d1935ee0';
 
 class LandingPage extends StatefulWidget {
   final String title;
@@ -10,15 +14,6 @@ class LandingPage extends StatefulWidget {
 
   @override
   _LandingPageState createState() => _LandingPageState();
-}
-
-Future<String> getWeatherData() async {
-  final response = await http.get(
-    Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=$API_KEY'),
-  );
-  print(response.body);
-  return response.body;
 }
 
 class _LandingPageState extends State<LandingPage> {
@@ -76,7 +71,7 @@ class _LandingPageState extends State<LandingPage> {
                                 style: TextStyle(
                                     fontSize: 25.0,
                                     fontWeight: FontWeight.bold),
-                              )),
+                              ),),
                             ),
                             Expanded(
                               child: Center(
@@ -106,11 +101,23 @@ class _LandingPageState extends State<LandingPage> {
                 ),
                 Container(child: Text(response)),
                 Container(
+                  child: Query(
+                    options: QueryOptions(
+                      document: gql(readCounters),
+                      variables: {
+                        "counterId": 23,
+                      },
+                    ),
+                    builder: (QueryResult result, {VoidCallback),
+                  ),
+                ),
+                Container(
                   margin: EdgeInsets.only(top: 0),
                   child: ElevatedButton(
                     child: Text("Find your Jobs!"),
                     onPressed: () async {
-                      var data = await getWeatherData();
+                      //  var data = await getWeatherData();
+                      var data = await getRandevuUser();
                       setState(() {
                         response = data;
                       });
