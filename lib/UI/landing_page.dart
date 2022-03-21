@@ -29,7 +29,7 @@ class _LandingPageState extends State<LandingPage> {
                   height: 100,
                   child: Center(
                       child: Text(
-                    "Unsere Visionn",
+                    "Unsere Visionn Hallo Christina",
                     style: TextStyle(fontSize: 25.0),
                   )),
                 ),
