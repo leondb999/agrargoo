@@ -2,7 +2,7 @@ import 'dart:html';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:agrargo/services/api_helpers.dart';
 
@@ -66,12 +66,13 @@ class _LandingPageState extends State<LandingPage> {
                           children: [
                             Expanded(
                               child: Center(
-                                  child: Text(
-                                "1. Deine Wünsche",
-                                style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.bold),
-                              ),),
+                                child: Text(
+                                  "1. Deine Wünsche",
+                                  style: TextStyle(
+                                      fontSize: 25.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
                             ),
                             Expanded(
                               child: Center(
@@ -100,17 +101,6 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                 ),
                 Container(child: Text(response)),
-                Container(
-                  child: Query(
-                    options: QueryOptions(
-                      document: gql(readCounters),
-                      variables: {
-                        "counterId": 23,
-                      },
-                    ),
-                    builder: (QueryResult result, {VoidCallback),
-                  ),
-                ),
                 Container(
                   margin: EdgeInsets.only(top: 0),
                   child: ElevatedButton(
