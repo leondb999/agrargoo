@@ -33,7 +33,7 @@ class _LandingPageState extends State<LandingPage> {
       ),
       body: SafeArea(
         child: Container(
-          color: Colors.green[100],
+          color: Colors.green[50],
           child: Center(
             child: Column(
               //crossAxisAlignment: CrossAxisAlignment.stretch,
