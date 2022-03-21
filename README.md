@@ -1,19 +1,5 @@
 # agrargo
-
-A new Flutter application.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Flutter App Project der Gruppe Agrargo |WWI19SCA DHBW Mannheim
 
 
 ## Deployment
@@ -26,6 +12,10 @@ Um Codeänderungen im master-Branch zu Veröffentlichen:
 2. run "flutter build web" in Android Studio Terminal
 3. run "firebase deploy" in Android Studio Terminal
 
+Firebase SetUp:
+https://stackoverflow.com/questions/23645220/firebase-tools-bash-firebase-command-not-found
+
+
 TODO für Christina & Verena
 Automatischer Code Formatter
 https://stackoverflow.com/questions/27092772/auto-code-formatting-in-android-studio
@@ -34,6 +24,9 @@ Aktiviere: File --> Settings --> Language & Frameworks --> Flutter --> 'Format c
 
 
 #How to merge
-1. master branch updaten (pull auf master ausführen) --> master aktuell
-2. lokalen Branch (z.B. dev_ch) in master mergen --> master hat neue features
-3. master commit & push
+1. Änderung auf lokalen Branch (z.B.dev_ch)
+2. Commit & push lokale Änderung auf dev_ch
+3. checkout master-Branch
+4. push master-Branch
+5. run flutter build web in Terminal auf dem master-Branch
+6. run firebase deploy in Terminal auf dem master-Branch
