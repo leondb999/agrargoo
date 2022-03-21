@@ -1,7 +1,16 @@
+import 'package:agrargo/UI/login_page.dart';
 import 'package:flutter/material.dart';
+import 'UI/intro_screen.dart';
 import 'UI/landing_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
@@ -14,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LandingPage(title: 'Agrargo'),
+      home: LoginPage(),
     );
   }
 }

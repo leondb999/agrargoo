@@ -30,3 +30,15 @@ Aktiviere: File --> Settings --> Language & Frameworks --> Flutter --> 'Format c
 4. push master-Branch
 5. run flutter build web in Terminal auf dem master-Branch
 6. run firebase deploy in Terminal auf dem master-Branch
+
+
+#install firebase_cli configuration
+https://firebase.flutter.dev/docs/cli/#installation
+
+
+#Google Signin
+ihre Client-ID: 900179231722-jera6234lno2o19akguq9vbrv6do3f01.apps.googleusercontent.com
+Ihr Clientschlüssel: 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
+https://developers.google.com/identity/sign-in/web/sign-in#before_you_begin
+
+Öffentlicher Name des Projektes: project-277800976688
