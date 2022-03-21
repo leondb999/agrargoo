@@ -32,3 +32,8 @@ https://stackoverflow.com/questions/27092772/auto-code-formatting-in-android-stu
 
 Aktiviere: File --> Settings --> Language & Frameworks --> Flutter --> 'Format code on save'.
 
+
+#How to merge
+1. master branch updaten (pull auf master ausführen) --> master aktuell
+2. lokalen Branch (z.B. dev_ch) in master mergen --> master hat neue features
+3. master commit & push

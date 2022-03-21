@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:http/http.dart' as http;
 
 const API_KEY = 'b85b91c2ff683c37dcd4ac22dfbf632b';
