@@ -27,7 +27,7 @@ class MyApp extends ConsumerWidget {
     //  As said this gives async value so it can gives 3 types of results
     //  1. The result is a Future<FirebaseApp>
     //  2. The result is a Future<Error>
-    //  3. It's still loading
+    //  3. It's still loading123
 
     final initialize = ref.watch(firebaseinitializerProvider);
     return MaterialApp(
