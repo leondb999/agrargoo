@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../UI/error_screen.dart';
+import '../UI/login/login_page.dart';
 import '../UI/pages/1_landing_page.dart';
 import '../UI/loading_screen.dart';
-import '../UI/login/login_page.dart';
+import '../UI/login/login_page2.dart';
 import '../providers/auth_providers.dart';
 
 class AuthChecker extends ConsumerWidget {
@@ -31,7 +32,7 @@ class AuthChecker extends ConsumerWidget {
             return ProfilePage(user: _user.value);
           }
           print("User Logged Out!");
-          return LoginPage();
+          return LoginPage(); //LoginPage2();
         },
         loading: () => const LoadingScreen(),
         error: (e, trace) => ErrorScreen(e, trace));

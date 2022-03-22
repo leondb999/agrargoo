@@ -47,9 +47,10 @@ class Authentication {
 
   // SignUp the user using Email and Password
   Future<void> signUpWithEmailAndPassword(
-      String email, String password, BuildContext context) async {
+      String email, String password,String name, BuildContext context) async {
     try {
       _auth.createUserWithEmailAndPassword(
+        name: name;
         email: email,
         password: password,
       );

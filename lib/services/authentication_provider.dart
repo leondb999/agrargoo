@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:agrargo/UI/login/login_page.dart';
+import 'package:agrargo/UI/login/login_page2.dart';
 import 'package:agrargo/UI/login/profile_page.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';

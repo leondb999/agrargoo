@@ -1,7 +1,7 @@
 import 'package:agrargo/UI/pages/1_landing_page.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:agrargo/zwischenspeicher/login_page_zw.dart';
-import 'package:agrargo/UI/login/login_page.dart';
+import 'package:agrargo/UI/login/login_page2.dart';
 import 'package:agrargo/services/fire_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -120,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       });
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(),
+                          builder: (context) => LoginPage2(),
                         ),
                       );
                     },
