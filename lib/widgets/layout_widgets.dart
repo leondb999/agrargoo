@@ -1,4 +1,4 @@
-import 'package:agrargo/UI/landing_page.dart';
+import 'package:agrargo/UI/pages/1_landing_page.dart';
 import 'package:agrargo/UI/login/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,5 +25,14 @@ BottomNavigationBar navigationBar(int index, BuildContext context, User user) {
         );
       }
     },
+  );
+}
+
+AppBar appBar() {
+  return AppBar(
+    backgroundColor: Colors.green,
+    title: Center(
+      child: Text('AgrarGo'),
+    ),
   );
 }

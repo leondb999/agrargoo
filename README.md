@@ -45,3 +45,6 @@ https://developers.google.com/identity/sign-in/web/sign-in#before_you_begin
 
 #FirebaseSignin (Dokumentation nach der ich den Login/Register Prozess )
 https://github.com/sbis04/flutter-authentication/blob/master/lib/utils/fire_auth.dart
+
+#Authentication with Riverpods & Firebase
+https://github.com/2002Bishwajeet/authentication_riverpod

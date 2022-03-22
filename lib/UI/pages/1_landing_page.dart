@@ -1,17 +1,17 @@
 import 'package:agrargo/UI/error_screen.dart';
 import 'package:agrargo/UI/login/login_page.dart';
-import 'package:agrargo/widgets/navigation_bar_widget.dart';
+import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../providers/auth_providers.dart';
-import 'loading_screen.dart';
+import '../../providers/auth_providers.dart';
+import '../loading_screen.dart';
 
 const API_KEY = 'sk_sand-79116408b11c4d3e8ca691a8d1935ee0';
-final int _selectedIndex = 0;
+final int NAV_INDEX = 0;
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -33,11 +33,11 @@ class _LandingPageState extends State<LandingPage> {
     return Consumer(builder: (context, ref, child) {
       final AsyncValue<User?> _user = ref.watch(authStateProvider);
       return Scaffold(
+        appBar: appBar(),
         body: SafeArea(
           child: Text("User name: ${_user.value!.displayName}"),
         ),
-        bottomNavigationBar:
-            navigationBar(_selectedIndex, context, _user.value!),
+        bottomNavigationBar: navigationBar(NAV_INDEX, context, _user.value!),
       );
     });
   }

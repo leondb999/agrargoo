@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../services/fire_auth.dart';
 import '../../services/validator.dart';
+import '../../widgets/layout_widgets.dart';
 
 ///Documentation for loginpage https://github.com/sbis04/flutter-authentication/blob/master/lib/utils/fire_auth.dart
 
@@ -39,7 +40,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
     }
-
     return firebaseApp;
   }
 
@@ -51,9 +51,7 @@ class _LoginPageState extends State<LoginPage> {
         _focusPassword.unfocus();
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Firebase Authentication'),
-        ),
+        appBar: appBar(),
         body: FutureBuilder(
           future: _initializeFirebase(),
           builder: (context, snapshot) {
@@ -117,6 +115,9 @@ class _LoginPageState extends State<LoginPage> {
                                   children: [
                                     Expanded(
                                       child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.green,
+                                        ),
                                         onPressed: () async {
                                           _focusEmail.unfocus();
                                           _focusPassword.unfocus();
@@ -159,6 +160,9 @@ class _LoginPageState extends State<LoginPage> {
                                     SizedBox(width: 24.0),
                                     Expanded(
                                       child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.green,
+                                        ),
                                         onPressed: () {
                                           Navigator.of(context).push(
                                             MaterialPageRoute(

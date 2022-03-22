@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../UI/error_screen.dart';
-import '../UI/landing_page.dart';
+import '../UI/pages/1_landing_page.dart';
 import '../UI/loading_screen.dart';
 import '../UI/login/login_page.dart';
 import '../providers/auth_providers.dart';
@@ -23,13 +23,12 @@ class AuthChecker extends ConsumerWidget {
 
     //  now the following variable contains an asyncValue so now we can use .when method
     //  to imply the condition
-    final AsyncValue<User?> _authState = ref.watch(authStateProvider);
-    return _authState.when(
+    final AsyncValue<User?> _user = ref.watch(authStateProvider);
+    return _user.when(
         data: (data) {
           if (data != null) {
-            print(
-                "User Logged In | User Name: ${_authState.value!.displayName}");
-            return ProfilePage(user: _authState.value);
+            print("User Logged In | User Name: ${_user.value!.displayName}");
+            return ProfilePage(user: _user.value);
           }
           print("User Logged Out!");
           return LoginPage();

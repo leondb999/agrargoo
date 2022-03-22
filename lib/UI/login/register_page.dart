@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../widgets/layout_widgets.dart';
+
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -33,9 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
         _focusPassword.unfocus();
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Register'),
-        ),
+        appBar: appBar(),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Center(
@@ -104,6 +104,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               children: [
                                 Expanded(
                                   child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.green,
+                                    ),
                                     onPressed: () async {
                                       setState(() {
                                         _isProcessing = true;
