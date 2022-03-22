@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 final int _selectedIndex = 1;
 
 class ProfilePage extends StatefulWidget {
-  final User user;
+  final User? user;
 
   ProfilePage({required this.user});
 
@@ -26,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    _currentUser = widget.user;
+    _currentUser = widget.user!;
     super.initState();
   }
 

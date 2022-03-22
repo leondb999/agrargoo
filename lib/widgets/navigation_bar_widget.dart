@@ -18,7 +18,7 @@ BottomNavigationBar navigationBar(int index, BuildContext context, User user) {
           MaterialPageRoute(builder: (context) => const LandingPage()),
         );
       }
-      if (index == 2) {
+      if (index == 1) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ProfilePage(user: user)),

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'UI/error_screen.dart';
 import 'UI/loading_screen.dart';
+import 'firebase_options.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +14,9 @@ void main() {
 
 //  This is a FutureProvider that will be used to check whether the firebase has been initialized or not
 final firebaseinitializerProvider = FutureProvider<FirebaseApp>((ref) async {
-  return await Firebase.initializeApp();
+  return await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 });
 
 class MyApp extends ConsumerWidget {

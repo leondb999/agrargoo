@@ -1,16 +1,14 @@
-import 'dart:html';
-
+import 'package:agrargo/UI/error_screen.dart';
 import 'package:agrargo/UI/login/login_page.dart';
-import 'package:agrargo/UI/login/profile_page.dart';
 import 'package:agrargo/widgets/navigation_bar_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod/riverpod.dart';
 
-import 'package:http/http.dart' as http;
-import 'package:agrargo/services/api_helpers.dart';
-import 'package:provider/provider.dart';
+import '../providers/auth_providers.dart';
+import 'loading_screen.dart';
 
 const API_KEY = 'sk_sand-79116408b11c4d3e8ca691a8d1935ee0';
 final int _selectedIndex = 0;
@@ -32,19 +30,19 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final firebaseAuth = Provider.of<FirebaseAuth>(context);
-    return StreamBuilder<User>(builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.active) {
-        return snapshot.hasData ? LandingPage() : LoginPage();
-      }
+    return Consumer(builder: (context, ref, child) {
+      final AsyncValue<User?> _user = ref.watch(authStateProvider);
       return Scaffold(
-        body: Center(
-          child: Text("Heasdllo"), //CircularProgressIndicator(),
+        body: SafeArea(
+          child: Text("User name: ${_user.value!.displayName}"),
         ),
+        bottomNavigationBar:
+            navigationBar(_selectedIndex, context, _user.value!),
       );
     });
   }
 }
+
 /*
 
  return Scaffold(
