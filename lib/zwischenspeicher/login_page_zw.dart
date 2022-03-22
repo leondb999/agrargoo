@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPage_zw extends StatefulWidget {
+  const LoginPage_zw({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginPage_zwState createState() => _LoginPage_zwState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPage_zwState extends State<LoginPage_zw> {
   late bool _passwordVisible;
   late String email;
   late String password;

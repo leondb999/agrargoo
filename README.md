@@ -42,3 +42,6 @@ Ihr Clientschlüssel: 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
 https://developers.google.com/identity/sign-in/web/sign-in#before_you_begin
 
 Öffentlicher Name des Projektes: project-277800976688
+
+#FirebaseSignin (Dokumentation nach der ich den Login/Register Prozess )
+https://github.com/sbis04/flutter-authentication/blob/master/lib/utils/fire_auth.dart

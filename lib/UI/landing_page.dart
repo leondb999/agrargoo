@@ -1,16 +1,22 @@
 import 'dart:html';
 
+import 'package:agrargo/UI/login/login_page.dart';
+import 'package:agrargo/UI/login/profile_page.dart';
+import 'package:agrargo/widgets/navigation_bar_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:agrargo/services/api_helpers.dart';
+import 'package:provider/provider.dart';
 
 const API_KEY = 'sk_sand-79116408b11c4d3e8ca691a8d1935ee0';
+final int _selectedIndex = 0;
 
 class LandingPage extends StatefulWidget {
-  final String title;
-  const LandingPage({Key? key, required this.title}) : super(key: key);
+  const LandingPage({Key? key}) : super(key: key);
 
   @override
   _LandingPageState createState() => _LandingPageState();
@@ -18,12 +24,32 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   String response = "";
+  late User _currentUser;
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final firebaseAuth = Provider.of<FirebaseAuth>(context);
+    return StreamBuilder<User>(builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.active) {
+        return snapshot.hasData ? LandingPage() : LoginPage();
+      }
+      return Scaffold(
+        body: Center(
+          child: Text("Hello"), //CircularProgressIndicator(),
+        ),
+      );
+    });
+  }
+}
+/*
+
+ return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text(widget.title)),
+        title: Center(child: Text("Landing Page")),
         backgroundColor: Colors.green,
       ),
       body: SafeArea(
@@ -124,6 +150,6 @@ class _LandingPageState extends State<LandingPage> {
           ),
         ),
       ),
+      bottomNavigationBar: navigationBar(_selectedIndex, context, _currentUser),
     );
-  }
-}
+ */
