@@ -114,4 +114,8 @@ class Authentication {
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
+  Future<void> refreshUser() async {
+    await _auth.currentUser!.reload();
+  }
 }

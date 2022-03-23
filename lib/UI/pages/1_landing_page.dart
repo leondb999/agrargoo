@@ -1,5 +1,4 @@
 import 'package:agrargo/UI/error_screen.dart';
-import 'package:agrargo/UI/login/login_page2.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,16 +12,19 @@ import '../loading_screen.dart';
 const API_KEY = 'sk_sand-79116408b11c4d3e8ca691a8d1935ee0';
 final int NAV_INDEX = 0;
 
-class LandingPage extends StatefulWidget {
+class LandingPage extends ConsumerStatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
 
   @override
   _LandingPageState createState() => _LandingPageState();
 }
 
-class _LandingPageState extends State<LandingPage> {
-  String response = "";
-  late User _currentUser;
+class _LandingPageState extends ConsumerState<LandingPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? user;
+  bool isSignedIn = false;
+  String userData = "";
+
   @override
   void initState() {
     super.initState();
@@ -30,14 +32,57 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    User? _user = ref.watch(fireBaseAuthProvider).currentUser;
+    final _auth = ref.watch(authenticationProvider).authStateChange;
+    _auth.listen((User? user) {
+      if (this.user != null) {
+        print("this.user != null: ${user!.email}");
+        setState(() {
+          this.user = user;
+          this.isSignedIn = true;
+        });
+      }
+    });
+
     return Consumer(builder: (context, ref, child) {
-      final AsyncValue<User?> _user = ref.watch(authStateProvider);
+      print("context: $context");
+      print("ref: $ref");
+      print("ref: $child");
+
       return Scaffold(
         appBar: appBar(),
         body: SafeArea(
-          child: Text("User name: ${_user.value!.displayName}"),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Landing Page", style: TextStyle(fontSize: 30)),
+                SizedBox(height: 50.0),
+                _user != null
+                    ? Text("User name: ${_user.email}")
+                    : Text("User null"),
+                isSignedIn ? Text("SignedIn") : Text("Signed Out"),
+                ElevatedButton(
+                  child: Text("Check Login Status"),
+                  onPressed: () {
+                    print("User: $_user");
+                    setState(() {
+                      if (_user != null) {
+                        userData = _user.toString();
+                      } else {
+                        userData = "null";
+                      }
+
+                      //  userData = _user!.refreshToken.toString();
+                    });
+                  },
+                ),
+                Text("Userdata: $userData"),
+              ],
+            ),
+          ),
         ),
-        bottomNavigationBar: navigationBar(NAV_INDEX, context, _user.value!),
+        bottomNavigationBar: navigationBar(NAV_INDEX, context, _user),
       );
     });
   }

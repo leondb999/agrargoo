@@ -2,8 +2,6 @@ import 'package:agrargo/UI/login/login_page.dart';
 import 'package:agrargo/UI/pages/1_landing_page.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:agrargo/zwischenspeicher/login_page_zw.dart';
-import 'package:agrargo/UI/login/login_page2.dart';
-import 'package:agrargo/services/fire_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -106,14 +104,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                 IconButton(
                                   icon: Icon(Icons.refresh),
                                   onPressed: () async {
-                                    User? user = await FireAuth.refreshUser(
+                                    /*
+                                    User? user = await _auth.refreshUser(
                                         _currentUser);
+
 
                                     if (user != null) {
                                       setState(() {
                                         _currentUser = user;
-                                      });
+                                      }
+                                      );
+
                                     }
+                                    */
                                   },
                                 ),
                               ],
@@ -154,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
 
       ///Widget für Navigationbar
-      bottomNavigationBar: navigationBar(_selectedIndex, context, _currentUser),
+      //bottomNavigationBar: navigationBar(_selectedIndex, context, _currentUser),
     );
   }
 }
