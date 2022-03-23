@@ -36,7 +36,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     final _auth = ref.watch(authenticationProvider).authStateChange;
     _auth.listen((User? user) {
       if (this.user != null) {
-        print("this.user != null: ${user!.email}");
+        print("this.user != nulll: ${user!.email}");
         setState(() {
           this.user = user;
           this.isSignedIn = true;
