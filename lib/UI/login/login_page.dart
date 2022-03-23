@@ -45,7 +45,6 @@ class _LoginPageState extends State<LoginPage> {
   //  but again I am not using it here
   final _email = TextEditingController();
   final _password = TextEditingController();
-  final _name = TextEditingController();
 
   //  A loading variable to show the loading animation when you a function is ongoing
   bool _isLoading = false;
@@ -80,302 +79,252 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Consumer(
-          builder: (context, ref, _) {
-            //  Consuming a provider using watch method and storing it in a variable
-            //  Now we will use this variable to access all the functions of the authentication
-            final _auth = ref.watch(authenticationProvider);
+        child: Consumer(builder: (context, ref, _) {
+          //  Consuming a provider using watch method and storing it in a variable
+          //  Now we will use this variable to access all the functions of the
+          //  authentication
+          final _auth = ref.watch(authenticationProvider);
 
-            //  Instead of creating a clutter on the onPressed Function
-            //  I have decided to create a seperate function and pass them into the
-            //  respective parameters.
-            //  if you want you can write the exact code in the onPressed function
-            //  it all depends on personal preference and code readability
-            Future<void> _onPressedFunction() async {
-              if (!_formKey.currentState!.validate()) {
-                return;
-              }
-              print(_email.text);
-              print(_password.text);
-
-              if (type == Status.login) {
-                loading();
-                await _auth
-                    .signInWithEmailAndPassword(
-                        _email.text, _password.text, context)
-                    .whenComplete(
-                        () => _auth.authStateChange.listen((event) async {
-                              print("User logs in...");
-                              if (event == null) {
-                                loading();
-                                return;
-                              }
-                            }));
-              } else {
-                loading();
-                await _auth
-                    .signUpWithEmailAndPassword(
-                      _email.text,
-                      _password.text,
-                      context,
-                    )
-                    .whenComplete(
-                      () => _auth.authStateChange.listen(
-                        (event) async {
-                          print("User registers...");
-                          if (event == null) {
-                            loading();
-                            return;
-                          }
-                        },
-                      ),
-                    );
-              }
-
-              //  I had said that we would be using a Loading spinner when
-              //  some functions are being performed. we need to check if some
-              //  error occured then we need to stop loading spinner so we can retry Authenticating
+          //  Instead of creating a clutter on the onPressed Function
+          //  I have decided to create a seperate function and pass them into the
+          //  respective parameters.
+          //  if you want you can write the exact code in the onPressed function
+          //  it all depends on personal preference and code readability
+          Future<void> _onPressedFunction() async {
+            if (!_formKey.currentState!.validate()) {
+              return;
+            }
+            // print(_email.text); // This are your best friend for debugging things
+            //  not to mention the debugging tools
+            // print(_password.text);
+            if (type == Status.login) {
+              loading();
+              await _auth
+                  .signInWithEmailAndPassword(
+                      _email.text, _password.text, context)
+                  .whenComplete(
+                      () => _auth.authStateChange.listen((event) async {
+                            if (event == null) {
+                              loading();
+                              return;
+                            }
+                          }));
+            } else {
+              loading();
+              await _auth
+                  .signUpWithEmailAndPassword(
+                      _email.text, _password.text, context)
+                  .whenComplete(
+                      () => _auth.authStateChange.listen((event) async {
+                            if (event == null) {
+                              loading();
+                              return;
+                            }
+                          }));
             }
 
-            return Scaffold(
-              body: SafeArea(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      ///TextFields email, password
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 48),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ///AgrarGo Logo
-                              Center(
-                                child: Image.asset(
-                                  'images/agrargo_logo_large.png',
-                                  height: 150,
-                                  width: 150,
-                                ),
-                              ),
-                              const Spacer(flex: 1),
+            //  I had said that we would be using a Loading spinner when
+            //  some functions are being performed. we need to check if some
+            //  error occured then we need to stop loading spinner so we can retry
+            //  Authenticating
+          }
 
-                              ///SignUp (Name Field)
-                              if (type == Status.signUp)
-                                AnimatedContainer(
-                                  duration: const Duration(milliseconds: 600),
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 8),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 4),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(25)),
-                                  child: TextFormField(
-                                    controller: _name,
-                                    decoration: InputDecoration(
-                                      hintText: 'Type your Name',
-                                      hintStyle: const TextStyle(
-                                          color: Colors.black54),
-                                      icon: Icon(CupertinoIcons.person,
-                                          color: Colors.blue.shade700,
-                                          size: 24),
-                                      alignLabelWithHint: true,
-                                      border: InputBorder.none,
-                                    ),
-                                    validator: type == Status.signUp
-                                        ? (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Name is empty!';
-                                            }
-                                            return null;
-                                          }
-                                        : null,
-                                  ),
-                                ),
+          Future<void> _loginWithGoogle() async {
+            loading2();
+            await _auth.signInWithGoogle(context).whenComplete(
+                  () => _auth.authStateChange.listen(
+                    (event) async {
+                      if (event == null) {
+                        loading2();
+                        return;
+                      }
+                    },
+                  ),
+                );
+          }
 
-                              ///Email Field
-                              Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 16),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 4),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(25)),
-                                child: TextFormField(
-                                  controller: _email,
-                                  autocorrect: true,
-                                  enableSuggestions: true,
-                                  keyboardType: TextInputType.emailAddress,
-                                  onSaved: (value) {},
-                                  decoration: InputDecoration(
-                                    hintText: 'Email address',
-                                    hintStyle:
-                                        const TextStyle(color: Colors.black54),
-                                    icon: Icon(Icons.email_outlined,
-                                        color: Colors.blue.shade700, size: 24),
-                                    alignLabelWithHint: true,
-                                    border: InputBorder.none,
-                                  ),
-                                  validator: (value) {
-                                    if (value!.isEmpty ||
-                                        !value.contains('@')) {
-                                      return 'Invalid email!';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
+          return Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 48),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Center(child: FlutterLogo(size: 81)),
+                        const Spacer(flex: 1),
 
-                              ///Password Field
-                              Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 8),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 4),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(25)),
-                                child: TextFormField(
-                                  controller: _password,
-                                  obscureText: true,
-                                  validator: (value) {
-                                    if (value!.isEmpty || value.length < 8) {
-                                      return 'Password is too short!';
-                                    }
-                                    return null;
-                                  },
-                                  decoration: InputDecoration(
-                                    hintText: 'Password',
-                                    hintStyle:
-                                        const TextStyle(color: Colors.black54),
-                                    icon: Icon(CupertinoIcons.lock_circle,
-                                        color: Colors.blue.shade700, size: 24),
-                                    alignLabelWithHint: true,
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-
-                              ///Passwort bestätigen
-                              if (type == Status.signUp)
-                                AnimatedContainer(
-                                  duration: const Duration(milliseconds: 600),
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 8),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 4),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(25)),
-                                  child: TextFormField(
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                      hintText: 'Confirm password',
-                                      hintStyle: const TextStyle(
-                                          color: Colors.black54),
-                                      icon: Icon(CupertinoIcons.lock_circle,
-                                          color: Colors.blue.shade700,
-                                          size: 24),
-                                      alignLabelWithHint: true,
-                                      border: InputBorder.none,
-                                    ),
-                                    validator: type == Status.signUp
-                                        ? (value) {
-                                            if (value != _password.text) {
-                                              return 'Passwords do not match!';
-                                            }
-                                            return null;
-                                          }
-                                        : null,
-                                  ),
-                                ),
-                              const Spacer()
-                            ],
+                        ///Email Input Field
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 16),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(25)),
+                          child: TextFormField(
+                            controller: _email,
+                            autocorrect: true,
+                            enableSuggestions: true,
+                            keyboardType: TextInputType.emailAddress,
+                            onSaved: (value) {},
+                            decoration: InputDecoration(
+                              hintText: 'Email address',
+                              hintStyle: const TextStyle(color: Colors.black54),
+                              icon: Icon(Icons.email_outlined,
+                                  color: Colors.blue.shade700, size: 24),
+                              alignLabelWithHint: true,
+                              border: InputBorder.none,
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty || !value.contains('@')) {
+                                return 'Invalid email!';
+                              }
+                              return null;
+                            },
                           ),
                         ),
-                      ),
 
-                      ///Login/SignUp-Button
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          width: double.infinity,
-                          decoration: const BoxDecoration(color: Colors.white),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.only(top: 32.0),
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                width: double.infinity,
-                                child: _isLoading
-                                    ? const Center(
-                                        child: CircularProgressIndicator())
-                                    : MaterialButton(
-                                        onPressed: _onPressedFunction,
-                                        child: Text(
-                                          type == Status.login
-                                              ? 'Log in'
-                                              : 'Sign up',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        textColor: Colors.blue.shade700,
-                                        textTheme: ButtonTextTheme.primary,
-                                        minWidth: 100,
-                                        padding: const EdgeInsets.all(18),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          side: BorderSide(
-                                              color: Colors.blue.shade700),
-                                        ),
-                                      ),
-                              ),
+                        /// Password Input Field
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(25)),
 
-                              const Spacer(),
-
-                              ///Register Button Button
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 24.0),
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: type == Status.login
-                                        ? 'Don\'t have an account? '
-                                        : 'Already have an account? ',
-                                    style: const TextStyle(color: Colors.black),
-                                    children: [
-                                      TextSpan(
-                                          text: type == Status.login
-                                              ? 'Sign up now'
-                                              : 'Log in',
-                                          style: TextStyle(
-                                              color: Colors.blue.shade700),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () {
-                                              _switchType();
-                                            })
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                          ///Password
+                          child: TextFormField(
+                            controller: _password,
+                            obscureText: true,
+                            validator: (value) {
+                              if (value!.isEmpty || value.length < 8) {
+                                return 'Password is too short!';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'Password',
+                              hintStyle: const TextStyle(color: Colors.black54),
+                              icon: Icon(CupertinoIcons.lock_circle,
+                                  color: Colors.blue.shade700, size: 24),
+                              alignLabelWithHint: true,
+                              border: InputBorder.none,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+
+                        ///Register Container
+                        if (type == Status.signUp)
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 600),
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 4),
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(25)),
+                            child: TextFormField(
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                hintText: 'Confirm password',
+                                hintStyle: TextStyle(color: Colors.black54),
+                                icon: Icon(CupertinoIcons.lock_circle,
+                                    color: Colors.blue.shade700, size: 24),
+                                alignLabelWithHint: true,
+                                border: InputBorder.none,
+                                focusColor: Colors.green,
+                              ),
+                              validator: type == Status.signUp
+                                  ? (value) {
+                                      if (value != _password.text) {
+                                        return 'Passwords do not match!';
+                                      }
+                                      return null;
+                                    }
+                                  : null,
+                            ),
+                          ),
+                        const Spacer()
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                      width: double.infinity,
+                      decoration: const BoxDecoration(color: Colors.white),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(top: 32.0),
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            width: double.infinity,
+                            child: _isLoading
+                                ? const Center(
+                                    child: CircularProgressIndicator())
+                                : MaterialButton(
+                                    onPressed: _onPressedFunction,
+                                    child: Text(
+                                      type == Status.login
+                                          ? 'Log in'
+                                          : 'Sign up',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    textColor: Colors.blue.shade700,
+                                    textTheme: ButtonTextTheme.primary,
+                                    minWidth: 100,
+                                    padding: const EdgeInsets.all(18),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25),
+                                      side: BorderSide(
+                                          color: Colors.blue.shade700),
+                                    ),
+                                  ),
+                          ),
+                          const Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 24.0),
+                            child: RichText(
+                              text: TextSpan(
+                                text: type == Status.login
+                                    ? 'Don\'t have an account? '
+                                    : 'Already have an account? ',
+                                style: const TextStyle(color: Colors.black),
+                                children: [
+                                  TextSpan(
+                                      text: type == Status.login
+                                          ? 'Sign up now'
+                                          : 'Log in',
+                                      style: TextStyle(
+                                          color: Colors.blue.shade700),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          _switchType();
+                                        })
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                )
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
