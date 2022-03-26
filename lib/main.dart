@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Firebase Riverpod',
+      title: 'Flutter Firebase Riverpod2',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
