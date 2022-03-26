@@ -1,15 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/auth_controller.dart';
 
-class TestScreen extends HookWidget {
+class TestScreen extends ConsumerWidget {
   const TestScreen({Key? key}) : super(key: key);
 
-  Widget build(BuildContext context) {
-    User? authControllerState = useProvider(authControllerProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    User? authControllerState = ref.watch(authControllerProvider);
     return Text("Hello");
   }
 }

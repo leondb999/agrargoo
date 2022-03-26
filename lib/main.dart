@@ -3,9 +3,7 @@ import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:flutterfire_ui/database.dart';
 import 'package:flutterfire_ui/firestore.dart';
@@ -41,7 +39,7 @@ class MyApp extends StatelessWidget {
 class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    User? authControllerState = useProvider(authControllerProvider);
+    User? authControllerState = ref.watch(authControllerProvider);
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('Agrar Go')),
@@ -56,7 +54,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
                   onPressed: () {
                     print("authControllerState Sign Out: $authControllerState");
-                    context.read(authControllerProvider.notifier).signOut();
+                    ref.read(authControllerProvider.notifier).signOut();
                   },
                   child: Text("Sign Out"),
                 )
@@ -98,7 +96,7 @@ class HomeScreen extends ConsumerWidget {
             ),
             Text(
               authControllerState != null
-                  ? "Signed In ${context.read(authControllerProvider.notifier).state?.uid}"
+                  ? "Signed In ${ref.read(authControllerProvider.notifier).state?.uid}"
                   : "Signed Out",
             ),
           ],
