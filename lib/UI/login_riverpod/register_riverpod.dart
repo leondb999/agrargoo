@@ -10,29 +10,21 @@ import 'package:flutterfire_ui/database.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:flutterfire_ui/i10n.dart';
 
-class LoginRiverpodPage extends ConsumerStatefulWidget {
-  static const routename = '/LoginRiverpodPage';
-  LoginRiverpodPage({Key? key}) : super(key: key);
+class RegisterRiverpodPage extends ConsumerStatefulWidget {
+  static const routename = '/RegisterRiverpodPage';
+  RegisterRiverpodPage({Key? key}) : super(key: key);
 
   @override
-  _LoginRiverpodPageState createState() => _LoginRiverpodPageState();
+  _RegisterRiverpodPageState createState() => _RegisterRiverpodPageState();
 }
 
-class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
+class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
+  final _name = TextEditingController();
   final _email = TextEditingController();
   final _password = TextEditingController();
-/*
-  checkAuthentification() async {
-    _auth.authStateChanges().listen((user) {
-      if (user != null) {
-        print(user);
-        Navigator.pushReplacementNamed(context, "/home");
-      }
-    });
-  }
-*/
+
   @override
   void initState() {
     // TODO: implement initState
@@ -46,7 +38,7 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Center(
-          child: Text("Login"),
+          child: Text("Register"),
         ),
       ),
       body: SafeArea(
@@ -64,6 +56,38 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
                     children: [
                       const Center(child: FlutterLogo(size: 81)),
                       const Spacer(flex: 1),
+
+                      ///Name Input Field
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 4),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(25)),
+                        child: TextFormField(
+                          controller: _name,
+                          autocorrect: true,
+                          enableSuggestions: true,
+                          keyboardType: TextInputType.name,
+                          onSaved: (value) {},
+                          decoration: InputDecoration(
+                            hintText: 'Name',
+                            hintStyle: const TextStyle(color: Colors.black54),
+                            icon: Icon(Icons.person,
+                                color: Colors.blue.shade700, size: 24),
+                            alignLabelWithHint: true,
+                            border: InputBorder.none,
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Name is empty';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
 
                       ///Email Input Field
                       Container(
@@ -151,7 +175,7 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
                         width: double.infinity,
                         child: MaterialButton(
                           onPressed: () {
-                            ///Validate Login Input
+                            ///Validate Input Field Data
 
                             if (!_formKey.currentState!.validate()) {
                               return;
@@ -163,14 +187,13 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
                             ///SignIn Anonymously
                             ref
                                 .read(authControllerProvider.notifier)
-                                .signInEmail(
-                                    context, _email.text, _password.text);
+                                .register(context, _email.text, _password.text);
                             Navigator.pushReplacementNamed(context, "/home");
 
                             ///Login User in Firebase
                           },
                           child: Text(
-                            'Log in',
+                            'Register',
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                           textColor: Colors.blue.shade700,
@@ -188,16 +211,16 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
                         padding: const EdgeInsets.only(bottom: 24.0),
                         child: RichText(
                           text: TextSpan(
-                            text: 'Don\'t have an account? ',
+                            text: 'You already have an account? ',
                             style: const TextStyle(color: Colors.black),
                             children: [
                               TextSpan(
-                                  text: 'Sign up now',
+                                  text: 'Sign in',
                                   style: TextStyle(color: Colors.blue.shade700),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
                                       Navigator.pushReplacementNamed(
-                                          context, "/register");
+                                          context, "/login");
                                     })
                             ],
                           ),

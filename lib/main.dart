@@ -1,3 +1,4 @@
+import 'package:agrargo/UI/login_riverpod/register_riverpod.dart';
 import 'package:agrargo/UI/login_riverpod/test_screen.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginRiverpodPage(),
         '/home': (context) => HomeScreen(),
         '/test': (context) => TestScreen(),
+        '/register': (context) => RegisterRiverpodPage(),
       },
     );
   }

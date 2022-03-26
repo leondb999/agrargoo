@@ -10,7 +10,8 @@ abstract class BaseAuthRepository {
   Future<void> signInAnonymously();
   Future<void> signInEmailAndPW(
       BuildContext context, String email, String password);
-
+  Future<void> registerUserEmailAndPW(
+      BuildContext context, String email, String password);
   User? getCurrentUser();
   Future<void> signOut();
 }
@@ -77,5 +78,14 @@ class AuthRepository implements BaseAuthRepository {
         ),
       );
     }
+  }
+
+  @override
+  Future<void> registerUserEmailAndPW(
+      BuildContext context, String email, String password) async {
+    // TODO: implement registerUserEmailAndPW
+    final userCredential = await _read(firebaseAuthProvider)
+        .createUserWithEmailAndPassword(email: email, password: password);
+    throw UnimplementedError();
   }
 }
