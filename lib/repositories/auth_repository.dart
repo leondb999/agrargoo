@@ -8,7 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 abstract class BaseAuthRepository {
   Stream<User?> get authStateChanges;
   Future<void> signInAnonymously();
-  Future<void> signInEmailAndPW(BuildContext context);
+  Future<void> signInEmailAndPW(
+      BuildContext context, String email, String password);
 
   User? getCurrentUser();
   Future<void> signOut();
@@ -55,11 +56,11 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
-  Future<void> signInEmailAndPW(BuildContext context) async {
+  Future<void> signInEmailAndPW(
+      BuildContext context, String email, String password) async {
     try {
       final userCredential = await _read(firebaseAuthProvider)
-          .signInWithEmailAndPassword(
-              email: 'leondickob@gmail.com', password: "Rafcamora666");
+          .signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       await showDialog(
         context: context,
@@ -76,20 +77,5 @@ class AuthRepository implements BaseAuthRepository {
         ),
       );
     }
-    throw UnimplementedError();
   }
 }
-/*
- Future<void> signInEmailAndPW(
-    String email,
-    String password
-  ) async {
-    try {
-      final userCredential = await _read(firebaseAuthProvider)
-          .signInWithEmailAndPassword(email: email, password: password);
-
-    } on FirebaseAuthException catch (e) {
-      throw CustomException(message: e.message);
-    }
-  }
- */

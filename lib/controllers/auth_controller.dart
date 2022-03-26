@@ -37,8 +37,9 @@ class AuthController extends StateNotifier<User?> {
     await _read(authRepositoryProvider).signInAnonymously();
   }
 
-  void signInEmail(BuildContext context) async {
-    await _read(authRepositoryProvider).signInEmailAndPW(context);
+  void signInEmail(BuildContext context, String email, String password) async {
+    await _read(authRepositoryProvider)
+        .signInEmailAndPW(context, email, password);
   }
 
   void signOut() async {

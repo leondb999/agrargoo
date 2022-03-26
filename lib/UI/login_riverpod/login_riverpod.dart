@@ -55,13 +55,94 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
         title: Center(
           child: Text("Login"),
         ),
-        actions: [],
       ),
       body: SafeArea(
         child: Form(
           key: _formKey,
           child: Column(
             children: [
+              Expanded(
+                flex: 3,
+                child: Container(
+                  margin: const EdgeInsets.only(top: 48),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Center(child: FlutterLogo(size: 81)),
+                      const Spacer(flex: 1),
+
+                      ///Email Input Field
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 4),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(25)),
+                        child: TextFormField(
+                          controller: _email,
+                          autocorrect: true,
+                          enableSuggestions: true,
+                          keyboardType: TextInputType.emailAddress,
+                          onSaved: (value) {},
+                          decoration: InputDecoration(
+                            hintText: 'Email address',
+                            hintStyle: const TextStyle(color: Colors.black54),
+                            icon: Icon(Icons.email_outlined,
+                                color: Colors.blue.shade700, size: 24),
+                            alignLabelWithHint: true,
+                            border: InputBorder.none,
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty || !value.contains('@')) {
+                              return 'Invalid email!';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+
+                      /// Password Input Field
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 4),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(25)),
+
+                        ///Password
+                        child: TextFormField(
+                          controller: _password,
+                          obscureText: true,
+                          validator: (value) {
+                            if (value!.isEmpty || value.length < 8) {
+                              return 'Password is too short!';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Password',
+                            hintStyle: const TextStyle(color: Colors.black54),
+                            icon: Icon(
+                              CupertinoIcons.lock_circle,
+                              color: Colors.blue.shade700,
+                              size: 24,
+                            ),
+                            alignLabelWithHint: true,
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+
+                      const Spacer()
+                    ],
+                  ),
+                ),
+              ),
               Expanded(
                 flex: 2,
                 child: Container(
@@ -78,23 +159,19 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
                         child: MaterialButton(
                           onPressed: () {
                             ///Validate Login Input
-                            /*
+
                             if (!_formKey.currentState!.validate()) {
                               return;
                             }
-                            */
+
                             print(
                                 "authControllerState Sign Out: $authControllerState");
 
                             ///SignIn Anonymously
-                            /*
                             ref
                                 .read(authControllerProvider.notifier)
-                                .signInAnonym();
-                             */
-                            ref
-                                .read(authControllerProvider.notifier)
-                                .signInEmail(context);
+                                .signInEmail(
+                                    context, _email.text, _password.text);
                             Navigator.pushReplacementNamed(context, "/home");
 
                             ///Login User in Firebase
