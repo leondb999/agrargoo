@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:flutterfire_ui/database.dart';
@@ -37,9 +38,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends HookWidget {
+class HomeScreen extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     User? authControllerState = useProvider(authControllerProvider);
     return Scaffold(
       appBar: AppBar(
