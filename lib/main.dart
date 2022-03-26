@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/home",
       routes: {
+        '/login': (context) => LoginRiverpodPage(),
         '/home': (context) => HomeScreen(),
         '/test': (context) => TestScreen(),
       },
@@ -73,16 +74,8 @@ class HomeScreen extends ConsumerWidget {
                         .signInAnonym();
                  */
                     authControllerState != null
-                        ? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginRiverpodPage()),
-                          )
-                        : Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginRiverpodPage()),
-                          );
+                        ? Navigator.pushReplacementNamed(context, "/login")
+                        : Navigator.pushReplacementNamed(context, "/login");
                   },
                 ),
         ],
@@ -90,15 +83,29 @@ class HomeScreen extends ConsumerWidget {
       body: SafeArea(
         child: Row(
           children: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.login),
-            ),
-            Text(
-              authControllerState != null
-                  ? "Signed In ${ref.read(authControllerProvider.notifier).state?.uid}"
-                  : "Signed Out",
-            ),
+            authControllerState == null
+                ? Column(
+                    children: [
+                      Icon(Icons.login),
+                      Text("Signed Out"),
+                      Text(
+                        "Email ${ref.read(authControllerProvider.notifier).state?.email}",
+                        style: TextStyle(color: Colors.red),
+                      )
+                    ],
+                  )
+                : Column(
+                    children: [
+                      Icon(Icons.login),
+                      Text(
+                        "Signed In:  ${ref.read(authControllerProvider.notifier).state?.uid}",
+                      ),
+                      Text(
+                        "Email: ${ref.read(authControllerProvider.notifier).state?.email}",
+                        style: TextStyle(color: Colors.green),
+                      )
+                    ],
+                  ),
           ],
         ),
       ),

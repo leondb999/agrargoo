@@ -11,7 +11,7 @@ import '../../providers/auth_providers.dart';
 ///Index für Navbar
 
 final int _selectedIndex = 1;
-/*
+
 class ProfilePage extends StatefulWidget {
   final User? user;
 

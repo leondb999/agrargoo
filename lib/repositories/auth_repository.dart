@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 abstract class BaseAuthRepository {
   Stream<User?> get authStateChanges;
   Future<void> signInAnonymously();
-  Future<void> signInEmailPassword();
+  Future<void> signInEmailAndPW(BuildContext context);
 
   User? getCurrentUser();
   Future<void> signOut();
@@ -55,13 +55,41 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
-  Future<void> signInEmailPassword() async {
+  Future<void> signInEmailAndPW(BuildContext context) async {
     try {
-      final userCredential =
-          await _read(firebaseAuthProvider).signInAnonymously();
-      MaterialPageRoute(builder: (context) => HomeScreen());
+      final userCredential = await _read(firebaseAuthProvider)
+          .signInWithEmailAndPassword(
+              email: 'leondickob@gmail.com', password: "Rafcamora666");
+    } on FirebaseAuthException catch (e) {
+      await showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Error Occured'),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+                child: const Text("OK"))
+          ],
+        ),
+      );
+    }
+    throw UnimplementedError();
+  }
+}
+/*
+ Future<void> signInEmailAndPW(
+    String email,
+    String password
+  ) async {
+    try {
+      final userCredential = await _read(firebaseAuthProvider)
+          .signInWithEmailAndPassword(email: email, password: password);
+
     } on FirebaseAuthException catch (e) {
       throw CustomException(message: e.message);
     }
   }
-}
+ */

@@ -35,11 +35,11 @@ class AuthController extends StateNotifier<User?> {
 
   void signInAnonym() async {
     await _read(authRepositoryProvider).signInAnonymously();
-
-    MaterialPageRoute(builder: (context) => HomeScreen());
   }
 
-  void signInEmailPassword() async {}
+  void signInEmail(BuildContext context) async {
+    await _read(authRepositoryProvider).signInEmailAndPW(context);
+  }
 
   void signOut() async {
     await _read(authRepositoryProvider).signOut();

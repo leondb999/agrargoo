@@ -85,10 +85,16 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
                             */
                             print(
                                 "authControllerState Sign Out: $authControllerState");
+
+                            ///SignIn Anonymously
+                            /*
                             ref
                                 .read(authControllerProvider.notifier)
                                 .signInAnonym();
-
+                             */
+                            ref
+                                .read(authControllerProvider.notifier)
+                                .signInEmail(context);
                             Navigator.pushReplacementNamed(context, "/home");
 
                             ///Login User in Firebase
