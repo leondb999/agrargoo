@@ -91,6 +91,10 @@ class HomeScreen extends ConsumerWidget {
                       Icon(Icons.login),
                       Text("Signed Out"),
                       Text(
+                        "Name ${ref.read(authControllerProvider.notifier).state?.displayName}",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      Text(
                         "Email ${ref.read(authControllerProvider.notifier).state?.email}",
                         style: TextStyle(color: Colors.red),
                       )
@@ -101,6 +105,10 @@ class HomeScreen extends ConsumerWidget {
                       Icon(Icons.login),
                       Text(
                         "Signed In:  ${ref.read(authControllerProvider.notifier).state?.uid}",
+                      ),
+                      Text(
+                        "Name ${ref.read(authControllerProvider.notifier).state?.displayName}",
+                        style: TextStyle(color: Colors.green),
                       ),
                       Text(
                         "Email: ${ref.read(authControllerProvider.notifier).state?.email}",

@@ -185,9 +185,11 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
                                 "authControllerState Sign Out: $authControllerState");
 
                             ///SignIn Anonymously
-                            ref
-                                .read(authControllerProvider.notifier)
-                                .register(context, _email.text, _password.text);
+                            ref.read(authControllerProvider.notifier).register(
+                                context,
+                                _name.text,
+                                _email.text,
+                                _password.text);
                             Navigator.pushReplacementNamed(context, "/home");
 
                             ///Login User in Firebase
