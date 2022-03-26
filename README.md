@@ -48,3 +48,5 @@ https://github.com/sbis04/flutter-authentication/blob/master/lib/utils/fire_auth
 
 #Authentication with Riverpods & Firebase
 https://github.com/2002Bishwajeet/authentication_riverpod
+
+-->https://www.youtube.com/watch?v=vrPk6LB9bjo&ab_channel=MarcusNg

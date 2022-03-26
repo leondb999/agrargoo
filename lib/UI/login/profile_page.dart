@@ -9,8 +9,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_providers.dart';
 
 ///Index für Navbar
-final int _selectedIndex = 1;
 
+final int _selectedIndex = 1;
+/*
 class ProfilePage extends StatefulWidget {
   final User? user;
 
@@ -161,3 +162,4 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+*/

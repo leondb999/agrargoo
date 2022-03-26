@@ -11,7 +11,7 @@ import '../loading_screen.dart';
 
 const API_KEY = 'sk_sand-79116408b11c4d3e8ca691a8d1935ee0';
 final int NAV_INDEX = 0;
-
+/*
 class LandingPage extends ConsumerStatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
 
@@ -87,7 +87,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     });
   }
 }
-
+*/
 /*
 
  return Scaffold(

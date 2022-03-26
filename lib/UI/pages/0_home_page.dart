@@ -1,3 +1,4 @@
+import 'package:agrargo/UI/login/login_page.dart';
 import 'package:agrargo/UI/pages/1_landing_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import '../../providers/auth_providers.dart';
 import '../../widgets/layout_widgets.dart';
 
 const int NAV_INDEX = 0;
-
+/*
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({Key? key}) : super(key: key);
   @override
@@ -19,10 +20,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     /// first variable is to get the data of Authenticated User    | User? user = data.currentUser;
-    final data = ref.watch(fireBaseAuthProvider);
-    final _user1 = data.userChanges();
-    final x = ref.read(fireBaseAuthProvider).userChanges();
-    print("x: $x");
+    final data = ref.read(fireBaseAuthProvider);
 
     ///  Second variable to access the Logout Function
     final _auth = ref.watch(authenticationProvider);
@@ -99,7 +97,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 width: double.infinity,
                 child: MaterialButton(
-                  onPressed: () => _auth.signOut(),
+                  onPressed: () {
+                    _auth.signOut();
+
+                    /*   Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                    );*/
+                  },
                   child: const Text(
                     'Log Out',
                     style: TextStyle(fontWeight: FontWeight.w600),
@@ -122,3 +128,4 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 }
+*/

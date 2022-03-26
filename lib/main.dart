@@ -1,53 +1,108 @@
-import 'package:agrargo/services/auth_checker.dart';
+import 'package:agrargo/UI/login_riverpod/test_screen.dart';
+import 'package:agrargo/controllers/auth_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutterfire_ui/auth.dart';
+import 'package:flutterfire_ui/database.dart';
+import 'package:flutterfire_ui/firestore.dart';
+import 'package:flutterfire_ui/i10n.dart';
 
-import 'UI/error_screen.dart';
-import 'UI/loading_screen.dart';
+import 'UI/login_riverpod/login_riverpod.dart';
 import 'firebase_options.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProviderScope(child: MyApp()));
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(ProviderScope(child: MyApp()));
 }
 
-//  This is a FutureProvider that will be used to check whether the firebase has been initialized or not
-final firebaseinitializerProvider = FutureProvider<FirebaseApp>((ref) async {
-  return await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-});
-
-class MyApp extends ConsumerWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    //  We will watch this provider to see if the firebase has been initialized
-    //  As said this gives async value so it can gives 3 types of results
-    //  1. The result is a Future<FirebaseApp>
-    //  2. The result is a Future<Error>
-    //  3. It's still loading123
-
-    final initialize = ref.watch(firebaseinitializerProvider);
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'Flutter Firebase Riverpod',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      initialRoute: "/home",
+      routes: {
+        '/home': (context) => HomeScreen(),
+        '/test': (context) => TestScreen(),
+      },
+    );
+  }
+}
 
-      //  We will use the initialize to check if the firebase has been initialized
-      //  .when function can only be used with AsysncValue. If you hover over intialize
-      //  you can see what type of variable it is. I have left it dynamic here for your better understanding
-      //  Though it's always recommended to not to use dynamic variables.
+class HomeScreen extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
+    User? authControllerState = useProvider(authControllerProvider);
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(child: Text('Agrar Go')),
+        actions: [
+          authControllerState != null
 
-      // Now here if the Firebase is initialized we will be redirected to AuthChecker
-      // which checks if the user is logged in or not.
+              ///Sign Out
+              ? ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(100, 5),
+                    primary: Colors.green,
+                  ),
+                  onPressed: () {
+                    print("authControllerState Sign Out: $authControllerState");
+                    context.read(authControllerProvider.notifier).signOut();
+                  },
+                  child: Text("Sign Out"),
+                )
 
-      //  the other Two functions speaks for themselves.
-      home: initialize.when(
-          data: (data) {
-            return const AuthChecker();
-          },
-          loading: () => const LoadingScreen(),
-          error: (e, stackTrace) => ErrorScreen(e, stackTrace)),
+              ///Sign In
+              : IconButton(
+                  splashColor: Colors.green,
+                  icon: Icon(
+                    Icons.login,
+                  ),
+                  onPressed: () {
+                    print("authControllerState Sign Out: $authControllerState");
+                    /*
+                    context
+                        .read(authControllerProvider.notifier)
+                        .signInAnonym();
+                 */
+                    authControllerState != null
+                        ? Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginRiverpodPage()),
+                          )
+                        : Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginRiverpodPage()),
+                          );
+                  },
+                ),
+        ],
+      ),
+      body: SafeArea(
+        child: Row(
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.login),
+            ),
+            Text(
+              authControllerState != null
+                  ? "Signed In ${context.read(authControllerProvider.notifier).state?.uid}"
+                  : "Signed Out",
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

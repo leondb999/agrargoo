@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../providers/auth_providers.dart';
+import '../pages/0_home_page.dart';
 
 //  Instead of creating Two Screens, I have Added both Login and Signup Screen in one Screen
 //  Yes , I am Lazy , But I am not going to create two screens , I am going to create one screen
@@ -40,13 +41,9 @@ class _LoginPageState extends State<LoginPage> {
   //  GlobalKey is used to validate the Form
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  //  TextEditingController to get the data from the TextFields
-  //  we can also use Riverpod to manage the state of the TextFields
-  //  but again I am not using it here
   final _email = TextEditingController();
   final _password = TextEditingController();
 
-  //  A loading variable to show the loading animation when you a function is ongoing
   bool _isLoading = false;
   bool _isLoading2 = false;
   void loading() {
@@ -80,67 +77,46 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Consumer(builder: (context, ref, _) {
-          //  Consuming a provider using watch method and storing it in a variable
-          //  Now we will use this variable to access all the functions of the
-          //  authentication
           final _auth = ref.watch(authenticationProvider);
 
-          //  Instead of creating a clutter on the onPressed Function
-          //  I have decided to create a seperate function and pass them into the
-          //  respective parameters.
-          //  if you want you can write the exact code in the onPressed function
-          //  it all depends on personal preference and code readability
           Future<void> _onPressedFunction() async {
             if (!_formKey.currentState!.validate()) {
               return;
             }
-            // print(_email.text); // This are your best friend for debugging things
-            //  not to mention the debugging tools
-            // print(_password.text);
             if (type == Status.login) {
+              print("****authStateChange:");
               loading();
               await _auth
                   .signInWithEmailAndPassword(
                       _email.text, _password.text, context)
                   .whenComplete(
-                      () => _auth.authStateChange.listen((event) async {
-                            if (event == null) {
-                              loading();
-                              return;
-                            }
-                          }));
+                    () => _auth.authStateChange.listen(
+                      (event) async {
+                        MaterialPageRoute(builder: (context) => HomePage());
+                        if (event == null) {
+                          loading();
+                          return;
+                        }
+                      },
+                    ),
+                  );
             } else {
               loading();
+
               await _auth
                   .signUpWithEmailAndPassword(
                       _email.text, _password.text, context)
                   .whenComplete(
-                      () => _auth.authStateChange.listen((event) async {
-                            if (event == null) {
-                              loading();
-                              return;
-                            }
-                          }));
+                    () => _auth.authStateChange.listen(
+                      (event) async {
+                        if (event == null) {
+                          loading();
+                          return;
+                        }
+                      },
+                    ),
+                  );
             }
-
-            //  I had said that we would be using a Loading spinner when
-            //  some functions are being performed. we need to check if some
-            //  error occured then we need to stop loading spinner so we can retry
-            //  Authenticating
-          }
-
-          Future<void> _loginWithGoogle() async {
-            loading2();
-            await _auth.signInWithGoogle(context).whenComplete(
-                  () => _auth.authStateChange.listen(
-                    (event) async {
-                      if (event == null) {
-                        loading2();
-                        return;
-                      }
-                    },
-                  ),
-                );
           }
 
           return Form(
@@ -213,8 +189,11 @@ class _LoginPageState extends State<LoginPage> {
                             decoration: InputDecoration(
                               hintText: 'Password',
                               hintStyle: const TextStyle(color: Colors.black54),
-                              icon: Icon(CupertinoIcons.lock_circle,
-                                  color: Colors.blue.shade700, size: 24),
+                              icon: Icon(
+                                CupertinoIcons.lock_circle,
+                                color: Colors.blue.shade700,
+                                size: 24,
+                              ),
                               alignLabelWithHint: true,
                               border: InputBorder.none,
                             ),
@@ -261,65 +240,63 @@ class _LoginPageState extends State<LoginPage> {
                 Expanded(
                   flex: 2,
                   child: Container(
-                      width: double.infinity,
-                      decoration: const BoxDecoration(color: Colors.white),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.only(top: 32.0),
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
-                            width: double.infinity,
-                            child: _isLoading
-                                ? const Center(
-                                    child: CircularProgressIndicator())
-                                : MaterialButton(
-                                    onPressed: _onPressedFunction,
-                                    child: Text(
-                                      type == Status.login
-                                          ? 'Log in'
-                                          : 'Sign up',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    textColor: Colors.blue.shade700,
-                                    textTheme: ButtonTextTheme.primary,
-                                    minWidth: 100,
-                                    padding: const EdgeInsets.all(18),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                      side: BorderSide(
-                                          color: Colors.blue.shade700),
-                                    ),
+                    width: double.infinity,
+                    decoration: const BoxDecoration(color: Colors.white),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(top: 32.0),
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          width: double.infinity,
+                          child: _isLoading
+                              ? const Center(child: CircularProgressIndicator())
+                              : MaterialButton(
+                                  onPressed: _onPressedFunction,
+                                  child: Text(
+                                    type == Status.login ? 'Log in' : 'Sign up',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600),
                                   ),
-                          ),
-                          const Spacer(),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 24.0),
-                            child: RichText(
-                              text: TextSpan(
-                                text: type == Status.login
-                                    ? 'Don\'t have an account? '
-                                    : 'Already have an account? ',
-                                style: const TextStyle(color: Colors.black),
-                                children: [
-                                  TextSpan(
-                                      text: type == Status.login
-                                          ? 'Sign up now'
-                                          : 'Log in',
-                                      style: TextStyle(
-                                          color: Colors.blue.shade700),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          _switchType();
-                                        })
-                                ],
-                              ),
+                                  textColor: Colors.blue.shade700,
+                                  textTheme: ButtonTextTheme.primary,
+                                  minWidth: 100,
+                                  padding: const EdgeInsets.all(18),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                    side:
+                                        BorderSide(color: Colors.blue.shade700),
+                                  ),
+                                ),
+                        ),
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 24.0),
+                          child: RichText(
+                            text: TextSpan(
+                              text: type == Status.login
+                                  ? 'Don\'t have an account? '
+                                  : 'Already have an account? ',
+                              style: const TextStyle(color: Colors.black),
+                              children: [
+                                TextSpan(
+                                    text: type == Status.login
+                                        ? 'Sign up now'
+                                        : 'Log in',
+                                    style:
+                                        TextStyle(color: Colors.blue.shade700),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        _switchType();
+                                      })
+                              ],
                             ),
                           ),
-                        ],
-                      )),
+                        ),
+                      ],
+                    ),
+                  ),
                 )
               ],
             ),
@@ -329,3 +306,4 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+*/
