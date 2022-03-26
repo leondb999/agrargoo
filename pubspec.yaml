@@ -25,6 +25,8 @@ dependencies:
     sdk: flutter
 
 
+
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -39,6 +41,7 @@ dependencies:
   provider: ^6.0.2
   riverpod: ^1.0.3
   flutter_riverpod: ^1.0.3
+  graphql_flutter: ^5.0.1
 #dependency_overrides:
  # firebase_auth_platform_interface: 6.1.11
 dev_dependencies:
@@ -58,6 +61,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   #assets:
+    #  - icons/agrargo_logo_large.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

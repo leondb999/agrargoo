@@ -1,4 +1,5 @@
 import 'package:agrargo/UI/login/profile_page.dart';
+import 'package:agrargo/UI/pages/test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +8,7 @@ import '../UI/error_screen.dart';
 import '../UI/pages/1_landing_page.dart';
 import '../UI/loading_screen.dart';
 import '../UI/login/login_page.dart';
+import '../UI/pages/2_who_are_you.dart';
 import '../providers/auth_providers.dart';
 
 class AuthChecker extends ConsumerWidget {
@@ -28,10 +30,10 @@ class AuthChecker extends ConsumerWidget {
         data: (data) {
           if (data != null) {
             print("User Logged In | User Name: ${_user.value!.displayName}");
-            return ProfilePage(user: _user.value);
+            return test();
           }
           print("User Logged Out!");
-          return LoginPage();
+          return test();
         },
         loading: () => const LoadingScreen(),
         error: (e, trace) => ErrorScreen(e, trace));
