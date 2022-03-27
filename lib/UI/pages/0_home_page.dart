@@ -1,5 +1,4 @@
 import 'package:agrargo/UI/login/login_page.dart';
-import 'package:agrargo/UI/pages/1_landing_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

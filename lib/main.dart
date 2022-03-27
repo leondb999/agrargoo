@@ -28,14 +28,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: "/landingpage",
+      initialRoute: "/home",
       routes: {
         '/login': (context) => LoginRiverpodPage(),
         '/home': (context) => HomeScreen(),
         '/test': (context) => TestScreen(),
         '/register': (context) => RegisterRiverpodPage(),
         '/whoareyou': (context) => WhoAreYou(),
-        '/landingpage': (context) => LandingPage(),
       },
     );
   }

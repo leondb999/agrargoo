@@ -1,4 +1,3 @@
-import 'package:agrargo/UI/pages/1_landing_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:agrargo/UI/error_screen.dart';
 import 'package:agrargo/UI/login/login_page.dart';
