@@ -1,198 +1,415 @@
 import 'package:agrargo/UI/error_screen.dart';
+import 'package:agrargo/UI/login/login_page.dart';
+import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod/riverpod.dart';
-
+import '../../controllers/auth_controller.dart';
 import '../../providers/auth_providers.dart';
-import '../loading_screen.dart';
-
-const API_KEY = 'sk_sand-79116408b11c4d3e8ca691a8d1935ee0';
-final int NAV_INDEX = 0;
 
 class LandingPage extends ConsumerStatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
-
+  static const routename = '/landingpage';
   @override
   _LandingPageState createState() => _LandingPageState();
 }
 
 class _LandingPageState extends ConsumerState<LandingPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  User? user;
-  bool isSignedIn = false;
-  String userData = "";
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final usersCollection = FirebaseFirestore.instance.collection('users');
+  late bool landwirt;
 
   @override
   Widget build(BuildContext context) {
-    User? _user = ref.watch(fireBaseAuthProvider).currentUser;
-    final _auth = ref.watch(authenticationProvider).authStateChange;
-    _auth.listen((User? user) {
-      if (this.user != null) {
-        print("this.user != nulll: ${user!.email}");
-        setState(() {
-          this.user = user;
-          this.isSignedIn = true;
-        });
-      }
-    });
+    User? authControllerState = ref.watch(authControllerProvider);
+    authControllerState?.reload();
+    User? authControllerStateRead = ref.read(authControllerProvider);
+    String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+    final String? documentID =
+        ref.read(authControllerProvider.notifier).state?.uid;
 
-    return Consumer(builder: (context, ref, child) {
-      print("context: $context");
-      print("ref: $ref");
-      print("ref: $child");
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(child: Text('Agrar Go')),
+        actions: [
+          authControllerState != null
 
-      return Scaffold(
-        appBar: appBar(),
-        body: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Landing Page", style: TextStyle(fontSize: 30)),
-                SizedBox(height: 50.0),
-                _user != null
-                    ? Text("User name: ${_user.email}")
-                    : Text("User null"),
-                isSignedIn ? Text("SignedIn") : Text("Signed Out"),
-                ElevatedButton(
-                  child: Text("Check Login Status"),
+              ///Sign Out
+              ? ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(100, 5),
+                    primary: Colors.green,
+                  ),
                   onPressed: () {
-                    print("User: $_user");
-                    setState(() {
-                      if (_user != null) {
-                        userData = _user.toString();
-                      } else {
-                        userData = "null";
-                      }
+                    print("authControllerState Sign Out: $authControllerState");
+                    ref.read(authControllerProvider.notifier).signOut();
+                  },
+                  child: Text("Sign Out"),
+                )
 
-                      //  userData = _user!.refreshToken.toString();
-                    });
+              ///Sign In
+              : IconButton(
+                  splashColor: Colors.green,
+                  icon: Icon(
+                    Icons.login,
+                  ),
+                  onPressed: () {
+                    print("authControllerState Sign Out: $authControllerState");
+                    /*
+                    context
+                        .read(authControllerProvider.notifier)
+                        .signInAnonym();
+                 */
+                    authControllerState != null
+                        ? Navigator.pushReplacementNamed(context, "/login")
+                        : Navigator.pushReplacementNamed(context, "/login");
                   },
                 ),
-                Text("Userdata: $userData"),
-              ],
-            ),
-          ),
-        ),
-        bottomNavigationBar: navigationBar(NAV_INDEX, context, _user),
-      );
-    });
-  }
-}
-
-/*
-
- return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text("Landing Page")),
-        backgroundColor: Colors.green,
+        ],
       ),
       body: SafeArea(
-        child: Container(
-          color: Colors.green[50],
-          child: Center(
-            child: Column(
-              //crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  color: Colors.white,
-                  height: 100,
-                  child: Center(
-                      child: Text(
-                    "Unsere Visionasd",
-                    style: TextStyle(fontSize: 25.0),
-                  )),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Text(
-                        "Auf Job- oder Helfersuche?",
-                        style: TextStyle(
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 20.0),
-                        child: Text(
-                          "In 3 Schritten zum Erfolg",
-                          style: TextStyle(fontSize: 15.0),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 50.0),
-                        child: Row(
-                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  "1. Deine Wünsche",
-                                  style: TextStyle(
-                                      fontSize: 25.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  "2. Match finden",
-                                  style: TextStyle(
-                                      fontSize: 25.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  "3. Durchstarten lol345",
-                                  style: TextStyle(
-                                      fontSize: 25.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Column(
+                children: [
+                  Icon(Icons.login),
+                  Text(
+                    "Signed In:  ${ref.read(authControllerProvider.notifier).state?.uid}",
                   ),
-                ),
-                Container(child: Text(response)),
-                Container(child: Text("Hallo Christina")),
-                Container(child: Text("Hallo Verena")),
-                Container(
-                  margin: EdgeInsets.only(top: 0),
-                  child: ElevatedButton(
-                    child: Text("Find your Jobs!"),
-                    onPressed: () async {
-                      //  var data = await getWeatherData();
-                      var data = await getRandevuUser();
-                      setState(() {
-                        response = data;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.lightGreen,
+                  Text(
+                    "Email: ${ref.read(authControllerProvider.notifier).state?.email}",
+                    style: TextStyle(color: Colors.green),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Expanded(
+                    child: FutureBuilder<DocumentSnapshot>(
+                      future: usersCollection.doc(documentID).get(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("Something went wrong");
+                        }
+                        if (snapshot.hasData && !snapshot.data!.exists) {
+                          return Text("Document does not exist");
+                        }
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          Map<String, dynamic> data =
+                              snapshot.data!.data() as Map<String, dynamic>;
+                          return Column(
+                            children: [
+                              Text(
+                                  "name: ${data['name']} ist ein ${data['landwirt'] ? 'Landwirt' : 'Arbeiter'} | (landwirt == ${data['landwirt']})"),
+                            ],
+                          );
+                        }
+                        return Column(
+                          children: [
+                            CircularProgressIndicator(),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  Container(
+                      height: 300,
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: usersCollection.snapshots(),
+                        builder:
+                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            return Text('Something went wrong');
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Container(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          final data = snapshot.requireData;
+
+                          return Column(
+                            children: [
+                              Text("Hello"),
+                              ListView.builder(
+                                itemCount: data.size,
+                                itemBuilder: (context, index) {
+                                  return Text(
+                                      'My Name is ${data.docs[index]['name']} and i am a ${data.docs[index]['landwirt'] ? 'Landwirt' : 'Arbeiter'}');
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ))
+                ],
+              ),
+              /*
+              authControllerState == null
+                  ? Column(
+                      children: [
+                        Icon(Icons.login),
+                        Text("Signed Out"),
+                        Text(
+                          "Name ${authControllerState?.displayName}",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        Text(
+                          "Email ${ref.read(authControllerProvider.notifier).state?.email}",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        Icon(Icons.login),
+                        Text(
+                          "Signed In:  ${ref.read(authControllerProvider.notifier).state?.uid}",
+                        ),
+                        Text(
+                          "Email: ${ref.read(authControllerProvider.notifier).state?.email}",
+                          style: TextStyle(color: Colors.green),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Expanded(
+                          child: FutureBuilder<DocumentSnapshot>(
+                            future: usersCollection.doc(documentID).get(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<DocumentSnapshot> snapshot) {
+                              if (snapshot.hasError) {
+                                return Text("Something went wrong");
+                              }
+                              if (snapshot.hasData && !snapshot.data!.exists) {
+                                return Text("Document does not exist");
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                Map<String, dynamic> data = snapshot.data!
+                                    .data() as Map<String, dynamic>;
+                                return Column(
+                                  children: [
+                                    Text(
+                                        "name: ${data['name']} ist ein ${data['landwirt'] ? 'Landwirt' : 'Arbeiter'} | (landwirt == ${data['landwirt']})"),
+                                  ],
+                                );
+                              }
+                              return Column(
+                                children: [
+                                  CircularProgressIndicator(),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                        /*
+                        Container(
+                            height: 300,
+                            child: StreamBuilder<QuerySnapshot>(
+                              stream: usersCollection.snapshots(),
+                              builder: (context,
+                                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                                if (snapshot.hasError) {
+                                  return Text('Something went wrong');
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Container(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                final data = snapshot.requireData;
+
+                                return Column(
+                                  children: [
+                                    Text("Hello"),
+                                    ListView.builder(
+                                      itemCount: data.size,
+                                      itemBuilder: (context, index) {
+                                        return Text(
+                                            'My Name is ${data.docs[index]['name']} and i am a ${data.docs[index]['landwirt'] ? 'Landwirt' : 'Arbeiter'}');
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            ))
+                        */
+                      ],
+                    ),
+*/
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                child: Center(
+                  child: Text(
+                    "Auf Job- oder Helfersuche?",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontFamily: 'Open Sans',
+                      fontSize: 40.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2E6C49),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 25.0),
+                child: Center(
+                  child: Text(
+                    "In 3 Schritten zum Erfolg",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontFamily: 'Open Sans',
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 70.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                        width: 35.0,
+                        height: 35.0,
+                        decoration: new BoxDecoration(
+                          color: Color(0xFF2E6C49),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                            child: Text(
+                          "1.",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                          ),
+                        ))),
+                    SizedBox(width: 10),
+                    Container(
+                      child: Center(
+                        child: Text(
+                          "Deine Wünsche",
+                          style: TextStyle(
+                            fontFamily: 'Open Sans',
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 30),
+                    Container(
+                      width: 35.0,
+                      height: 35.0,
+                      decoration: new BoxDecoration(
+                        color: Color(0xFF2E6C49),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "2.",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Container(
+                      child: Center(
+                        child: Text(
+                          "Match finden",
+                          style: TextStyle(
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 30),
+                    Container(
+                        width: 35.0,
+                        height: 35.0,
+                        decoration: new BoxDecoration(
+                          color: Color(0xFF2E6C49),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                            child: Text(
+                          "3.",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                          ),
+                        ))),
+                    SizedBox(width: 10),
+                    Container(
+                      child: Center(
+                        child: Text(
+                          "Durchstarten",
+                          style: TextStyle(
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 35.0, bottom: 300),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => WhoAreYou()));
+                  },
+                  child: Text('Los gehts!'),
+                  style: ElevatedButton.styleFrom(
+                      primary: Color(0xFF9FB98B),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                      textStyle:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                ),
+              ),
+            ],
           ),
         ),
       ),
-      bottomNavigationBar: navigationBar(_selectedIndex, context, _currentUser),
     );
- */
+  }
+}
+
+Future<DocumentSnapshot?> getCurrentUserbyDocumentId(
+    CollectionReference<Map<String, dynamic>> collection, String? id) async {
+  bool? landwirt;
+  DocumentSnapshot? documentSnapshot;
+
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(id)
+      .get()
+      .then((value) {
+    documentSnapshot = value;
+    landwirt = value['landwirt'];
+  });
+  // print("landwirt: ${landwirt.toString()} ");
+  //now you can access the document field value
+  // String? name = documentSnapshot!['name'];
+  //bool landwirt2 = documentSnapshot!['landwirt'];
+  //print("Name: '$name' ist ein ${landwirt2 ? 'Landwirt' : 'Arbeiter'} ");
+  return documentSnapshot;
+}

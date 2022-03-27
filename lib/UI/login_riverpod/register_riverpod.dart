@@ -12,9 +12,12 @@ import 'package:flutterfire_ui/i10n.dart';
 
 import '../../main.dart';
 
+///https://www.geeksforgeeks.org/flutter-arguments-in-named-routes/
+
 class RegisterRiverpodPage extends ConsumerStatefulWidget {
-  static const routename = '/RegisterRiverpodPage';
-  RegisterRiverpodPage({Key? key}) : super(key: key);
+  static const routename = '/register';
+
+  RegisterRiverpodPage();
 
   @override
   _RegisterRiverpodPageState createState() => _RegisterRiverpodPageState();
@@ -26,7 +29,7 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
   final _name = TextEditingController();
   final _email = TextEditingController();
   final _password = TextEditingController();
-  bool _isSwitched = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -36,11 +39,17 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
   @override
   Widget build(BuildContext context) {
     User? authControllerState = ref.watch(authControllerProvider);
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+
+    bool _landwirt = arguments['landwirt'];
+    print("landwirt: $_landwirt");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Center(
-          child: Text("Register"),
+          child: Text(
+              "Register als ${_landwirt ? 'Landwirt' : 'Helfer'} : $_landwirt"),
         ),
       ),
       body: SafeArea(
@@ -157,23 +166,6 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
                         ),
                       ),
 
-                      Center(
-                        child: Text(
-                            "Du bist ein ${_isSwitched ? 'Landwirt' : 'Arbeiter'} $_isSwitched"),
-                      ),
-
-                      Center(
-                        child: Switch(
-                            value: _isSwitched,
-                            activeTrackColor: Colors.greenAccent,
-                            activeColor: Colors.green,
-                            onChanged: (value) {
-                              setState(() {
-                                _isSwitched = value;
-                              });
-                            }),
-                      ),
-
                       const Spacer()
                     ],
                   ),
@@ -209,7 +201,7 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
                                   _name.text,
                                   _email.text,
                                   _password.text,
-                                  _isSwitched,
+                                  _landwirt,
                                 );
 
                             Navigator.pushReplacementNamed(context, "/home");

@@ -26,7 +26,7 @@ BottomNavigationBar navigationBar(int index, BuildContext context, User? user) {
         if (user != null) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (context) => LandingPage()),
           );
         } else {
           Navigator.push(

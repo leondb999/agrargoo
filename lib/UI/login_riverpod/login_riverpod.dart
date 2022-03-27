@@ -42,6 +42,7 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
   @override
   Widget build(BuildContext context) {
     User? authControllerState = ref.watch(authControllerProvider);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -197,7 +198,7 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
                                       Navigator.pushReplacementNamed(
-                                          context, "/register");
+                                          context, "/whoareyou");
                                     })
                             ],
                           ),
