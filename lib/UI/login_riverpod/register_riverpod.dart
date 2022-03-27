@@ -235,7 +235,7 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
                         padding: const EdgeInsets.only(bottom: 24.0),
                         child: RichText(
                           text: TextSpan(
-                            text: 'You already have an account? ',
+                            text: 'You already have an account?  ',
                             style: const TextStyle(color: Colors.black),
                             children: [
                               TextSpan(
