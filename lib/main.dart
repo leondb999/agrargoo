@@ -46,14 +46,19 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  final Stream<QuerySnapshot> users =
-      FirebaseFirestore.instance.collection('users').snapshots();
+  // final Stream<QuerySnapshot> users =
+  //   FirebaseFirestore.instance.collection('users').snapshots();
+  final usersCollection = FirebaseFirestore.instance.collection('users');
+  late bool landwirt;
+
   @override
   Widget build(BuildContext context) {
-    // ref.refresh(authControllerProvider);
     User? authControllerState = ref.watch(authControllerProvider);
     authControllerState?.reload();
     User? authControllerStateRead = ref.read(authControllerProvider);
+    String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+    final String? documentID =
+        ref.read(authControllerProvider.notifier).state?.uid;
 
     return Scaffold(
       appBar: AppBar(
@@ -119,44 +124,101 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         "Signed In:  ${ref.read(authControllerProvider.notifier).state?.uid}",
                       ),
                       Text(
-                        "Name ${authControllerState.displayName}",
-                        style: TextStyle(color: Colors.green),
-                      ),
-                      Text(
                         "Email: ${ref.read(authControllerProvider.notifier).state?.email}",
                         style: TextStyle(color: Colors.green),
                       ),
-                      Text(
-                        "Email: ${authControllerStateRead!.displayName}",
-                        style: TextStyle(color: Colors.green),
+                      SizedBox(
+                        height: 10,
                       ),
+                      Expanded(
+                        child: FutureBuilder<DocumentSnapshot>(
+                          future: usersCollection.doc(documentID).get(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<DocumentSnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              return Text("Something went wrong");
+                            }
+                            if (snapshot.hasData && !snapshot.data!.exists) {
+                              return Text("Document does not exist");
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              Map<String, dynamic> data =
+                                  snapshot.data!.data() as Map<String, dynamic>;
+                              return Column(
+                                children: [
+                                  Text(
+                                      "name: ${data['name']} ist ein ${data['landwirt'] ? 'Landwirt' : 'Arbeiter'} | (landwirt == ${data['landwirt']})"),
+                                ],
+                              );
+                            }
+                            return Column(
+                              children: [
+                                CircularProgressIndicator(),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      /*
+                      Container(
+                          height: 300,
+                          child: StreamBuilder<QuerySnapshot>(
+                            stream: usersCollection.snapshots(),
+                            builder: (context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.hasError) {
+                                return Text('Something went wrong');
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Container(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              final data = snapshot.requireData;
+
+                              return Column(
+                                children: [
+                                  Text("Hello"),
+                                  ListView.builder(
+                                    itemCount: data.size,
+                                    itemBuilder: (context, index) {
+                                      return Text(
+                                          'My Name is ${data.docs[index]['name']} and i am a ${data.docs[index]['landwirt'] ? 'Landwirt' : 'Arbeiter'}');
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          ))
+                      */
                     ],
                   ),
-            Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-              stream: users,
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return Text('Something went wrong');
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Container(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                final data = snapshot.requireData;
-
-                return ListView.builder(
-                    itemCount: data.size,
-                    itemBuilder: (context, index) {
-                      return Text(
-                          'My Name is ${data.docs[index]['name']} and i am a ${data.docs[index]['landwirt'] ? 'Landwirt' : 'Arbeiter'}');
-                    });
-              },
-            ))
           ],
         ),
       ),
     );
   }
+}
+
+Future<DocumentSnapshot?> getCurrentUserbyDocumentId(
+    CollectionReference<Map<String, dynamic>> collection, String? id) async {
+  bool? landwirt;
+  DocumentSnapshot? documentSnapshot;
+
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(id)
+      .get()
+      .then((value) {
+    documentSnapshot = value;
+    landwirt = value['landwirt'];
+  });
+  // print("landwirt: ${landwirt.toString()} ");
+  //now you can access the document field value
+  // String? name = documentSnapshot!['name'];
+  //bool landwirt2 = documentSnapshot!['landwirt'];
+  //print("Name: '$name' ist ein ${landwirt2 ? 'Landwirt' : 'Arbeiter'} ");
+  return documentSnapshot;
 }

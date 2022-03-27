@@ -26,7 +26,7 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
   final _name = TextEditingController();
   final _email = TextEditingController();
   final _password = TextEditingController();
-
+  bool _isSwitched = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -157,6 +157,23 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
                         ),
                       ),
 
+                      Center(
+                        child: Text(
+                            "Du bist ein ${_isSwitched ? 'Landwirt' : 'Arbeiter'} $_isSwitched"),
+                      ),
+
+                      Center(
+                        child: Switch(
+                            value: _isSwitched,
+                            activeTrackColor: Colors.greenAccent,
+                            activeColor: Colors.green,
+                            onChanged: (value) {
+                              setState(() {
+                                _isSwitched = value;
+                              });
+                            }),
+                      ),
+
                       const Spacer()
                     ],
                   ),
@@ -188,21 +205,14 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
 
                             ///SignIn Anonymously
                             ref.read(authControllerProvider.notifier).register(
-                                context,
-                                _name.text,
-                                _email.text,
-                                _password.text);
+                                  context,
+                                  _name.text,
+                                  _email.text,
+                                  _password.text,
+                                  _isSwitched,
+                                );
 
-                            //  await Navigator.pushNamed(context, "/home")
-                            //    .then((value) => setState(() {}));
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()),
-                            ).then((value) => Navigator.pop(context));
-
-                            //   Navigator.pushReplacementNamed(context, "/home");
+                            Navigator.pushReplacementNamed(context, "/home");
 
                             ///Login User in Firebase
                           },
