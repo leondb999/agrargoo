@@ -1,6 +1,5 @@
 import 'package:agrargo/UI/login_riverpod/register_riverpod.dart';
 import 'package:agrargo/UI/login_riverpod/test_screen.dart';
-import 'package:agrargo/UI/pages/1_landing_page.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'UI/login_riverpod/login_riverpod.dart';
 import 'firebase_options.dart';
-import 'package:agrargo/UI/pages/1_landing_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

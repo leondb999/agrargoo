@@ -1,4 +1,4 @@
-import 'package:agrargo/UI/pages/1_landing_page.dart';
+import 'package:agrargo/UI/login_riverpod/login_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,8 +25,8 @@ class AuthChecker extends ConsumerWidget {
 
     return _authState.when(
         data: (data) {
-          if (data != null) return const LandingPage();
-          return const LandingPage(); //LoginPage();
+          if (data != null) return LoginRiverpodPage();
+          return LoginRiverpodPage(); //LoginPage();
         },
         loading: () => const LoadingScreen(),
         error: (e, trace) => ErrorScreen(e, trace));

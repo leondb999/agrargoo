@@ -1,5 +1,4 @@
 import 'package:agrargo/UI/login/login_page.dart';
-import 'package:agrargo/UI/pages/1_landing_page.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:agrargo/zwischenspeicher/login_page_zw.dart';
 import 'package:firebase_auth/firebase_auth.dart';
