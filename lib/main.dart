@@ -39,10 +39,19 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  Widget build(BuildContext context) {
+    // ref.refresh(authControllerProvider);
     User? authControllerState = ref.watch(authControllerProvider);
+    authControllerState?.reload();
+    User? authControllerStateRead = ref.read(authControllerProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('Agrar Go')),
@@ -82,41 +91,50 @@ class HomeScreen extends ConsumerWidget {
                 ),
         ],
       ),
-      body: SafeArea(
-        child: Row(
-          children: [
-            authControllerState == null
-                ? Column(
-                    children: [
-                      Icon(Icons.login),
-                      Text("Signed Out"),
-                      Text(
-                        "Name ${ref.read(authControllerProvider.notifier).state?.displayName}",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      Text(
-                        "Email ${ref.read(authControllerProvider.notifier).state?.email}",
-                        style: TextStyle(color: Colors.red),
-                      )
-                    ],
-                  )
-                : Column(
-                    children: [
-                      Icon(Icons.login),
-                      Text(
-                        "Signed In:  ${ref.read(authControllerProvider.notifier).state?.uid}",
-                      ),
-                      Text(
-                        "Name ${ref.read(authControllerProvider.notifier).state?.displayName}",
-                        style: TextStyle(color: Colors.green),
-                      ),
-                      Text(
-                        "Email: ${ref.read(authControllerProvider.notifier).state?.email}",
-                        style: TextStyle(color: Colors.green),
-                      )
-                    ],
-                  ),
-          ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          ref.refresh(authControllerProvider);
+        },
+        child: SafeArea(
+          child: Row(
+            children: [
+              authControllerState == null
+                  ? Column(
+                      children: [
+                        Icon(Icons.login),
+                        Text("Signed Out"),
+                        Text(
+                          "Name ${authControllerState?.displayName}",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        Text(
+                          "Email ${ref.read(authControllerProvider.notifier).state?.email}",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        Icon(Icons.login),
+                        Text(
+                          "Signed In:  ${ref.read(authControllerProvider.notifier).state?.uid}",
+                        ),
+                        Text(
+                          "Name ${authControllerState.displayName}",
+                          style: TextStyle(color: Colors.green),
+                        ),
+                        Text(
+                          "Email: ${ref.read(authControllerProvider.notifier).state?.email}",
+                          style: TextStyle(color: Colors.green),
+                        ),
+                        Text(
+                          "Email: ${authControllerStateRead!.displayName}",
+                          style: TextStyle(color: Colors.green),
+                        ),
+                      ],
+                    ),
+            ],
+          ),
         ),
       ),
     );

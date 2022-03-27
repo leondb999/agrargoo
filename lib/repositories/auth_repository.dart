@@ -12,6 +12,7 @@ abstract class BaseAuthRepository {
       BuildContext context, String email, String password);
   Future<void> registerUserEmailAndPW(
       BuildContext context, String name, String email, String password);
+  Future<void> updateUserName(String name);
   User? getCurrentUser();
   Future<void> signOut();
 }
@@ -85,8 +86,20 @@ class AuthRepository implements BaseAuthRepository {
       BuildContext context, String name, String email, String password) async {
     // TODO: implement registerUserEmailAndPW
     final userCredential = await _read(firebaseAuthProvider)
-        .createUserWithEmailAndPassword(email: email, password: password);
-    userCredential.user?.updateDisplayName(name);
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((userCredential) {
+      userCredential.user!.updateDisplayName(name);
+      userCredential.user!.reload();
+      // Navigator.pop(context);
+      //  Navigator.pushReplacementNamed(context, "/home");
+    });
+
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateUserName(String name) {
+    // TODO: implement updateUserName
     throw UnimplementedError();
   }
 }

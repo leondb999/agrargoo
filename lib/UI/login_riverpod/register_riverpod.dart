@@ -10,6 +10,8 @@ import 'package:flutterfire_ui/database.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:flutterfire_ui/i10n.dart';
 
+import '../../main.dart';
+
 class RegisterRiverpodPage extends ConsumerStatefulWidget {
   static const routename = '/RegisterRiverpodPage';
   RegisterRiverpodPage({Key? key}) : super(key: key);
@@ -174,7 +176,7 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
                         margin: const EdgeInsets.symmetric(horizontal: 16),
                         width: double.infinity,
                         child: MaterialButton(
-                          onPressed: () {
+                          onPressed: () async {
                             ///Validate Input Field Data
 
                             if (!_formKey.currentState!.validate()) {
@@ -190,7 +192,17 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
                                 _name.text,
                                 _email.text,
                                 _password.text);
-                            Navigator.pushReplacementNamed(context, "/home");
+
+                            //  await Navigator.pushNamed(context, "/home")
+                            //    .then((value) => setState(() {}));
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()),
+                            ).then((value) => Navigator.pop(context));
+
+                            //   Navigator.pushReplacementNamed(context, "/home");
 
                             ///Login User in Firebase
                           },

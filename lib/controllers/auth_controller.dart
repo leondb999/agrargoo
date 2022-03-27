@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../repositories/auth_repository.dart';
 
 final authControllerProvider = StateNotifierProvider<AuthController, User?>(
-  (ref) => AuthController(ref.read), //..getUser(),
+  (ref) => AuthController(ref.read)..getUser(),
 );
 
 class AuthController extends StateNotifier<User?> {
