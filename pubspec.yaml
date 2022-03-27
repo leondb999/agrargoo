@@ -38,9 +38,12 @@ dependencies:
   google_sign_in_web: ^0.10.0+5
   flutterfire_ui: ^0.3.6+1
   flutter_riverpod: ^1.0.3
+  cloud_firestore: ^3.1.10
+  json_serializable: ^6.1.5
 #dependency_overrides:
  # firebase_auth_platform_interface: 6.1.11
 dev_dependencies:
+  build_runner: ^2.1.8
   flutter_test:
     sdk: flutter
 

@@ -1,6 +1,7 @@
 import 'package:agrargo/UI/login_riverpod/register_riverpod.dart';
 import 'package:agrargo/UI/login_riverpod/test_screen.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final Stream<QuerySnapshot> users =
+      FirebaseFirestore.instance.collection('users').snapshots();
   @override
   Widget build(BuildContext context) {
     // ref.refresh(authControllerProvider);
@@ -91,50 +94,67 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          ref.refresh(authControllerProvider);
-        },
-        child: SafeArea(
-          child: Row(
-            children: [
-              authControllerState == null
-                  ? Column(
-                      children: [
-                        Icon(Icons.login),
-                        Text("Signed Out"),
-                        Text(
-                          "Name ${authControllerState?.displayName}",
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        Text(
-                          "Email ${ref.read(authControllerProvider.notifier).state?.email}",
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        Icon(Icons.login),
-                        Text(
-                          "Signed In:  ${ref.read(authControllerProvider.notifier).state?.uid}",
-                        ),
-                        Text(
-                          "Name ${authControllerState.displayName}",
-                          style: TextStyle(color: Colors.green),
-                        ),
-                        Text(
-                          "Email: ${ref.read(authControllerProvider.notifier).state?.email}",
-                          style: TextStyle(color: Colors.green),
-                        ),
-                        Text(
-                          "Email: ${authControllerStateRead!.displayName}",
-                          style: TextStyle(color: Colors.green),
-                        ),
-                      ],
-                    ),
-            ],
-          ),
+      body: SafeArea(
+        child: Row(
+          children: [
+            authControllerState == null
+                ? Column(
+                    children: [
+                      Icon(Icons.login),
+                      Text("Signed Out"),
+                      Text(
+                        "Name ${authControllerState?.displayName}",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      Text(
+                        "Email ${ref.read(authControllerProvider.notifier).state?.email}",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      Icon(Icons.login),
+                      Text(
+                        "Signed In:  ${ref.read(authControllerProvider.notifier).state?.uid}",
+                      ),
+                      Text(
+                        "Name ${authControllerState.displayName}",
+                        style: TextStyle(color: Colors.green),
+                      ),
+                      Text(
+                        "Email: ${ref.read(authControllerProvider.notifier).state?.email}",
+                        style: TextStyle(color: Colors.green),
+                      ),
+                      Text(
+                        "Email: ${authControllerStateRead!.displayName}",
+                        style: TextStyle(color: Colors.green),
+                      ),
+                    ],
+                  ),
+            Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+              stream: users,
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Something went wrong');
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                final data = snapshot.requireData;
+
+                return ListView.builder(
+                    itemCount: data.size,
+                    itemBuilder: (context, index) {
+                      return Text(
+                          'My Name is ${data.docs[index]['name']} and i am a ${data.docs[index]['landwirt'] ? 'Landwirt' : 'Arbeiter'}');
+                    });
+              },
+            ))
+          ],
         ),
       ),
     );

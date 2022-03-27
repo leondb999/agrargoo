@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                   .whenComplete(
                     () => _auth.authStateChange.listen(
                       (event) async {
-                        MaterialPageRoute(builder: (context) => HomePage());
+                        MaterialPageRoute(builder: (context) => LoginPage());
                         if (event == null) {
                           loading();
                           return;
@@ -306,4 +306,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-*/
