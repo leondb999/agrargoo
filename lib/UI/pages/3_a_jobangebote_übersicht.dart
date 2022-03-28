@@ -38,17 +38,9 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
             child: Row(
               children: [
                 SizedBox(width: MediaQuery.of(context).size.width * 0.89),
-                Icon(
-                  Icons.filter_alt_sharp,
-                  color: Colors.black,
-                  size: 30.0,
-                ),
+                Icon(Icons.filter_alt_sharp, color: Colors.black, size: 30.0),
                 SizedBox(width: 7),
-                Icon(
-                  Icons.sort,
-                  color: Colors.black,
-                  size: 30.0,
-                ),
+                Icon(Icons.sort, color: Colors.black, size: 30.0),
               ],
             ),
           ),
@@ -57,28 +49,27 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
               height: MediaQuery.of(context).size.height * 0.015),
           Expanded(
             child: SingleChildScrollView(
-              child: Column(children: [
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('jobAnzeigen')
-                        .snapshots(),
-                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('Something went wrong');
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Container(
-                          height: 50,
+              child: Container(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('jobAnzeigen')
+                      .snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Something went wrong');
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return SizedBox(
                           width: 50,
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      final List<DocumentSnapshot> documents =
-                          snapshot.data!.docs;
+                          height: 50,
+                          child: CircularProgressIndicator());
+                    }
+                    final List<DocumentSnapshot> documents =
+                        snapshot.data!.docs;
 
-                      return ListView(
+                    return Container(
+                      height: MediaQuery.of(context).size.height,
+                      child: ListView(
                         children: documents
                             .map(
                               (doc) => Card(
@@ -93,14 +84,14 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
                                     children: [
                                       Expanded(
                                         child: Container(
-                                            height: 100,
-                                            color: Colors.amber,
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                    "Jobanzeige ID: ${doc.id}"),
-                                              ],
-                                            )),
+                                          height: 100,
+                                          color: Colors.amber,
+                                          child: Row(
+                                            children: [
+                                              Text("Jobanzeige ID: ${doc.id}"),
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -123,230 +114,11 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
                               ),
                             )
                             .toList(),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
-                /*
-    Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    child: new Container(
-                      decoration: new BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: new BorderRadius.only(
-                            topLeft: const Radius.circular(40.0),
-                            topRight: const Radius.circular(40.0),
-                            bottomLeft: const Radius.circular(40.0),
-                            bottomRight: const Radius.circular(40.0),
-                          )),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                              flex: 2,
-                              child: const Image(
-                                image: NetworkImage(
-                                    'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-                              )),
-                          Expanded(
-                              flex: 6,
-                              child: Text("Gemüseernte - Bauernhof Meyer",
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.normal,
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 25.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF000000)))),
-                          Expanded(
-                            flex: 2,
-                            child: Row(
-                              children: [
-                                Text("9,25 €/h",
-                                    style: TextStyle(
-                                        fontStyle: FontStyle.italic,
-                                        fontFamily: 'Open Sans',
-                                        fontSize: 25.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF000000))),
-                                SizedBox(width: 50),
-                                IconButton(
-                                  icon: const Icon(Icons.arrow_right),
-                                  onPressed: () async {
-                                    Navigator.pushNamed(
-                                      context,
-                                      Jobangebot.routename,
-                                      arguments: {'landwirt': _landwirt},
-                                    );
-                                  },
-                                  color: Colors.black,
-                                  iconSize: 50,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )),
-                SizedBox(height: 20),
-                Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    child: new Container(
-                      decoration: new BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: new BorderRadius.only(
-                            topLeft: const Radius.circular(40.0),
-                            topRight: const Radius.circular(40.0),
-                            bottomLeft: const Radius.circular(40.0),
-                            bottomRight: const Radius.circular(40.0),
-                          )),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                              flex: 2,
-                              child: const Image(
-                                image: NetworkImage(
-                                    'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-                              )),
-                          Expanded(
-                              flex: 6,
-                              child: Text(
-                                  "Viel zu tun im Kuhstall - Bauernhof Laier",
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.normal,
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 25.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF000000)))),
-                          Expanded(
-                              flex: 2,
-                              child: Row(
-                                children: [
-                                  Text("13,50 €/h",
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic,
-                                          fontFamily: 'Open Sans',
-                                          fontSize: 25.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF000000))),
-                                  SizedBox(width: 50),
-                                  Icon(
-                                    Icons.arrow_right,
-                                    color: Colors.black,
-                                    size: 50.0,
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                    )),
-                SizedBox(height: 20),
-                Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    child: new Container(
-                      decoration: new BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: new BorderRadius.only(
-                            topLeft: const Radius.circular(40.0),
-                            topRight: const Radius.circular(40.0),
-                            bottomLeft: const Radius.circular(40.0),
-                            bottomRight: const Radius.circular(40.0),
-                          )),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                              flex: 2,
-                              child: const Image(
-                                image: NetworkImage(
-                                    'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-                              )),
-                          Expanded(
-                              flex: 6,
-                              child: Text("Spargelernte - Familie Leuer",
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.normal,
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 25.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF000000)))),
-                          Expanded(
-                              flex: 2,
-                              child: Row(
-                                children: [
-                                  Text("10,00 €/h",
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic,
-                                          fontFamily: 'Open Sans',
-                                          fontSize: 25.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF000000))),
-                                  SizedBox(width: 50),
-                                  Icon(
-                                    Icons.arrow_right,
-                                    color: Colors.black,
-                                    size: 50.0,
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                    )),
-                SizedBox(height: 20),
-                Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    child: new Container(
-                      decoration: new BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: new BorderRadius.only(
-                            topLeft: const Radius.circular(40.0),
-                            topRight: const Radius.circular(40.0),
-                            bottomLeft: const Radius.circular(40.0),
-                            bottomRight: const Radius.circular(40.0),
-                          )),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                              flex: 2,
-                              child: const Image(
-                                image: NetworkImage(
-                                    'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-                              )),
-                          Expanded(
-                              flex: 6,
-                              child: Text(
-                                  "Traktorfahrer*in gesucht - Bauernhof Riedel",
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.normal,
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 25.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF000000)))),
-                          Expanded(
-                              flex: 2,
-                              child: Row(
-                                children: [
-                                  Text("9,50 €/h",
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic,
-                                          fontFamily: 'Open Sans',
-                                          fontSize: 25.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF000000))),
-                                  SizedBox(width: 50),
-                                  Icon(
-                                    Icons.arrow_right,
-                                    color: Colors.black,
-                                    size: 50.0,
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                    )),
-                */
-              ]),
+              ),
             ),
           )
         ],
