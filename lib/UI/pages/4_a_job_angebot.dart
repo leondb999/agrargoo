@@ -18,77 +18,91 @@ class Jobangebot extends ConsumerStatefulWidget {
 
 class _JobangebotState extends ConsumerState<Jobangebot> {
   final usersCollection = FirebaseFirestore.instance.collection('users');
-
+  String _jobanzeigeID = "";
   @override
   Widget build(BuildContext context) {
     User? authControllerState = ref.watch(authControllerProvider);
-    final String? documentID =
-        ref.read(authControllerProvider.notifier).state?.uid;
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
 
-    bool _landwirt = arguments['landwirt'];
-    print("landwirt: $_landwirt");
-
+    String jobanzeigeID = arguments['jobanzeige_ID'];
+    setState(() {
+      _jobanzeigeID = jobanzeigeID;
+      print("setState _jobanzeigeID");
+    });
+    print("jobanzeigeID: $jobanzeigeID");
     return Scaffold(
-        appBar: appBar(),
-        resizeToAvoidBottomInset: false,
-        body: Column(children: [
-          Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.17,
-              color: Color(0xFF1f623c),
-              child: Center(
-                  child: Text("Gemüseernte - Bauernhof Meyer",
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontFamily: 'Open Sans',
-                          fontSize: 50.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFFffffff))))),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.95,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(children: [
-                  Icon(
-                    Icons.place,
-                    color: Colors.black,
-                    size: 25.0,
-                  ),
-                  SizedBox(width: 3),
-                  Text("Hockenheim",
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontFamily: 'Open Sans',
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF000000))),
-                ]),
-                Row(
+      appBar: appBar(),
+      resizeToAvoidBottomInset: false,
+      body: Column(children: [
+        FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance
+              .collection('jobAnzeigen')
+              .doc(_jobanzeigeID)
+              .get(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text("Something went wrong");
+            }
+            if (snapshot.hasData && !snapshot.data!.exists) {
+              return Text("Document does not exist");
+            }
+            if (snapshot.connectionState == ConnectionState.done) {
+              Map<String, dynamic> data =
+                  snapshot.data!.data() as Map<String, dynamic>;
+              return Container(
+                width: MediaQuery.of(context).size.width * 0.95,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(
-                      Icons.date_range,
-                      color: Colors.black,
-                      size: 25.0,
-                    ),
-                    SizedBox(width: 3),
-                    Text("01.04.2022 - 07.05.2022",
-                        style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontFamily: 'Open Sans',
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF000000)))
+                    Row(children: [
+                      Text("Title: ${data['titel']}"),
+                      Icon(
+                        Icons.place,
+                        color: Colors.black,
+                        size: 25.0,
+                      ),
+                      SizedBox(width: 3),
+                      Text("Hockenheim",
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              fontFamily: 'Open Sans',
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF000000))),
+                    ]),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.date_range,
+                          color: Colors.black,
+                          size: 25.0,
+                        ),
+                        SizedBox(width: 3),
+                        Text("01.04.2022 - 07.05.2022",
+                            style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontFamily: 'Open Sans',
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF000000)))
+                      ],
+                    )
                   ],
-                )
+                ),
+              );
+            }
+            return Column(
+              children: [
+                CircularProgressIndicator(),
               ],
-            ),
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.015),
-          Expanded(
-              child: SingleChildScrollView(
+            );
+          },
+        ),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.015),
+        Expanded(
+          child: SingleChildScrollView(
             child: Column(children: [
               Row(
                 children: <Widget>[
@@ -287,7 +301,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                           : Navigator.pushNamed(
                               context,
                               LoginRiverpodPage.routename,
-                              arguments: {'landwirt': _landwirt},
+                              arguments: {'landwirt': false},
                             );
                     },
                     style: ElevatedButton.styleFrom(
@@ -299,7 +313,9 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                   )),
               SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             ]),
-          ))
-        ]));
+          ),
+        ),
+      ]),
+    );
   }
 }

@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterRiverpodPage(),
         '/login': (context) => LoginRiverpodPage(),
         '/whoareyou': (context) => WhoAreYou(),
-        '/jobangebotübersicht': (context) => JobangebotUebersichtPage(),
+        '/jobangebotuebersicht': (context) => JobangebotUebersichtPage(),
         '/jobangebot': (context) => Jobangebot(),
         '/helferprofil': (context) => HelferProfil(),
         '/landwirtprofil': (context) => LandwirtProfil(),

@@ -207,15 +207,6 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
                                   _landwirt,
                                 );
 
-                            /*
-                            if (_landwirt == true) {
-                              Navigator.pushNamed(
-                                context,
-                                TestScreen.routename,
-                                arguments: {'landwirt': _landwirt},
-                              );
-                            }
-*/
                             ///Login User in Firebase
                           },
                           child: Text(

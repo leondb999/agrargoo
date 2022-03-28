@@ -1,4 +1,5 @@
 import 'package:agrargo/UI/pages/4_a_job_angebot.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -6,7 +7,7 @@ import '../../widgets/layout_widgets.dart';
 
 class JobangebotUebersichtPage extends StatefulWidget {
   const JobangebotUebersichtPage({Key? key}) : super(key: key);
-  static const routename = '/jobangebotübersicht';
+  static const routename = '/jobangebotuebersicht';
   @override
   State<JobangebotUebersichtPage> createState() =>
       _JobangebotUebersichtPageState();
@@ -15,12 +16,6 @@ class JobangebotUebersichtPage extends StatefulWidget {
 class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
   @override
   Widget build(BuildContext context) {
-    final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
-
-    bool _landwirt = arguments['landwirt'];
-    print("landwirt: $_landwirt");
-
     return Scaffold(
       appBar: appBar(),
       resizeToAvoidBottomInset: false,
@@ -64,6 +59,76 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
             child: SingleChildScrollView(
               child: Column(children: [
                 Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('jobAnzeigen')
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Something went wrong');
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Container(
+                          height: 50,
+                          width: 50,
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      final List<DocumentSnapshot> documents =
+                          snapshot.data!.docs;
+
+                      return ListView(
+                        children: documents
+                            .map(
+                              (doc) => Card(
+                                color: Colors.grey,
+                                margin: EdgeInsets.only(top: 40),
+                                child: ListTile(
+                                  title: Text(
+                                    doc['titel'],
+                                    style: TextStyle(fontSize: 30),
+                                  ),
+                                  subtitle: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                            height: 100,
+                                            color: Colors.amber,
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                    "Jobanzeige ID: ${doc.id}"),
+                                              ],
+                                            )),
+                                      ),
+                                    ],
+                                  ),
+                                  trailing: _activeAnzeige(doc['status']),
+                                  leading: Image.network(
+                                    "https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg",
+                                  ),
+                                  onTap: () {
+                                    print("document: ${doc.id}");
+
+                                    Navigator.pushNamed(
+                                      context,
+                                      Jobangebot.routename,
+                                      arguments: {
+                                        'jobanzeige_ID': doc.id.toString()
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      );
+                    },
+                  ),
+                ),
+                /*
+    Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: MediaQuery.of(context).size.height * 0.2,
                     child: new Container(
@@ -280,6 +345,7 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
                         ],
                       ),
                     )),
+                */
               ]),
             ),
           )
@@ -287,4 +353,14 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
       ),
     );
   }
+}
+
+Widget _activeAnzeige(bool status) {
+  Widget x = Text("Hello");
+  if (status == true) {
+    x = Text('Active', style: TextStyle(color: Colors.green));
+  } else {
+    x = Text('inactive', style: TextStyle(color: Colors.red));
+  }
+  return x;
 }

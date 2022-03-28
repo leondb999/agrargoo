@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../main.dart';
+import '4_a_job_angebot.dart';
 
 class LandwirtProfil extends ConsumerStatefulWidget {
   const LandwirtProfil({Key? key}) : super(key: key);
@@ -16,8 +17,14 @@ class LandwirtProfil extends ConsumerStatefulWidget {
 }
 
 class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
-  final usersCollection = FirebaseFirestore.instance.collection('users');
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  ///User Collection
+  final usersCollection = FirebaseFirestore.instance.collection('users');
+
+  ///Hof Collection
+  final hofCollection =
+      FirebaseFirestore.instance.collection('höfe').snapshots();
 
   checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
@@ -40,6 +47,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
   Widget build(BuildContext context) {
     User? authControllerState = ref.watch(authControllerProvider);
     String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+    print("User ID : $userID");
     final String? documentID =
         ref.read(authControllerProvider.notifier).state?.uid;
 
@@ -79,9 +87,187 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                     onPressed: () {},
                   )
           ]),
-      body: Container(
-        child: Text("Landwirt Profil"),
+      body: SafeArea(
+        child: Center(
+          /// User Infos
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                child: authControllerState == null
+                    ? Text("Nothing to See")
+                    : Column(
+                        children: [
+                          ///Show User Name from Firestore
+                          Container(
+                            color: Colors.greenAccent,
+                            width: MediaQuery.of(context).size.width,
+                            child: FutureBuilder<DocumentSnapshot>(
+                              future: usersCollection.doc(documentID).get(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                if (snapshot.hasError) {
+                                  return Text("Something went wrong");
+                                }
+                                if (snapshot.hasData &&
+                                    !snapshot.data!.exists) {
+                                  return Text("Document does not exist");
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  Map<String, dynamic> data = snapshot.data!
+                                      .data() as Map<String, dynamic>;
+                                  return Column(
+                                    children: [
+                                      Text(
+                                        "User ID:  ${ref.read(authControllerProvider.notifier).state?.uid}",
+                                      ),
+                                      Text(
+                                        "Hi ${data['name']}",
+                                        style: TextStyle(fontSize: 30),
+                                      ),
+                                    ],
+                                  );
+                                }
+                                return Column(
+                                  children: [
+                                    Container(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            height: 60,
+                          ),
+
+                          ///Höfe with User ID from Firestore
+                          Container(
+                            color: Colors.lightGreen,
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Alle Höfe",
+                                  style: TextStyle(fontSize: 30),
+                                ),
+                                Container(
+                                  height: 300,
+                                  child: StreamBuilder<QuerySnapshot>(
+                                    stream: FirebaseFirestore.instance
+                                        .collection('höfe')
+                                        .snapshots(),
+                                    builder: (context,
+                                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                                      if (snapshot.hasError) {
+                                        return Text('Something went wrong');
+                                      }
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Container(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                      final List<DocumentSnapshot> documents =
+                                          snapshot.data!.docs;
+
+                                      return ListView(
+                                        children: documents
+                                            .map(
+                                              (doc) => Card(
+                                                child: ListTile(
+                                                  title: Text(doc['name']),
+                                                ),
+                                              ),
+                                            )
+                                            .toList(),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            color: Colors.amber,
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Alle Anzeigen",
+                                  style: TextStyle(fontSize: 30),
+                                ),
+                                Container(
+                                  height: 300,
+                                  child: StreamBuilder<QuerySnapshot>(
+                                    stream: FirebaseFirestore.instance
+                                        .collection('jobAnzeigen')
+                                        .snapshots(),
+                                    builder: (context,
+                                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                                      if (snapshot.hasError) {
+                                        return Text('Something went wrong');
+                                      }
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Container(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                      final List<DocumentSnapshot> documents =
+                                          snapshot.data!.docs;
+
+                                      return ListView(
+                                        children: documents
+                                            .map(
+                                              (doc) => Card(
+                                                child: ListTile(
+                                                  title: Text(doc['titel']),
+                                                  subtitle: _activeAnzeige(
+                                                      doc['status']),
+                                                  onTap: () {
+                                                    Navigator.pushNamed(
+                                                      context,
+                                                      Jobangebot.routename,
+                                                    );
+                                                  },
+                                                  leading:
+                                                      Icon(Icons.arrow_right),
+                                                ),
+                                              ),
+                                            )
+                                            .toList(),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
+}
+
+Widget _activeAnzeige(bool status) {
+  Widget x = Text("Hello");
+  if (status == true) {
+    x = Text('Active', style: TextStyle(color: Colors.green));
+  } else {
+    x = Text('inactive', style: TextStyle(color: Colors.red));
+  }
+  return x;
 }

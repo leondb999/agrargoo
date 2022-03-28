@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../UI/pages/6_a_helfer_profil.dart';
 import '../UI/pages/6_b_landwirt_profil.dart';
 
 abstract class BaseAuthRepository {
@@ -97,11 +98,23 @@ class AuthRepository implements BaseAuthRepository {
       User? user = userCredential.user;
       await FirebaseFirestore.instance.collection('users').doc(user?.uid).set(
           {'name': name, 'email': email, 'landwirt': landwirt}).then((value) {
-        Navigator.pushNamed(
-          context,
-          LandwirtProfil.routename,
-          arguments: {'landwirt': landwirt},
-        );
+        ///Landwirt Profil Page
+        if (landwirt == true) {
+          Navigator.pushNamed(
+            context,
+            LandwirtProfil.routename,
+            arguments: {'landwirt': landwirt},
+          );
+        }
+
+        ///Helfer Profil Page
+        if (landwirt == false) {
+          Navigator.pushNamed(
+            context,
+            HelferProfil.routename,
+            arguments: {'landwirt': landwirt},
+          );
+        }
       });
 
       // Navigator.pop(context);
