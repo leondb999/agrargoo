@@ -7,6 +7,7 @@ import '../UI/error_screen.dart';
 import '../UI/pages/1_landing_page.dart';
 import '../UI/loading_screen.dart';
 import '../UI/login/login_page.dart';
+import '../UI/pages/3_a_jobangebote_übersicht.dart';
 import '../providers/auth_providers.dart';
 
 class AuthChecker extends ConsumerWidget {
@@ -28,10 +29,10 @@ class AuthChecker extends ConsumerWidget {
         data: (data) {
           if (data != null) {
             print("User Logged In | User Name: ${_user.value!.displayName}");
-            return ProfilePage(user: _user.value);
+            return JobangebotUebersichtPage();
           }
           print("User Logged Out!");
-          return LoginPage();
+          return JobangebotUebersichtPage();
         },
         loading: () => const LoadingScreen(),
         error: (e, trace) => ErrorScreen(e, trace));
