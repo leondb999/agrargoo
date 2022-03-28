@@ -9,6 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'UI/login_riverpod/login_riverpod.dart';
+import 'UI/pages/3_a_jobangebote_übersicht.dart';
+import 'UI/pages/3_b_helfer_übersicht.dart';
+import 'UI/pages/4_a_job_angebot.dart';
+import 'UI/pages/6_a_helfer_profil.dart';
+import 'UI/pages/6_b_landwirt_profil.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -32,7 +37,13 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeScreen(),
         '/test': (context) => TestScreen(),
         '/register': (context) => RegisterRiverpodPage(),
+        '/login': (context) => LoginRiverpodPage(),
         '/whoareyou': (context) => WhoAreYou(),
+        '/jobangebotübersicht': (context) => JobangebotUebersichtPage(),
+        '/jobangebot': (context) => Jobangebot(),
+        '/helferprofil': (context) => HelferProfil(),
+        '/landwirtprofil': (context) => LandwirtProfil(),
+        '/helferuebersicht': (context) => HelferUebersichtPage(),
       },
     );
   }

@@ -11,6 +11,7 @@ import 'package:flutterfire_ui/firestore.dart';
 import 'package:flutterfire_ui/i10n.dart';
 
 import '../../main.dart';
+import '../pages/6_b_landwirt_profil.dart';
 
 ///https://www.geeksforgeeks.org/flutter-arguments-in-named-routes/
 ///TODO Vorname & Nachname
@@ -204,8 +205,13 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
                                   _password.text,
                                   _landwirt,
                                 );
-
-                            Navigator.pushReplacementNamed(context, "/home");
+                            if (_landwirt == true) {
+                              Navigator.pushNamed(
+                                context,
+                                LandwirtProfil.routename,
+                                arguments: {'landwirt': _landwirt},
+                              );
+                            }
 
                             ///Login User in Firebase
                           },

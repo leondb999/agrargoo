@@ -6,7 +6,7 @@ import '../../widgets/layout_widgets.dart';
 
 class JobangebotUebersichtPage extends StatefulWidget {
   const JobangebotUebersichtPage({Key? key}) : super(key: key);
-
+  static const routename = '/jobangebotübersicht';
   @override
   State<JobangebotUebersichtPage> createState() =>
       _JobangebotUebersichtPageState();
@@ -15,6 +15,12 @@ class JobangebotUebersichtPage extends StatefulWidget {
 class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
   @override
   Widget build(BuildContext context) {
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+
+    bool _landwirt = arguments['landwirt'];
+    print("landwirt: $_landwirt");
+
     return Scaffold(
       appBar: appBar(),
       resizeToAvoidBottomInset: false,
@@ -101,10 +107,11 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
                                 IconButton(
                                   icon: const Icon(Icons.arrow_right),
                                   onPressed: () async {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                jobangebot()));
+                                    Navigator.pushNamed(
+                                      context,
+                                      Jobangebot.routename,
+                                      arguments: {'landwirt': _landwirt},
+                                    );
                                   },
                                   color: Colors.black,
                                   iconSize: 50,

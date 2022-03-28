@@ -1,3 +1,4 @@
+import 'package:agrargo/UI/login_riverpod/register_riverpod.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,8 +11,10 @@ import 'package:flutterfire_ui/database.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:flutterfire_ui/i10n.dart';
 
+import '../pages/3_b_helfer_übersicht.dart';
+
 class LoginRiverpodPage extends ConsumerStatefulWidget {
-  static const routename = '/LoginRiverpodPage';
+  static const routename = '/login';
   LoginRiverpodPage({Key? key}) : super(key: key);
 
   @override
@@ -42,7 +45,11 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
   @override
   Widget build(BuildContext context) {
     User? authControllerState = ref.watch(authControllerProvider);
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
 
+    bool _landwirt = arguments['landwirt'];
+    print("landwirt: $_landwirt");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -166,7 +173,13 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
                                 .read(authControllerProvider.notifier)
                                 .signInEmail(
                                     context, _email.text, _password.text);
-                            Navigator.pushReplacementNamed(context, "/home");
+                            if (_landwirt == true) {
+                              Navigator.pushNamed(
+                                context,
+                                HelferUebersichtPage.routename,
+                                arguments: {'landwirt': _landwirt},
+                              );
+                            }
 
                             ///Login User in Firebase
                           },
@@ -193,13 +206,17 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
                             style: const TextStyle(color: Colors.black),
                             children: [
                               TextSpan(
-                                  text: 'Sign up now',
-                                  style: TextStyle(color: Colors.blue.shade700),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.pushReplacementNamed(
-                                          context, "/whoareyou");
-                                    })
+                                text: 'Register now',
+                                style: TextStyle(color: Colors.blue.shade700),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      RegisterRiverpodPage.routename,
+                                      arguments: {'landwirt': _landwirt},
+                                    );
+                                  },
+                              ),
                             ],
                           ),
                         ),

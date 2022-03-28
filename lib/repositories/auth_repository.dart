@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../UI/pages/6_b_landwirt_profil.dart';
+
 abstract class BaseAuthRepository {
   Stream<User?> get authStateChanges;
   Future<void> signInAnonymously();
@@ -99,7 +101,14 @@ class AuthRepository implements BaseAuthRepository {
           .set({'name': name, 'email': email, 'landwirt': landwirt});
 
       // Navigator.pop(context);
-      Navigator.pushReplacementNamed(context, "/home");
+      //   Navigator.pushReplacementNamed(context, "/home");
+      /*
+      Navigator.pushNamed(
+        context,
+        LandwirtProfil.routename,
+        arguments: {'landwirt': landwirt},
+      );
+      */
     });
 
     throw UnimplementedError();

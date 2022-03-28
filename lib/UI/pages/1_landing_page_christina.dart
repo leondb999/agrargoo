@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 
 class LandingPageCh extends StatefulWidget {
   const LandingPageCh({Key? key}) : super(key: key);
+  static const routename = '/landingpagech';
 
   @override
   _LandingPageChState createState() => _LandingPageChState();

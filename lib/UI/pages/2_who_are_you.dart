@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../login_riverpod/login_riverpod.dart';
 import '../login_riverpod/register_riverpod.dart';
+import '3_a_jobangebote_übersicht.dart';
 
 class WhoAreYou extends StatefulWidget {
   static const routename = '/whoareyou';
@@ -50,7 +52,7 @@ class _WhoAreYouState extends State<WhoAreYou> {
                     });
                     Navigator.pushNamed(
                       context,
-                      RegisterRiverpodPage.routename,
+                      LoginRiverpodPage.routename,
                       arguments: {'landwirt': landwirt},
                     );
                   },
@@ -73,7 +75,7 @@ class _WhoAreYouState extends State<WhoAreYou> {
                   });
                   Navigator.pushNamed(
                     context,
-                    RegisterRiverpodPage.routename,
+                    JobangebotUebersichtPage.routename,
                     arguments: {'landwirt': landwirt},
                   );
                 },

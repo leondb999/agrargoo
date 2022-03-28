@@ -1,18 +1,35 @@
+import 'package:agrargo/UI/login_riverpod/login_riverpod.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../controllers/auth_controller.dart';
 import '../../widgets/layout_widgets.dart';
 
-class jobangebot extends StatefulWidget {
-  const jobangebot({Key? key}) : super(key: key);
+class Jobangebot extends ConsumerStatefulWidget {
+  const Jobangebot({Key? key}) : super(key: key);
+  static const routename = '/jobangebot';
 
   @override
-  State<jobangebot> createState() => _jobangebotState();
+  _JobangebotState createState() => _JobangebotState();
 }
 
-class _jobangebotState extends State<jobangebot> {
+class _JobangebotState extends ConsumerState<Jobangebot> {
+  final usersCollection = FirebaseFirestore.instance.collection('users');
+
   @override
   Widget build(BuildContext context) {
+    User? authControllerState = ref.watch(authControllerProvider);
+    final String? documentID =
+        ref.read(authControllerProvider.notifier).state?.uid;
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+
+    bool _landwirt = arguments['landwirt'];
+    print("landwirt: $_landwirt");
+
     return Scaffold(
         appBar: appBar(),
         resizeToAvoidBottomInset: false,
@@ -256,12 +273,23 @@ class _jobangebotState extends State<jobangebot> {
               ),
               Container(
                   margin: EdgeInsets.only(top: 35.0),
+
+                  ///Bewerben Button
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => jobangebot()));
-                    },
                     child: Text('Bewerben'),
+                    onPressed: () {
+                      ///TODO Implement Navigation to Jobangebot
+                      ///User Logged In
+
+                      authControllerState != null
+                          ? Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => Jobangebot()))
+                          : Navigator.pushNamed(
+                              context,
+                              LoginRiverpodPage.routename,
+                              arguments: {'landwirt': _landwirt},
+                            );
+                    },
                     style: ElevatedButton.styleFrom(
                         primary: Color(0xFF9FB98B),
                         padding:
