@@ -48,7 +48,7 @@ class AuthController extends StateNotifier<User?> {
         .registerUserEmailAndPW(context, name, email, password, landwirt);
   }
 
-  void signOut() async {
-    await _read(authRepositoryProvider).signOut();
+  void signOut(BuildContext context) async {
+    await _read(authRepositoryProvider).signOut(context);
   }
 }

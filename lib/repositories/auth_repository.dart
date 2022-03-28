@@ -17,7 +17,7 @@ abstract class BaseAuthRepository {
       String email, String password, bool landwirt);
   Future<void> updateUserName(String name);
   User? getCurrentUser();
-  Future<void> signOut();
+  Future<void> signOut(BuildContext context);
 }
 
 ///Firebase instance
@@ -52,7 +52,7 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
-  Future<void> signOut() async {
+  Future<void> signOut(BuildContext context) async {
     try {
       await _read(firebaseAuthProvider).signOut();
     } on FirebaseAuthException catch (e) {
@@ -95,20 +95,17 @@ class AuthRepository implements BaseAuthRepository {
       //userCredential.user!.reload();
 
       User? user = userCredential.user;
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user?.uid)
-          .set({'name': name, 'email': email, 'landwirt': landwirt});
+      await FirebaseFirestore.instance.collection('users').doc(user?.uid).set(
+          {'name': name, 'email': email, 'landwirt': landwirt}).then((value) {
+        Navigator.pushNamed(
+          context,
+          LandwirtProfil.routename,
+          arguments: {'landwirt': landwirt},
+        );
+      });
 
       // Navigator.pop(context);
       //   Navigator.pushReplacementNamed(context, "/home");
-      /*
-      Navigator.pushNamed(
-        context,
-        LandwirtProfil.routename,
-        arguments: {'landwirt': landwirt},
-      );
-      */
     });
 
     throw UnimplementedError();

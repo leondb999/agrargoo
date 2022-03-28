@@ -1,3 +1,4 @@
+import 'package:agrargo/UI/login_riverpod/test_screen.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -197,7 +198,7 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
                             print(
                                 "authControllerState Sign Out: $authControllerState");
 
-                            ///SignIn Anonymously
+                            ///SignIn Email & Password
                             ref.read(authControllerProvider.notifier).register(
                                   context,
                                   _name.text,
@@ -205,14 +206,16 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
                                   _password.text,
                                   _landwirt,
                                 );
+
+                            /*
                             if (_landwirt == true) {
                               Navigator.pushNamed(
                                 context,
-                                LandwirtProfil.routename,
+                                TestScreen.routename,
                                 arguments: {'landwirt': _landwirt},
                               );
                             }
-
+*/
                             ///Login User in Firebase
                           },
                           child: Text(

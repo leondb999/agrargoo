@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +8,8 @@ import '../../controllers/auth_controller.dart';
 
 class TestScreen extends ConsumerStatefulWidget {
   const TestScreen({Key? key}) : super(key: key);
+  static const routename = '/test';
+
   @override
   _TestScreenState createState() => _TestScreenState();
 }
@@ -27,7 +30,9 @@ class _TestScreenState extends ConsumerState<TestScreen> {
   void initState() {
     // TODO: implement initState
     checkAuthentification();
+
     super.initState();
+    setState(() {});
   }
 
   Widget build(BuildContext context) {

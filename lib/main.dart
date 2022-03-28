@@ -50,6 +50,8 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends ConsumerStatefulWidget {
+  static const routename = '/home';
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -59,6 +61,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   //   FirebaseFirestore.instance.collection('users').snapshots();
   final usersCollection = FirebaseFirestore.instance.collection('users');
   late bool landwirt;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  checkAuthentification() async {
+    _auth.authStateChanges().listen((user) {
+      if (user == null) {
+        print(user);
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    checkAuthentification();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +103,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   onPressed: () {
                     print("authControllerState Sign Out: $authControllerState");
-                    ref.read(authControllerProvider.notifier).signOut();
+                    ref.read(authControllerProvider.notifier).signOut(context);
                   },
                   child: Text("Sign Out"),
                 )
