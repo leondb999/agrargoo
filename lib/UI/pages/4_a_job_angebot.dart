@@ -269,7 +269,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                                 size: 25.0,
                               ),
                               SizedBox(width: 3),
-                              Text("Noch Fragen?",
+                              Text("Noch Fragen??",
                                   style: TextStyle(
                                       fontStyle: FontStyle.normal,
                                       fontFamily: 'Open Sans',
