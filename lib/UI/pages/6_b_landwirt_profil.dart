@@ -21,6 +21,8 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
 
   ///User Collection
   final usersCollection = FirebaseFirestore.instance.collection('users');
+  final jobAnzeigenCollection =
+      FirebaseFirestore.instance.collection('jobAnzeigen');
 
   ///Hof Collection
   final hofCollection =
@@ -50,7 +52,8 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     print("User ID : $userID");
     final String? documentID =
         ref.read(authControllerProvider.notifier).state?.uid;
-
+    //_getHofID(userID!);
+    //_getAnzeigenByHofID(userID!);
     return Scaffold(
       appBar: AppBar(
           toolbarHeight: MediaQuery.of(context).size.height * 0.09,
@@ -88,174 +91,207 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                   )
           ]),
       body: SafeArea(
-        child: Center(
-          /// User Infos
-          child: Column(
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                child: authControllerState == null
-                    ? Text("Nothing to See")
-                    : Column(
-                        children: [
-                          ///Show User Name from Firestore
-                          Container(
-                            color: Colors.greenAccent,
-                            width: MediaQuery.of(context).size.width,
-                            child: FutureBuilder<DocumentSnapshot>(
-                              future: usersCollection.doc(documentID).get(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                if (snapshot.hasError) {
-                                  return Text("Something went wrong");
-                                }
-                                if (snapshot.hasData &&
-                                    !snapshot.data!.exists) {
-                                  return Text("Document does not exist");
-                                }
-                                if (snapshot.connectionState ==
-                                    ConnectionState.done) {
-                                  Map<String, dynamic> data = snapshot.data!
-                                      .data() as Map<String, dynamic>;
-                                  return Column(
-                                    children: [
-                                      Text(
-                                        "User ID:  ${ref.read(authControllerProvider.notifier).state?.uid}",
-                                      ),
-                                      Text(
-                                        "Hi ${data['name']}",
-                                        style: TextStyle(fontSize: 30),
-                                      ),
-                                    ],
-                                  );
-                                }
-                                return Column(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              child: authControllerState == null
+                  ? Text("Nothing to See")
+                  : Column(
+                      children: [
+                        ///Show User Name from Firestore
+                        FutureBuilder<DocumentSnapshot>(
+                          future: usersCollection.doc(documentID).get(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<DocumentSnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              return Text("Something went wrong");
+                            }
+                            if (snapshot.hasData && !snapshot.data!.exists) {
+                              return Text("Document does not exist");
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              Map<String, dynamic> data =
+                                  snapshot.data!.data() as Map<String, dynamic>;
+                              return Container(
+                                color: Colors.greenAccent,
+                                width: MediaQuery.of(context).size.width,
+                                child: Column(
                                   children: [
-                                    Container(
-                                      child: CircularProgressIndicator(),
+                                    Text(
+                                      "User ID:  ${ref.read(authControllerProvider.notifier).state?.uid}",
+                                    ),
+                                    Text(
+                                      "Hi ${data['name']}",
+                                      style: TextStyle(fontSize: 30),
                                     ),
                                   ],
-                                );
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 60,
-                          ),
-
-                          ///Höfe with User ID from Firestore
-                          Container(
-                            color: Colors.lightGreen,
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              children: [
-                                Text(
-                                  "Alle Höfe",
-                                  style: TextStyle(fontSize: 30),
                                 ),
-                                Container(
-                                  height: 300,
-                                  child: StreamBuilder<QuerySnapshot>(
-                                    stream: FirebaseFirestore.instance
-                                        .collection('höfe')
-                                        .snapshots(),
-                                    builder: (context,
-                                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                                      if (snapshot.hasError) {
-                                        return Text('Something went wrong');
-                                      }
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return Container(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      }
-                                      final List<DocumentSnapshot> documents =
-                                          snapshot.data!.docs;
+                              );
+                            }
+                            return SizedBox(
+                                width: 50, height: 50, child: Text(""));
+                          },
+                        ),
+                        SizedBox(
+                          height: 60,
+                        ),
 
-                                      return ListView(
-                                        children: documents
-                                            .map(
-                                              (doc) => Card(
-                                                child: ListTile(
-                                                  title: Text(doc['name']),
-                                                ),
+                        ///Höfe with User ID from Firestore
+                        Column(
+                          children: [
+                            Text(
+                              "Alle Höfe",
+                              style: TextStyle(fontSize: 30),
+                            ),
+                            SingleChildScrollView(
+                              child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('höfe')
+                                    .where('userID', isEqualTo: userID)
+                                    .snapshots(),
+                                builder: (context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (snapshot.hasError) {
+                                    return Text('Something went wrong');
+                                  }
+                                  if (snapshot.hasData == null) {
+                                    return Text('User has no Höfe yet');
+                                  }
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Container(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  final List<DocumentSnapshot> documents =
+                                      snapshot.data!.docs;
+                                  return Container(
+                                    color: Colors.lightGreen,
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 100,
+                                    child: ListView(
+                                      children: documents
+                                          .map(
+                                            (doc) => Card(
+                                              child: ListTile(
+                                                title: Text(doc['hofName']),
                                               ),
-                                            )
-                                            .toList(),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
+                                            ),
+                                          )
+                                          .toList(),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            color: Colors.amber,
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              children: [
-                                Text(
-                                  "Alle Anzeigen",
-                                  style: TextStyle(fontSize: 30),
-                                ),
-                                Container(
-                                  height: 300,
-                                  child: StreamBuilder<QuerySnapshot>(
-                                    stream: FirebaseFirestore.instance
-                                        .collection('jobAnzeigen')
-                                        .snapshots(),
-                                    builder: (context,
-                                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                                      if (snapshot.hasError) {
-                                        return Text('Something went wrong');
-                                      }
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return Container(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      }
-                                      final List<DocumentSnapshot> documents =
-                                          snapshot.data!.docs;
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
 
-                                      return ListView(
-                                        children: documents
-                                            .map(
-                                              (doc) => Card(
-                                                child: ListTile(
-                                                  title: Text(doc['titel']),
-                                                  subtitle: _activeAnzeige(
-                                                      doc['status']),
-                                                  onTap: () {
-                                                    Navigator.pushNamed(
-                                                      context,
-                                                      Jobangebot.routename,
-                                                    );
-                                                  },
-                                                  leading:
-                                                      Icon(Icons.arrow_right),
-                                                ),
-                                              ),
-                                            )
-                                            .toList(),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
+                        /// Zeige Anzeigen des Users
+                        Column(
+                          children: [
+                            Text(
+                              "Alle Anzeigen",
+                              style: TextStyle(fontSize: 30),
                             ),
-                          ),
-                        ],
-                      ),
-              ),
-            ],
-          ),
+                            SingleChildScrollView(
+                              child: StreamBuilder<QuerySnapshot>(
+                                ///TODO Implement Join über hofCollection und jobanzeigenCollection | aktuell Abfrage über UserID
+                                stream: FirebaseFirestore.instance
+                                    .collection('jobAnzeigen')
+                                    .where('auftraggeberID', isEqualTo: userID)
+                                    .snapshots(),
+                                builder: (context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (snapshot.hasError) {
+                                    return Text('Something went wrong');
+                                  }
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Container(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  final List<DocumentSnapshot> documents =
+                                      snapshot.data!.docs;
+
+                                  return Container(
+                                    height: 200,
+                                    color: Colors.amber,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: ListView(
+                                      children: documents
+                                          .map(
+                                            (doc) => Card(
+                                              child: ListTile(
+                                                title: Text(doc['titel']),
+                                                subtitle: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Container(
+                                                        //height: 100,
+                                                        //color: Colors.blueGrey,
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            SizedBox(
+                                                                height: 10),
+                                                            Text(
+                                                              "Auftraggeber ID: ${doc['auftraggeberID']}",
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            Text(
+                                                              "HofID: ${doc['hofID']}",
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                trailing: _activeAnzeige(
+                                                    doc['status']),
+                                                onTap: () {
+                                                  Navigator.pushNamed(
+                                                    context,
+                                                    Jobangebot.routename,
+                                                  );
+                                                },
+                                                leading:
+                                                    Icon(Icons.arrow_right),
+                                              ),
+                                            ),
+                                          )
+                                          .toList(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+            ),
+          ],
         ),
       ),
     );
@@ -270,4 +306,43 @@ Widget _activeAnzeige(bool status) {
     x = Text('inactive', style: TextStyle(color: Colors.red));
   }
   return x;
+}
+
+String? _getHofID(String userID) {
+  String hofName = "";
+  List hofList = [];
+  List<String?> hofListIDs = [];
+
+  ///Hof ID
+  FirebaseFirestore.instance
+      .collection('höfe')
+      .where('userID', isEqualTo: userID)
+      .get()
+      .then((value) {
+    value.docs.forEach((doc) {
+      hofList.add(doc['hofName']);
+      hofListIDs.add(doc.id);
+    });
+  });
+
+  print("Hof ID: ${hofListIDs.first};   Hof: ${hofList.first}");
+  return hofListIDs.first;
+}
+
+_getAnzeigenByHofID(String userID) async* {
+  String? hofID = _getHofID(userID);
+  print("_getAnzeigenByHofID: $hofID");
+  List x = [];
+  FirebaseFirestore.instance
+      .collection('jobAnzeigen')
+      .where('hofID', isEqualTo: _getHofID(userID))
+      .get()
+      .then((value) {
+    value.docs.forEach((doc) {
+      x.add(doc);
+    });
+  });
+  x.forEach((e) {
+    print("titel: ${e['titel']}; status: ${e['status']}");
+  });
 }

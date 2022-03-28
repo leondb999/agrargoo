@@ -12,6 +12,7 @@ import 'package:flutterfire_ui/firestore.dart';
 import 'package:flutterfire_ui/i10n.dart';
 
 import '../pages/3_b_helfer_übersicht.dart';
+import '../pages/6_b_landwirt_profil.dart';
 
 class LoginRiverpodPage extends ConsumerStatefulWidget {
   static const routename = '/login';
@@ -176,9 +177,18 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
                             if (_landwirt == true) {
                               Navigator.pushNamed(
                                 context,
+                                LandwirtProfil.routename,
+                              );
+
+                              ///TODO Navigation to Helferübersichtseite
+                              /*
+                              Navigator.pushNamed(
+                                context,
                                 HelferUebersichtPage.routename,
                                 arguments: {'landwirt': _landwirt},
                               );
+
+                              */
                             }
 
                             ///Login User in Firebase
