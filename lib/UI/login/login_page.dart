@@ -1,197 +1,307 @@
-import 'package:agrargo/UI/login/profile_page.dart';
-import 'package:agrargo/UI/login/register_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../services/fire_auth.dart';
-import '../../services/validator.dart';
-import '../../widgets/layout_widgets.dart';
+import '../../providers/auth_providers.dart';
+import '../pages/0_home_page.dart';
 
-///Documentation for loginpage https://github.com/sbis04/flutter-authentication/blob/master/lib/utils/fire_auth.dart
+//  Instead of creating Two Screens, I have Added both Login and Signup Screen in one Screen
+//  Yes , I am Lazy , But I am not going to create two screens , I am going to create one screen
+
+//  So for to monitor we are in which State we are i.e Login or signUp , I have used enums here
+//  So I have created and Enum Status which contains two things Login and SignUp
+
+//  and I have made a Global Variable type of Status, to use in LoginPage
+// It's actually not recommended to use Global Variables , but I am using it here to make it simple
+//  The main motive here was to teach Firebase Authentication using Riverpod as state management
+
+enum Status {
+  login,
+  signUp,
+}
+
+Status type = Status.login;
+
+//  I have used stateful widget to use setstate functions in LoginPage
+//  we could also managed the state using Riverpod but I am not using it here
+//  Remember Stateful widgets are made for a reason. If it would be bad
+//  flutter developer would not think of it in the first place.
 
 class LoginPage extends StatefulWidget {
+  static const routename = '/LoginPage';
+  const LoginPage({Key? key}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
+  //  GlobalKey is used to validate the Form
+  final GlobalKey<FormState> _formKey = GlobalKey();
 
-  final _emailTextController = TextEditingController();
-  final _passwordTextController = TextEditingController();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
 
-  final _focusEmail = FocusNode();
-  final _focusPassword = FocusNode();
+  bool _isLoading = false;
+  bool _isLoading2 = false;
+  void loading() {
+    setState(() {
+      _isLoading = !_isLoading;
+    });
+  }
 
-  bool _isProcessing = false;
+  void loading2() {
+    setState(() {
+      _isLoading2 = !_isLoading2;
+    });
+  }
 
-  Future<FirebaseApp> _initializeFirebase() async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
-
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => ProfilePage(
-            user: user,
-          ),
-        ),
-      );
+  void _switchType() {
+    if (type == Status.signUp) {
+      setState(() {
+        type = Status.login;
+      });
+    } else {
+      setState(() {
+        type = Status.signUp;
+      });
     }
-    return firebaseApp;
+    // print(type);
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        _focusEmail.unfocus();
-        _focusPassword.unfocus();
-      },
-      child: Scaffold(
-        appBar: appBar(),
-        body: FutureBuilder(
-          future: _initializeFirebase(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 24.0),
-                      child: Text(
-                        'Login',
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                    ),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: <Widget>[
-                          TextFormField(
-                            controller: _emailTextController,
-                            focusNode: _focusEmail,
-                            validator: (value) => Validator.validateEmail(
-                              email: value,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: "Email",
-                              errorBorder: UnderlineInputBorder(
-                                borderRadius: BorderRadius.circular(6.0),
-                                borderSide: BorderSide(
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 8.0),
-                          TextFormField(
-                            controller: _passwordTextController,
-                            focusNode: _focusPassword,
-                            obscureText: true,
-                            validator: (value) => Validator.validatePassword(
-                              password: value!,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: "Password",
-                              errorBorder: UnderlineInputBorder(
-                                borderRadius: BorderRadius.circular(6.0),
-                                borderSide: BorderSide(
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 24.0),
-                          _isProcessing
-                              ? CircularProgressIndicator()
-                              : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.green,
-                                        ),
-                                        onPressed: () async {
-                                          _focusEmail.unfocus();
-                                          _focusPassword.unfocus();
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Consumer(builder: (context, ref, _) {
+          final _auth = ref.watch(authenticationProvider);
 
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            setState(() {
-                                              _isProcessing = true;
-                                            });
-
-                                            User? user = await FireAuth
-                                                .signInUsingEmailPassword(
-                                              email: _emailTextController.text,
-                                              password:
-                                                  _passwordTextController.text,
-                                              context: context,
-                                            );
-
-                                            setState(() {
-                                              _isProcessing = false;
-                                            });
-
-                                            if (user != null) {
-                                              Navigator.of(context)
-                                                  .pushReplacement(
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ProfilePage(user: user),
-                                                ),
-                                              );
-                                            }
-                                          }
-                                        },
-                                        child: Text(
-                                          'Sign In',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 24.0),
-                                    Expanded(
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.green,
-                                        ),
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  RegisterPage(),
-                                            ),
-                                          );
-                                        },
-                                        child: Text(
-                                          'Register',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              );
+          Future<void> _onPressedFunction() async {
+            if (!_formKey.currentState!.validate()) {
+              return;
             }
+            if (type == Status.login) {
+              print("****authStateChange:");
+              loading();
+              await _auth
+                  .signInWithEmailAndPassword(
+                      _email.text, _password.text, context)
+                  .whenComplete(
+                    () => _auth.authStateChange.listen(
+                      (event) async {
+                        MaterialPageRoute(builder: (context) => LoginPage());
+                        if (event == null) {
+                          loading();
+                          return;
+                        }
+                      },
+                    ),
+                  );
+            } else {
+              loading();
 
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        ),
+              await _auth
+                  .signUpWithEmailAndPassword(
+                      _email.text, _password.text, context)
+                  .whenComplete(
+                    () => _auth.authStateChange.listen(
+                      (event) async {
+                        if (event == null) {
+                          loading();
+                          return;
+                        }
+                      },
+                    ),
+                  );
+            }
+          }
+
+          return Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 48),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Center(child: FlutterLogo(size: 81)),
+                        const Spacer(flex: 1),
+
+                        ///Email Input Field
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 16),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(25)),
+                          child: TextFormField(
+                            controller: _email,
+                            autocorrect: true,
+                            enableSuggestions: true,
+                            keyboardType: TextInputType.emailAddress,
+                            onSaved: (value) {},
+                            decoration: InputDecoration(
+                              hintText: 'Email address',
+                              hintStyle: const TextStyle(color: Colors.black54),
+                              icon: Icon(Icons.email_outlined,
+                                  color: Colors.blue.shade700, size: 24),
+                              alignLabelWithHint: true,
+                              border: InputBorder.none,
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty || !value.contains('@')) {
+                                return 'Invalid email!';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+
+                        /// Password Input Field
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(25)),
+
+                          ///Password
+                          child: TextFormField(
+                            controller: _password,
+                            obscureText: true,
+                            validator: (value) {
+                              if (value!.isEmpty || value.length < 8) {
+                                return 'Password is too short!';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'Password',
+                              hintStyle: const TextStyle(color: Colors.black54),
+                              icon: Icon(
+                                CupertinoIcons.lock_circle,
+                                color: Colors.blue.shade700,
+                                size: 24,
+                              ),
+                              alignLabelWithHint: true,
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+
+                        ///Register Container
+                        if (type == Status.signUp)
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 600),
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 4),
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(25)),
+                            child: TextFormField(
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                hintText: 'Confirm password',
+                                hintStyle: TextStyle(color: Colors.black54),
+                                icon: Icon(CupertinoIcons.lock_circle,
+                                    color: Colors.blue.shade700, size: 24),
+                                alignLabelWithHint: true,
+                                border: InputBorder.none,
+                                focusColor: Colors.green,
+                              ),
+                              validator: type == Status.signUp
+                                  ? (value) {
+                                      if (value != _password.text) {
+                                        return 'Passwords do not match!';
+                                      }
+                                      return null;
+                                    }
+                                  : null,
+                            ),
+                          ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(color: Colors.white),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(top: 32.0),
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          width: double.infinity,
+                          child: _isLoading
+                              ? const Center(child: CircularProgressIndicator())
+                              : MaterialButton(
+                                  onPressed: _onPressedFunction,
+                                  child: Text(
+                                    type == Status.login ? 'Log in' : 'Sign up',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  textColor: Colors.blue.shade700,
+                                  textTheme: ButtonTextTheme.primary,
+                                  minWidth: 100,
+                                  padding: const EdgeInsets.all(18),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                    side:
+                                        BorderSide(color: Colors.blue.shade700),
+                                  ),
+                                ),
+                        ),
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 24.0),
+                          child: RichText(
+                            text: TextSpan(
+                              text: type == Status.login
+                                  ? 'Don\'t have an account? '
+                                  : 'Already have an account? ',
+                              style: const TextStyle(color: Colors.black),
+                              children: [
+                                TextSpan(
+                                    text: type == Status.login
+                                        ? 'Sign up now'
+                                        : 'Log in',
+                                    style:
+                                        TextStyle(color: Colors.blue.shade700),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        _switchType();
+                                      })
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
