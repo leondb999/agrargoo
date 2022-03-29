@@ -1,5 +1,5 @@
-import 'package:agrargo/UI/login_riverpod/login_riverpod.dart';
-import 'package:agrargo/UI/pages/4_a_job_angebot.dart';
+import 'package:agrargo/UI/login_riverpod/login.dart';
+import 'package:agrargo/UI/pages/helfer/4_a_job_angebot.dart';
 import 'package:agrargo/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

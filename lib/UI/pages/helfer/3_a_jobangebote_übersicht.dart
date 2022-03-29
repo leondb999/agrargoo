@@ -1,12 +1,13 @@
-import 'package:agrargo/UI/pages/4_a_job_angebot.dart';
-import 'package:agrargo/UI/pages/7_add_jobanzeige.dart';
+import 'package:agrargo/UI/pages/helfer/4_a_job_angebot.dart';
+import 'package:agrargo/UI/pages/landwirt/7_add_jobanzeige.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
+import 'package:agrargo/widgets/firebase_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../widgets/layout_widgets.dart';
+import '../../../widgets/layout_widgets.dart';
 
 class JobangebotUebersichtPage extends StatefulWidget {
   const JobangebotUebersichtPage({Key? key}) : super(key: key);
@@ -69,46 +70,8 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
                       ? ListView.builder(
                           itemCount: jobAnzeigeList.length,
                           itemBuilder: (context, index) {
-                            var jobanzeige = jobAnzeigeList[index];
-
-                            return Card(
-                              color: Colors.grey,
-                              margin: EdgeInsets.only(top: 40),
-                              child: ListTile(
-                                title: Text(jobanzeige.titel!,
-                                    style: TextStyle(fontSize: 30)),
-                                subtitle: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        height: 100,
-                                        color: Colors.amber,
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                                "DocID der Jobanzeige: ${jobanzeige.jobanzeigeID!}"),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                trailing: _activeAnzeige(
-                                    jobAnzeigeList[index].status!),
-                                leading: Image.network(
-                                  "https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg",
-                                ),
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    Jobangebot.routename,
-                                    arguments: {
-                                      'jobanzeige_ID': jobanzeige.jobanzeigeID!
-                                    },
-                                  );
-                                },
-                              ),
-                            );
+                            return jobAngebotCard(
+                                context, jobAnzeigeList[index]);
                           },
                         )
                       : Text("keine Jobanzeigen jetzt")),

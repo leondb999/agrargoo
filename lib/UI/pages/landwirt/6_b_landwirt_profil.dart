@@ -13,9 +13,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
 
-import '../../controllers/auth_controller.dart';
-import '../../main.dart';
-import '4_a_job_angebot.dart';
+import '../../../controllers/auth_controller.dart';
+import '../../../main.dart';
+import '../helfer/4_a_job_angebot.dart';
 import 'package:provider/provider.dart' as p;
 
 class LandwirtProfil extends ConsumerStatefulWidget {
@@ -60,7 +60,8 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     User? authControllerState = ref.watch(authControllerProvider);
     String? userID = ref.read(authControllerProvider.notifier).state?.uid;
     print("User ID : $userID");
-    final firestoreService = FireStoreService();
+
+    /// User Liste
     final userLoggedIn = UserProvider()
         .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
 
@@ -68,14 +69,10 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     final hofListeFilteredByUserID = HofProvider()
         .getHofByUserID(userID, p.Provider.of<List<HofModel>>(context));
 
-    //final jobAnzeigeList = p.Provider.of<List<Jobanzeige>>(context);
-    ///Filter Jobanzeigen nach UserID des eingeloggten Landwirt Users
+    ///Jobanzeigen Filtered by UserID
     List<JobanzeigeModel> jobanzeigenListUser = JobanzeigeProvider()
         .getAnzeigeByUserID(
             userID, p.Provider.of<List<JobanzeigeModel>>(context));
-
-    final String? documentID =
-        ref.read(authControllerProvider.notifier).state?.uid;
 
     return Scaffold(
       appBar: AppBar(
@@ -144,33 +141,31 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                   ///Höfe with User ID from Firestore
                   SingleChildScrollView(
                     child: Container(
-                        height: 200,
-                        child: hofListeFilteredByUserID.isEmpty
-                            ? Column(
-                                children: [
-                                  Text(
-                                      "Keine Höfe bis jetzt erstellt! Erstelle jetzt deinen ersten Hof"),
-                                  ElevatedButton(
-                                      onPressed: () {},
-                                      child: Text("Erstelle Hof")),
-                                ],
-                              )
-                            : ListView.builder(
-                                itemCount: hofListeFilteredByUserID.length,
-                                itemBuilder: (context, index) {
-                                  var hof = hofListeFilteredByUserID[index];
-                                  return hofCard(hof);
-                                })),
+                      height: 200,
+                      child: hofListeFilteredByUserID.isEmpty
+                          ? Column(
+                              children: [
+                                Text(
+                                    "Keine Höfe bis jetzt erstellt! Erstelle jetzt deinen ersten Hof"),
+                                ElevatedButton(
+                                    onPressed: () {},
+                                    child: Text("Erstelle Hof")),
+                              ],
+                            )
+                          : ListView.builder(
+                              itemCount: hofListeFilteredByUserID.length,
+                              itemBuilder: (context, index) {
+                                return hofCard(hofListeFilteredByUserID[index]);
+                              },
+                            ),
+                    ),
                   ),
                   SizedBox(height: 10),
 
                   /// Zeige Anzeigen des Users
                   Column(
                     children: [
-                      Text(
-                        "Alle Anzeigen",
-                        style: TextStyle(fontSize: 30),
-                      ),
+                      Text("Alle Anzeigen", style: TextStyle(fontSize: 30)),
                       SingleChildScrollView(
                         child: Container(
                           height: MediaQuery.of(context).size.height,
@@ -179,9 +174,10 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                               : ListView.builder(
                                   itemCount: jobanzeigenListUser.length,
                                   itemBuilder: (context, index) {
-                                    var jobanzeige = jobanzeigenListUser[index];
-
-                                    return jobAngebotCard(context, jobanzeige);
+                                    return jobAngebotCard(
+                                      context,
+                                      jobanzeigenListUser[index],
+                                    );
                                   },
                                 ),
                         ),
@@ -193,43 +189,4 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
       ),
     );
   }
-}
-
-String? _getHofID(String userID) {
-  String hofName = "";
-  List hofList = [];
-  List<String?> hofListIDs = [];
-
-  ///Hof ID
-  FirebaseFirestore.instance
-      .collection('höfe')
-      .where('userID', isEqualTo: userID)
-      .get()
-      .then((value) {
-    value.docs.forEach((doc) {
-      hofList.add(doc['hofName']);
-      hofListIDs.add(doc.id);
-    });
-  });
-
-  print("Hof ID: ${hofListIDs.first};   Hof: ${hofList.first}");
-  return hofListIDs.first;
-}
-
-_getAnzeigenByHofID(String userID) async* {
-  String? hofID = _getHofID(userID);
-  print("_getAnzeigenByHofID: $hofID");
-  List x = [];
-  FirebaseFirestore.instance
-      .collection('jobAnzeigen')
-      .where('hofID', isEqualTo: _getHofID(userID))
-      .get()
-      .then((value) {
-    value.docs.forEach((doc) {
-      x.add(doc);
-    });
-  });
-  x.forEach((e) {
-    print("titel: ${e['titel']}; status: ${e['status']}");
-  });
 }

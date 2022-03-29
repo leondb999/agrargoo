@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:agrargo/UI/login_riverpod/register_riverpod.dart';
+import 'package:agrargo/UI/login_riverpod/register.dart';
 import 'package:agrargo/UI/login_riverpod/test_screen.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
-import 'package:agrargo/UI/pages/7_add_jobanzeige.dart';
+import 'package:agrargo/UI/pages/landwirt/7_add_jobanzeige.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
@@ -19,12 +19,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
 
-import 'UI/login_riverpod/login_riverpod.dart';
-import 'UI/pages/3_a_jobangebote_übersicht.dart';
-import 'UI/pages/3_b_helfer_übersicht.dart';
-import 'UI/pages/4_a_job_angebot.dart';
-import 'UI/pages/6_a_helfer_profil.dart';
-import 'UI/pages/6_b_landwirt_profil.dart';
+import 'UI/login_riverpod/login.dart';
+import 'UI/pages/helfer/3_a_jobangebote_übersicht.dart';
+import 'UI/pages/landwirt/3_b_helfer_übersicht.dart';
+import 'UI/pages/helfer/4_a_job_angebot.dart';
+import 'UI/pages/helfer/6_a_helfer_profil.dart';
+import 'UI/pages/landwirt/6_b_landwirt_profil.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -153,11 +153,11 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: "/home",
         routes: {
-          '/login': (context) => LoginRiverpodPage(),
+          '/login': (context) => LoginPage(),
           '/home': (context) => HomeScreen(),
           '/test': (context) => TestScreen(),
-          '/register': (context) => RegisterRiverpodPage(),
-          '/login': (context) => LoginRiverpodPage(),
+          '/register': (context) => RegisterPage(),
+          '/login': (context) => LoginPage(),
           '/whoareyou': (context) => WhoAreYou(),
           '/jobangebotuebersicht': (context) => JobangebotUebersichtPage(),
           '/jobangebot': (context) => Jobangebot(),

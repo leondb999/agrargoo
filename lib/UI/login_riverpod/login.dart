@@ -1,5 +1,6 @@
-import 'package:agrargo/UI/login_riverpod/register_riverpod.dart';
+import 'package:agrargo/UI/login_riverpod/register.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
+import 'package:agrargo/widgets/login_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,18 +12,18 @@ import 'package:flutterfire_ui/database.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:flutterfire_ui/i10n.dart';
 
-import '../pages/3_b_helfer_übersicht.dart';
-import '../pages/6_b_landwirt_profil.dart';
+import '../pages/landwirt/3_b_helfer_übersicht.dart';
+import '../pages/landwirt/6_b_landwirt_profil.dart';
 
-class LoginRiverpodPage extends ConsumerStatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   static const routename = '/login';
-  LoginRiverpodPage({Key? key}) : super(key: key);
+  LoginPage({Key? key}) : super(key: key);
 
   @override
-  _LoginRiverpodPageState createState() => _LoginRiverpodPageState();
+  _LoginState createState() => _LoginState();
 }
 
-class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
+class _LoginState extends ConsumerState<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   final _email = TextEditingController();
@@ -75,71 +76,29 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
                       const Spacer(flex: 1),
 
                       ///Email Input Field
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 16),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 4),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25)),
-                        child: TextFormField(
-                          controller: _email,
-                          autocorrect: true,
-                          enableSuggestions: true,
-                          keyboardType: TextInputType.emailAddress,
-                          onSaved: (value) {},
-                          decoration: InputDecoration(
-                            hintText: 'Email address',
-                            hintStyle: const TextStyle(color: Colors.black54),
-                            icon: Icon(Icons.email_outlined,
-                                color: Colors.blue.shade700, size: 24),
-                            alignLabelWithHint: true,
-                            border: InputBorder.none,
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty || !value.contains('@')) {
-                              return 'Invalid email!';
-                            }
-                            return null;
-                          },
-                        ),
+                      customTextFormField(
+                        controller: _email,
+                        textInputType: TextInputType.emailAddress,
+                        hintText: 'Email address',
+                        icon: Icon(Icons.email_outlined,
+                            color: Colors.blue.shade700, size: 24),
+                        validateString: 'email',
+                        obscureText: false,
+                        autocorrect: true,
+                        enableSuggestions: true,
                       ),
 
-                      /// Password Input Field
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 8),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 4),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25)),
-
-                        ///Password
-                        child: TextFormField(
-                          controller: _password,
-                          obscureText: true,
-                          validator: (value) {
-                            if (value!.isEmpty || value.length < 8) {
-                              return 'Password is too short!';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            hintText: 'Password',
-                            hintStyle: const TextStyle(color: Colors.black54),
-                            icon: Icon(
-                              CupertinoIcons.lock_circle,
-                              color: Colors.blue.shade700,
-                              size: 24,
-                            ),
-                            alignLabelWithHint: true,
-                            border: InputBorder.none,
-                          ),
-                        ),
+                      ///Password Input Field
+                      customTextFormField(
+                        controller: _password,
+                        hintText: 'Password',
+                        icon: Icon(CupertinoIcons.lock_circle,
+                            color: Colors.blue.shade700, size: 24),
+                        validateString: 'password',
+                        obscureText: true,
+                        autocorrect: true,
+                        enableSuggestions: true,
                       ),
-
                       const Spacer()
                     ],
                   ),
@@ -224,7 +183,7 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
                                   ..onTap = () {
                                     Navigator.pushNamed(
                                       context,
-                                      RegisterRiverpodPage.routename,
+                                      RegisterPage.routename,
                                       arguments: {'landwirt': _landwirt},
                                     );
                                   },

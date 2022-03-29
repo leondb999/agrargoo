@@ -1,12 +1,12 @@
-import 'package:agrargo/UI/login_riverpod/login_riverpod.dart';
+import 'package:agrargo/UI/login_riverpod/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../controllers/auth_controller.dart';
-import '../../widgets/layout_widgets.dart';
+import '../../../controllers/auth_controller.dart';
+import '../../../widgets/layout_widgets.dart';
 
 class Jobangebot extends ConsumerStatefulWidget {
   const Jobangebot({Key? key}) : super(key: key);
@@ -300,7 +300,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                               builder: (context) => Jobangebot()))
                           : Navigator.pushNamed(
                               context,
-                              LoginRiverpodPage.routename,
+                              LoginPage.routename,
                               arguments: {'landwirt': false},
                             );
                     },

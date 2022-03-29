@@ -12,21 +12,22 @@ import 'package:flutterfire_ui/firestore.dart';
 import 'package:flutterfire_ui/i10n.dart';
 
 import '../../main.dart';
-import '../pages/6_b_landwirt_profil.dart';
+import '../../widgets/login_widgets.dart';
+import '../pages/landwirt/6_b_landwirt_profil.dart';
 
 ///https://www.geeksforgeeks.org/flutter-arguments-in-named-routes/
 ///TODO Vorname & Nachname
 
-class RegisterRiverpodPage extends ConsumerStatefulWidget {
+class RegisterPage extends ConsumerStatefulWidget {
   static const routename = '/register';
 
-  RegisterRiverpodPage();
+  RegisterPage();
 
   @override
-  _RegisterRiverpodPageState createState() => _RegisterRiverpodPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
+class _RegisterPageState extends ConsumerState<RegisterPage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   final _name = TextEditingController();
@@ -72,103 +73,42 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
                       const Spacer(flex: 1),
 
                       ///Name Input Field
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 16),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 4),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25)),
-                        child: TextFormField(
-                          controller: _name,
-                          autocorrect: true,
-                          enableSuggestions: true,
-                          keyboardType: TextInputType.name,
-                          onSaved: (value) {},
-                          decoration: InputDecoration(
-                            hintText: 'Name',
-                            hintStyle: const TextStyle(color: Colors.black54),
-                            icon: Icon(Icons.person,
-                                color: Colors.blue.shade700, size: 24),
-                            alignLabelWithHint: true,
-                            border: InputBorder.none,
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Name is empty';
-                            }
-                            return null;
-                          },
-                        ),
+                      customTextFormField(
+                        controller: _name,
+                        textInputType: TextInputType.name,
+                        hintText: 'Name',
+                        icon: Icon(Icons.person,
+                            color: Colors.blue.shade700, size: 24),
+                        validateString: 'name',
+                        obscureText: false,
+                        autocorrect: true,
+                        enableSuggestions: true,
                       ),
 
                       ///Email Input Field
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 16),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 4),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25)),
-                        child: TextFormField(
-                          controller: _email,
-                          autocorrect: true,
-                          enableSuggestions: true,
-                          keyboardType: TextInputType.emailAddress,
-                          onSaved: (value) {},
-                          decoration: InputDecoration(
-                            hintText: 'Email address',
-                            hintStyle: const TextStyle(color: Colors.black54),
-                            icon: Icon(Icons.email_outlined,
-                                color: Colors.blue.shade700, size: 24),
-                            alignLabelWithHint: true,
-                            border: InputBorder.none,
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty || !value.contains('@')) {
-                              return 'Invalid email!';
-                            }
-                            return null;
-                          },
-                        ),
+                      customTextFormField(
+                        controller: _email,
+                        textInputType: TextInputType.emailAddress,
+                        hintText: 'Email address',
+                        icon: Icon(Icons.email_outlined,
+                            color: Colors.blue.shade700, size: 24),
+                        validateString: 'email',
+                        obscureText: false,
+                        autocorrect: true,
+                        enableSuggestions: true,
                       ),
 
-                      /// Password Input Field
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 8),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 4),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25)),
-
-                        ///Password
-                        child: TextFormField(
-                          controller: _password,
-                          obscureText: true,
-                          validator: (value) {
-                            if (value!.isEmpty || value.length < 8) {
-                              return 'Password is too short!';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            hintText: 'Password',
-                            hintStyle: const TextStyle(color: Colors.black54),
-                            icon: Icon(
-                              CupertinoIcons.lock_circle,
-                              color: Colors.blue.shade700,
-                              size: 24,
-                            ),
-                            alignLabelWithHint: true,
-                            border: InputBorder.none,
-                          ),
-                        ),
+                      ///Password Input Field
+                      customTextFormField(
+                        controller: _password,
+                        hintText: 'Password',
+                        icon: Icon(CupertinoIcons.lock_circle,
+                            color: Colors.blue.shade700, size: 24),
+                        validateString: 'password',
+                        obscureText: true,
+                        autocorrect: true,
+                        enableSuggestions: true,
                       ),
-
                       const Spacer()
                     ],
                   ),
@@ -254,3 +194,5 @@ class _RegisterRiverpodPageState extends ConsumerState<RegisterRiverpodPage> {
     );
   }
 }
+
+String? validateEmail(String value) {}
