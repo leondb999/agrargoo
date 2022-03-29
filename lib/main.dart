@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'UI/login_riverpod/login_riverpod.dart';
+import 'UI/pages/3_a_jobangebote_übersicht.dart';
+import 'UI/pages/4_a_job_angebot.dart';
+import 'UI/pages/6_b_landwirt_profil.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -26,8 +29,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: "/home",
+      initialRoute: "/jobUebersicht",
       routes: {
+        '/profilLandwirt': (context) => ProfilLandwirt(),
+        '/jobangebot': (context) => jobangebot(),
+        '/jobUebersicht': (context) => JobangebotUebersichtPage(),
         '/login': (context) => LoginRiverpodPage(),
         '/home': (context) => HomeScreen(),
         '/test': (context) => TestScreen(),

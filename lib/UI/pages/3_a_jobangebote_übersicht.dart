@@ -10,6 +10,7 @@ class JobangebotUebersichtPage extends StatefulWidget {
   @override
   State<JobangebotUebersichtPage> createState() =>
       _JobangebotUebersichtPageState();
+  static const routename = '/jobUebersicht';
 }
 
 class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
@@ -57,6 +58,16 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
           Expanded(
             child: SingleChildScrollView(
               child: Column(children: [
+                Container(
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: 10,
+                    itemBuilder: (BuildContext context, int index) {
+                      return makeCard;
+                    },
+                  ),
+                ),
                 Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: MediaQuery.of(context).size.height * 0.2,
@@ -280,4 +291,40 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
       ),
     );
   }
+
+  final makeCard = Card(
+    elevation: 6.0,
+    margin: new EdgeInsets.symmetric(horizontal: 70.0, vertical: 13.0),
+    child: Container(
+      decoration: BoxDecoration(color: Color(0xFF9FB98B)),
+      child: ListTile(
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 40.0, vertical: 40.0),
+          leading: Container(
+              padding: EdgeInsets.only(right: 12.0),
+              decoration: new BoxDecoration(
+                  border: new Border(
+                      right:
+                          new BorderSide(width: 1.0, color: Colors.white54))),
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+              )),
+          title: Text(
+            "Gemüseernte auf dem Bauernhof Meyer",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+
+          subtitle: Row(
+            children: <Widget>[
+              Icon(Icons.place, color: Colors.black12),
+              SizedBox(height: 30),
+              Text(" Hockenheim", style: TextStyle(color: Colors.white))
+            ],
+          ),
+          trailing: Icon(Icons.keyboard_arrow_right,
+              color: Colors.white, size: 30.0)),
+    ),
+  );
 }
