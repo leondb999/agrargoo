@@ -19,6 +19,7 @@ abstract class BaseAuthRepository {
   Future<void> updateUserName(String name);
   User? getCurrentUser();
   Future<void> signOut(BuildContext context);
+  Future<void> refreshUser();
 }
 
 ///Firebase instance
@@ -89,38 +90,54 @@ class AuthRepository implements BaseAuthRepository {
   Future<void> registerUserEmailAndPW(BuildContext context, String name,
       String email, String password, bool landwirt) async {
     // TODO: implement registerUserEmailAndPW
-    final userCredential = await _read(firebaseAuthProvider)
-        .createUserWithEmailAndPassword(email: email, password: password)
-        .then((userCredential) async {
-      userCredential.user!.updateDisplayName(name);
-      //userCredential.user!.reload();
+    try {
+      await _read(firebaseAuthProvider)
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((userCredential) async {
+        userCredential.user!.updateDisplayName(name);
+        //userCredential.user!.reload();
 
-      User? user = userCredential.user;
-      await FirebaseFirestore.instance.collection('users').doc(user?.uid).set(
-          {'name': name, 'email': email, 'landwirt': landwirt}).then((value) {
-        ///Landwirt Profil Page
-        if (landwirt == true) {
-          Navigator.pushNamed(
-            context,
-            LandwirtProfil.routename,
-            arguments: {'landwirt': landwirt},
-          );
-        }
+        User? user = userCredential.user;
+        await FirebaseFirestore.instance.collection('users').doc(user?.uid).set(
+            {'name': name, 'email': email, 'landwirt': landwirt}).then((value) {
+          ///Landwirt Profil Page
+          if (landwirt == true) {
+            Navigator.pushNamed(
+              context,
+              LandwirtProfil.routename,
+              arguments: {'landwirt': landwirt},
+            );
+          }
 
-        ///Helfer Profil Page
-        if (landwirt == false) {
-          Navigator.pushNamed(
-            context,
-            HelferProfil.routename,
-            arguments: {'landwirt': landwirt},
-          );
-        }
+          ///Helfer Profil Page
+          if (landwirt == false) {
+            Navigator.pushNamed(
+              context,
+              HelferProfil.routename,
+              arguments: {'landwirt': landwirt},
+            );
+          }
+        });
+
+        // Navigator.pop(context);
+        //   Navigator.pushReplacementNamed(context, "/home");
       });
-
-      // Navigator.pop(context);
-      //   Navigator.pushReplacementNamed(context, "/home");
-    });
-
+    } on FirebaseAuthException catch (e) {
+      await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                  title: const Text('Error Occured'),
+                  content: Text(e.toString()),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(ctx).pop();
+                        },
+                        child: const Text("OK"))
+                  ]));
+    } catch (e) {
+      print(e);
+    }
     throw UnimplementedError();
   }
 
@@ -128,5 +145,9 @@ class AuthRepository implements BaseAuthRepository {
   Future<void> updateUserName(String name) {
     // TODO: implement updateUserName
     throw UnimplementedError();
+  }
+
+  Future<void> refreshUser() async {
+    await _read(firebaseAuthProvider).currentUser!.reload();
   }
 }

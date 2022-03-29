@@ -32,20 +32,29 @@ Container customTextFormField({
       keyboardType: textInputType,
       autocorrect: autocorrect,
       validator: (value) {
+        /// Validate Input
         switch (validateString) {
           case 'name':
             if (value!.isEmpty) {
-              return 'Name is empty';
+              return 'Name can\'t be empty';
             }
             return null;
           case 'email':
-            if (value!.isEmpty || !value.contains('@')) {
-              return 'Invalid email!';
+            RegExp emailRegExp = RegExp(
+                r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+            //if (value!.isEmpty || !value.contains('@')) {
+            //return 'Enter a invalid Email';}
+            if (value!.isEmpty) {
+              return 'Email can\'t be empty';
+            } else if (!emailRegExp.hasMatch(value)) {
+              return 'Enter a correct email';
             }
             return null;
           case 'password':
-            if (value!.isEmpty || value.length < 8) {
-              return 'Password is too short!';
+            if (value!.isEmpty) {
+              return 'Password can\'t be empty';
+            } else if (value.length < 8) {
+              return 'Enter a password with length at least 6';
             }
             return null;
         }
