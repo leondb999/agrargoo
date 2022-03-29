@@ -7,6 +7,7 @@ import 'package:agrargo/UI/pages/7_add_jobanzeige.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
+import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/repositories/firestore_repository.dart';
 import 'package:agrargo/repositories/hof_provider.dart';
 import 'package:agrargo/repositories/jobanzeige_provider.dart';
@@ -38,10 +39,9 @@ class MyApp extends StatelessWidget {
     final firestoreService = FireStoreService();
     return p.MultiProvider(
       providers: [
-        ///Listens to changes at Hof
-        p.ChangeNotifierProvider.value(value: HofProvider()),
-        p.StreamProvider<List<Hof>>.value(
-          value: firestoreService.getHoefe(),
+        ///User Provider
+        p.StreamProvider<List<UserModel>>.value(
+          value: firestoreService.getUserList(),
           initialData: [],
           child: StreamBuilder(builder: (context, snapshot) {
             if (!snapshot.hasError) {
@@ -73,13 +73,47 @@ class MyApp extends StatelessWidget {
           }),
         ),
 
-        p.ChangeNotifierProvider.value(value: JobanzeigeProvider()),
+        ///HofModel Provider
+        p.ChangeNotifierProvider.value(value: HofProvider()),
+        p.StreamProvider<List<HofModel>>.value(
+          value: firestoreService.getHoefeList(),
+          initialData: [],
+          child: StreamBuilder(builder: (context, snapshot) {
+            if (!snapshot.hasError) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return Text(
+                    'Offline!',
+                    style: TextStyle(fontSize: 24, color: Colors.red),
+                    textAlign: TextAlign.center,
+                  );
+                case ConnectionState.waiting:
+                  return SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: CircularProgressIndicator(),
+                  );
+                default:
+                  return ListView.builder(itemBuilder: (context, index) {
+                    return Text("Her könnten ihre Jobanzeigen stehen");
+                  });
+              }
+            } else {
+              return Text(
+                "Error: ${snapshot.error}",
+                style: TextStyle(fontSize: 17, color: Colors.red),
+                textAlign: TextAlign.center,
+              );
+            }
+          }),
+        ),
 
-        ///getJobanzeigen Provider with StreamBuilder
-        p.StreamProvider<List<Jobanzeige>>.value(
-          value: firestoreService.getJobanzeigen(),
+        ///JobanzeigeModel Provider
+        p.ChangeNotifierProvider.value(value: JobanzeigeProvider()),
+        p.StreamProvider<List<JobanzeigeModel>>.value(
+          value: firestoreService.getJobanzeigenList(),
           child: StreamBuilder(
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            builder: (context, snapshot) {
               if (!snapshot.hasError) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:

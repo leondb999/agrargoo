@@ -1,11 +1,11 @@
-class Jobanzeige {
+class JobanzeigeModel {
   String? jobanzeigeID;
   String? auftraggeberID;
   String? hofID;
   bool? status;
   String? titel;
 
-  Jobanzeige(
+  JobanzeigeModel(
       {this.jobanzeigeID,
       this.auftraggeberID,
       this.hofID,
@@ -22,7 +22,8 @@ class Jobanzeige {
     };
   }
 
-  Jobanzeige.fromFirestore(Map<String, dynamic> firestoreMap, String documentID)
+  JobanzeigeModel.fromFirestore(
+      Map<String, dynamic> firestoreMap, String documentID)
       : jobanzeigeID = documentID,
         auftraggeberID = firestoreMap['auftraggeberID'],
         hofID = firestoreMap['hofID'],

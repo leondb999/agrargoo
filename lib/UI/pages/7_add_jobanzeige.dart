@@ -37,7 +37,7 @@ class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
               clearData();
               final jobanzeigeProvider =
                   Provider.of<JobanzeigeProvider>(context, listen: false);
-              jobanzeigeProvider.loadValues(Jobanzeige());
+              jobanzeigeProvider.loadValues(JobanzeigeModel());
             })
           : Future.delayed(
               Duration.zero,
@@ -47,7 +47,7 @@ class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
 
                 final jobanzeigeProvider =
                     Provider.of<JobanzeigeProvider>(context, listen: false);
-                Jobanzeige anzeige = Jobanzeige(
+                JobanzeigeModel anzeige = JobanzeigeModel(
                   titel: routeData['titel'],
                   hofID: routeData['hofID'],
                   jobanzeigeID: routeData['jobanzeigeID'],

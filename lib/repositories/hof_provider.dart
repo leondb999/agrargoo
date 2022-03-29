@@ -22,7 +22,7 @@ class HofProvider with ChangeNotifier {
     if (hofID == null) {
       String? newID = uuid.v4();
       print("saveData() -- new jobanzeige ID:$newID ");
-      var newHof = Hof(
+      var newHof = HofModel(
         hofID: newID,
         besitzerID: getBesitzerID,
         hofName: getHofName,
@@ -30,7 +30,7 @@ class HofProvider with ChangeNotifier {
       );
       service.saveHof(newHof);
     } else {
-      var updateJobanzeige = Hof(
+      var updateJobanzeige = HofModel(
         hofID: getHofID,
         besitzerID: getBesitzerID,
         hofName: getHofName,
@@ -40,8 +40,8 @@ class HofProvider with ChangeNotifier {
   }
 
   ///Filter Höfe nach Nutzer ID
-  List<Hof> getHofByUserID(String? userID, List<Hof> hofListe) {
-    List<Hof> filteredList = [];
+  List<HofModel> getHofByUserID(String? userID, List<HofModel> hofListe) {
+    List<HofModel> filteredList = [];
     hofListe.forEach((hof) {
       if (hof.besitzerID == userID) {
         filteredList.add(hof);

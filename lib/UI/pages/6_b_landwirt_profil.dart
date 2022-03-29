@@ -1,8 +1,11 @@
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
+import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/repositories/firestore_repository.dart';
 import 'package:agrargo/repositories/hof_provider.dart';
 import 'package:agrargo/repositories/jobanzeige_provider.dart';
+import 'package:agrargo/repositories/user_provider.dart';
+import 'package:agrargo/widgets/firebase_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,7 +51,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
   @override
   void initState() {
     // TODO: implement initState
-    checkAuthentification();
+    // checkAuthentification();
     super.initState();
   }
 
@@ -58,13 +61,18 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     String? userID = ref.read(authControllerProvider.notifier).state?.uid;
     print("User ID : $userID");
     final firestoreService = FireStoreService();
-    final hofListeFilteredByUserID =
-        HofProvider().getHofByUserID(userID, p.Provider.of<List<Hof>>(context));
+    final userLoggedIn = UserProvider()
+        .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
+
+    ///Hof Liste
+    final hofListeFilteredByUserID = HofProvider()
+        .getHofByUserID(userID, p.Provider.of<List<HofModel>>(context));
 
     //final jobAnzeigeList = p.Provider.of<List<Jobanzeige>>(context);
     ///Filter Jobanzeigen nach UserID des eingeloggten Landwirt Users
-    List<Jobanzeige> jobanzeigenListUser = JobanzeigeProvider()
-        .getAnzeigeByUserID(userID, p.Provider.of<List<Jobanzeige>>(context));
+    List<JobanzeigeModel> jobanzeigenListUser = JobanzeigeProvider()
+        .getAnzeigeByUserID(
+            userID, p.Provider.of<List<JobanzeigeModel>>(context));
 
     final String? documentID =
         ref.read(authControllerProvider.notifier).state?.uid;
@@ -111,49 +119,27 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
             ? Text("Nothing to See")
             : Column(
                 children: [
-                  ///Show User Name from Firestore
-                  FutureBuilder<DocumentSnapshot>(
-                    future: usersCollection.doc(documentID).get(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<DocumentSnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        return Text("Something went wrong");
-                      }
-                      if (snapshot.hasData && !snapshot.data!.exists) {
-                        return Text("Document does not exist");
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        Map<String, dynamic> data =
-                            snapshot.data!.data() as Map<String, dynamic>;
-                        return Container(
-                          color: Colors.greenAccent,
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            children: [
-                              Text(
-                                "User ID:  ${ref.read(authControllerProvider.notifier).state?.uid}",
+                  Container(
+                    color: Colors.greenAccent,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      children: [
+                        userLoggedIn.isEmpty
+                            ? Text("No User found")
+                            : Column(
+                                children: [
+                                  Text(
+                                    " Hi ${userLoggedIn.first.name}",
+                                    style: TextStyle(fontSize: 30),
+                                  ),
+                                  Text("User ID: $userID"),
+                                ],
                               ),
-                              Text(
-                                "Hi ${data['name']}",
-                                style: TextStyle(fontSize: 30),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      return SizedBox(width: 50, height: 50, child: Text(""));
-                    },
+                      ],
+                    ),
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
+
+                  SizedBox(height: 30),
 
                   ///Höfe with User ID from Firestore
                   SingleChildScrollView(
@@ -173,16 +159,10 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                 itemCount: hofListeFilteredByUserID.length,
                                 itemBuilder: (context, index) {
                                   var hof = hofListeFilteredByUserID[index];
-                                  return Card(
-                                    child: ListTile(
-                                      title: Text(hof.hofName!),
-                                    ),
-                                  );
+                                  return hofCard(hof);
                                 })),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
 
                   /// Zeige Anzeigen des Users
                   Column(
@@ -193,60 +173,18 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                       ),
                       SingleChildScrollView(
                         child: Container(
-                            height: MediaQuery.of(context).size.height,
-                            child: jobanzeigenListUser.isEmpty
-                                ? Text(
-                                    "Keine Jobanzeigen bis jetzt hochgeladen")
-                                : ListView.builder(
-                                    itemCount: jobanzeigenListUser.length,
-                                    itemBuilder: (context, index) {
-                                      var jobanzeige =
-                                          jobanzeigenListUser[index];
+                          height: MediaQuery.of(context).size.height,
+                          child: jobanzeigenListUser.isEmpty
+                              ? Text("Keine Jobanzeigen bis jetzt hochgeladen")
+                              : ListView.builder(
+                                  itemCount: jobanzeigenListUser.length,
+                                  itemBuilder: (context, index) {
+                                    var jobanzeige = jobanzeigenListUser[index];
 
-                                      return Card(
-                                        color: Colors.grey,
-                                        margin: EdgeInsets.only(top: 10),
-                                        child: ListTile(
-                                          title: Text(jobanzeige.titel!,
-                                              style: TextStyle(fontSize: 30)),
-                                          subtitle: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Container(
-                                                  height: 50,
-                                                  color: Colors.amber,
-                                                  child: Column(
-                                                    children: [
-                                                      Text(
-                                                          'Auftraggeber ID: ${jobanzeige.auftraggeberID}'),
-                                                      Text(
-                                                          "DocID der Jobanzeige: ${jobanzeige.jobanzeigeID!}"),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          trailing: _activeAnzeige(
-                                              jobanzeigenListUser[index]
-                                                  .status!),
-                                          leading: Image.network(
-                                            "https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg",
-                                          ),
-                                          onTap: () {
-                                            Navigator.pushNamed(
-                                              context,
-                                              Jobangebot.routename,
-                                              arguments: {
-                                                'jobanzeige_ID':
-                                                    jobanzeige.jobanzeigeID!
-                                              },
-                                            );
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  )),
+                                    return jobAngebotCard(context, jobanzeige);
+                                  },
+                                ),
+                        ),
                       ),
                     ],
                   ),
@@ -255,16 +193,6 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
       ),
     );
   }
-}
-
-Widget _activeAnzeige(bool status) {
-  Widget x = Text("Hello");
-  if (status == true) {
-    x = Text('Active', style: TextStyle(color: Colors.green));
-  } else {
-    x = Text('inactive', style: TextStyle(color: Colors.red));
-  }
-  return x;
 }
 
 String? _getHofID(String userID) {

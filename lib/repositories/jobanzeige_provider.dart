@@ -26,7 +26,7 @@ class JobanzeigeProvider with ChangeNotifier {
   }
 
   ///lade Jobanzeige
-  loadValues(Jobanzeige jobanzeige) {
+  loadValues(JobanzeigeModel jobanzeige) {
     jobanzeigeID = jobanzeige.jobanzeigeID;
     auftraggeberID = jobanzeige.auftraggeberID;
     hofID = jobanzeige.hofID;
@@ -38,7 +38,7 @@ class JobanzeigeProvider with ChangeNotifier {
     if (jobanzeigeID == null) {
       String? newID = uuid.v4();
       print("saveData() -- new jobanzeige ID:$newID ");
-      var newAnzeige = Jobanzeige(
+      var newAnzeige = JobanzeigeModel(
         jobanzeigeID: newID,
         auftraggeberID: getAuftraggeberID,
         status: getStatus,
@@ -47,7 +47,7 @@ class JobanzeigeProvider with ChangeNotifier {
       );
       service.saveJobanzeige(newAnzeige);
     } else {
-      var updateJobanzeige = Jobanzeige(
+      var updateJobanzeige = JobanzeigeModel(
         status: getStatus,
         auftraggeberID: getAuftraggeberID,
         jobanzeigeID: jobanzeigeID,
@@ -59,13 +59,13 @@ class JobanzeigeProvider with ChangeNotifier {
 
   ///Lösche Anzeige
   void removeData() {
-    service.removeItem(jobanzeigeID!);
+    service.removeJobanzeige(jobanzeigeID!);
   }
 
   ///Filter Jobanzeigen by ID
-  List<Jobanzeige> getAnzeigeByUserID(
-      String? userID, List<Jobanzeige> jobAnzeigeList) {
-    List<Jobanzeige> filteredList = [];
+  List<JobanzeigeModel> getAnzeigeByUserID(
+      String? userID, List<JobanzeigeModel> jobAnzeigeList) {
+    List<JobanzeigeModel> filteredList = [];
     jobAnzeigeList.forEach((anzeige) {
       if (anzeige.auftraggeberID == userID) {
         filteredList.add(anzeige);

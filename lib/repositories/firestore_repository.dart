@@ -1,4 +1,5 @@
 import 'package:agrargo/models/hof_model.dart';
+import 'package:agrargo/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:agrargo/main.dart';
 import 'package:agrargo/repositories/custom_exception.dart';
@@ -14,9 +15,22 @@ import '../models/jobanzeige_model.dart';
 
 class FireStoreService {
   FirebaseFirestore _db = FirebaseFirestore.instance;
-/////////////////////////////////////////////// Jobanzeigen ///////////////////////////////////////////////
+
+/////////////////////////////////////////////// UserModel  ///////////////////////////////////////////////
+  Stream<List<UserModel>> getUserList() {
+    final x = _db.collection(('users')).get().then((value) {
+      value.docs.forEach((doc) {
+        print("getUserList: ${doc.id} name: ${doc['name']}");
+      });
+    });
+    return _db.collection(('users')).snapshots().map((snapshot) => snapshot.docs
+        .map((doc) => UserModel.fromFirestore(doc.data(), doc.id))
+        .toList());
+  }
+
+/////////////////////////////////////////////// JobanzeigeModel ///////////////////////////////////////////////
   ///get alle Jobanzeigen
-  Stream<List<Jobanzeige>> getJobanzeigen() {
+  Stream<List<JobanzeigeModel>> getJobanzeigenList() {
     final x = _db.collection(('jobAnzeigen')).get().then((value) {
       value.docs.forEach((doc) {
         print("getJobanzeigen: ${doc.id} titel: ${doc['titel']}");
@@ -25,12 +39,12 @@ class FireStoreService {
 
     return _db.collection(('jobAnzeigen')).snapshots().map((snapshot) =>
         snapshot.docs
-            .map((doc) => Jobanzeige.fromFirestore(doc.data(), doc.id))
+            .map((doc) => JobanzeigeModel.fromFirestore(doc.data(), doc.id))
             .toList());
   }
 
   /// Landwirt
-  Stream<List<Jobanzeige>> getJobanzeigenByAuftraggeber(String userID) {
+  Stream<List<JobanzeigeModel>> getJobanzeigenByAuftraggeber(String userID) {
     final x = _db
         .collection(('jobAnzeigen'))
         .where('auftraggeberID', isEqualTo: userID)
@@ -47,24 +61,24 @@ class FireStoreService {
         .where('auftraggeberID', isEqualTo: userID)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => Jobanzeige.fromFirestore(doc.data(), doc.id))
+            .map((doc) => JobanzeigeModel.fromFirestore(doc.data(), doc.id))
             .toList());
   }
 
   ///update
-  Future<void> saveJobanzeige(Jobanzeige anzeige) {
+  Future<void> saveJobanzeige(JobanzeigeModel anzeige) {
     return _db
         .collection('jobAnzeigen')
         .doc(anzeige.jobanzeigeID)
         .set(anzeige.createMap());
   }
 
-  Future<void> removeItem(String jobanzeigeID) {
+  Future<void> removeJobanzeige(String jobanzeigeID) {
     return _db.collection('jobAnzeigen').doc(jobanzeigeID).delete();
   }
 
-/////////////////////////////////////////////// Hof ///////////////////////////////////////////////
-  Stream<List<Hof>> getHoefe() {
+/////////////////////////////////////////////// HofModel ///////////////////////////////////////////////
+  Stream<List<HofModel>> getHoefeList() {
     final x = _db.collection(('höfe')).get().then((value) {
       value.docs.forEach((doc) {
         print("getHöfe: ${doc.id} name: ${doc['hofName']}");
@@ -72,11 +86,11 @@ class FireStoreService {
     });
 
     return _db.collection(('höfe')).snapshots().map((snapshot) => snapshot.docs
-        .map((doc) => Hof.fromFirestore(doc.data(), doc.id))
+        .map((doc) => HofModel.fromFirestore(doc.data(), doc.id))
         .toList());
   }
 
-  Future<void> saveHof(Hof hof) {
+  Future<void> saveHof(HofModel hof) {
     return _db.collection('höfe').doc(hof.hofID).set(hof.createMap());
   }
 }

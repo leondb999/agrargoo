@@ -19,7 +19,7 @@ class JobangebotUebersichtPage extends StatefulWidget {
 class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
   @override
   Widget build(BuildContext context) {
-    final jobAnzeigeList = Provider.of<List<Jobanzeige>>(context);
+    final jobAnzeigeList = Provider.of<List<JobanzeigeModel>>(context);
     return Scaffold(
       appBar: appBar(),
       resizeToAvoidBottomInset: false,
