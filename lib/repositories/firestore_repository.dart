@@ -86,4 +86,8 @@ class FireStoreService {
   Future<void> saveHof(HofModel hof) {
     return _db.collection('höfe').doc(hof.hofID).set(hof.createMap());
   }
+
+  Future<void> removeHof(String hofID) {
+    return _db.collection('höfe').doc(hofID).delete();
+  }
 }

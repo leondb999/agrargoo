@@ -54,7 +54,7 @@ Container customTextFormField({
             if (value!.isEmpty) {
               return 'Password can\'t be empty';
             } else if (value.length < 8) {
-              return 'Enter a password with length at least 6';
+              return 'Enter a password with length at least 8';
             }
             return null;
         }

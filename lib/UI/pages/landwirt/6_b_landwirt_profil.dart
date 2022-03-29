@@ -1,3 +1,4 @@
+import 'package:agrargo/UI/pages/landwirt/8_add_hof_page.dart';
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/models/user_model.dart';
@@ -17,7 +18,7 @@ import '../../../main.dart';
 
 class LandwirtProfil extends ConsumerStatefulWidget {
   const LandwirtProfil({Key? key}) : super(key: key);
-  static const routename = '/landwirtprofil';
+  static const routename = '/landwirt-profil';
 
   @override
   _LandwirtProfilState createState() => _LandwirtProfilState();
@@ -146,14 +147,18 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                     "Keine Höfe bis jetzt erstellt! Erstelle jetzt deinen ersten Hof"),
                                 ElevatedButton(
                                   child: Text("Erstelle Hof"),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pushNamed(AddHofPage.routename);
+                                  },
                                 ),
                               ],
                             )
                           : ListView.builder(
                               itemCount: hofListeFilteredByUserID.length,
                               itemBuilder: (context, index) {
-                                return hofCard(hofListeFilteredByUserID[index]);
+                                return hofCard(
+                                    context, hofListeFilteredByUserID[index]);
                               },
                             ),
                     ),

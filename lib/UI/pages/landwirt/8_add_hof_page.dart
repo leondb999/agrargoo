@@ -1,26 +1,30 @@
+import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
+import 'package:agrargo/provider/hof_provider.dart';
 import 'package:agrargo/provider/jobanzeige_provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as p;
 import 'package:flutter/material.dart';
 
-///https://github.com/Mashood97/flutter_firestore/blob/master/lib/screens/edit_add_product.dart
-class AddEditJobanzeige extends StatefulWidget {
-  const AddEditJobanzeige({Key? key}) : super(key: key);
-  static const routename = '/add-edit-jobanzeige';
+import '../../../controllers/auth_controller.dart';
+
+class AddHofPage extends ConsumerStatefulWidget {
+  const AddHofPage({Key? key}) : super(key: key);
+  static const routename = '/add-hof';
 
   @override
-  _AddEditJobanzeigeState createState() => _AddEditJobanzeigeState();
+  _AddHofPageState createState() => _AddHofPageState();
 }
 
-class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
+class _AddHofPageState extends ConsumerState<AddHofPage> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
-  final priceController = TextEditingController();
+  final standortController = TextEditingController();
   var routeData;
   void clearData() {
     nameController.text = '';
-    priceController.text = '';
+    standortController.text = '';
   }
 
   @override
@@ -35,26 +39,25 @@ class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
       (value) => routeData == null
           ? Future.delayed(Duration.zero, () {
               clearData();
-              final jobanzeigeProvider =
-                  Provider.of<JobanzeigeProvider>(context, listen: false);
-              jobanzeigeProvider.loadValues(JobanzeigeModel());
+              final hofProvider =
+                  p.Provider.of<HofProvider>(context, listen: false);
+              hofProvider.loadValues(HofModel());
             })
           : Future.delayed(
               Duration.zero,
               () {
                 print("routeData: $routeData");
-                nameController.text = routeData['titel'];
+                nameController.text = routeData['hofName'];
+                standortController.text = routeData['standort'];
 
-                final jobanzeigeProvider =
-                    Provider.of<JobanzeigeProvider>(context, listen: false);
-                JobanzeigeModel anzeige = JobanzeigeModel(
-                  titel: routeData['titel'],
+                final hofProvider =
+                    p.Provider.of<HofProvider>(context, listen: false);
+                HofModel anzeige = HofModel(
                   hofID: routeData['hofID'],
-                  jobanzeigeID: routeData['jobanzeigeID'],
-                  auftraggeberID: routeData['auftraggeberID'],
-                  status: routeData['status'],
+                  besitzerID: routeData['besitzerID'],
+                  standort: routeData['standort'],
                 );
-                jobanzeigeProvider.loadValues(anzeige);
+                hofProvider.loadValues(anzeige);
               },
             ),
     );
@@ -65,16 +68,18 @@ class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
     // TODO: implement dispose
     super.dispose();
     nameController.dispose();
-    priceController.dispose();
+    standortController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final jobanzeigeProvider = Provider.of<JobanzeigeProvider>(context);
+    final hofProvider = p.Provider.of<HofProvider>(context);
+    String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+
     print(
-        "jobanzeige titel: ${jobanzeigeProvider.titel}, status: ${jobanzeigeProvider.status}, auftraggeberID: ${jobanzeigeProvider.getAuftraggeberID}, hofID: ${jobanzeigeProvider.getHofID}");
+        "hof Name: ${hofProvider.hofName}, standort: ${hofProvider.standort}, besitzerID: ${hofProvider.getBesitzerID}, hofID: ${hofProvider.getHofID}");
     return Scaffold(
-      appBar: AppBar(title: Text('Add / Edit Jobangebot Screen')),
+      appBar: AppBar(title: Text('Add Hof ')),
       body: SafeArea(
         child: Container(
           child: Form(
@@ -84,18 +89,33 @@ class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
+                    ///Name Input Field
                     TextFormField(
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Please Enter Titel';
+                          return 'Please Enter Hof Name ';
                         }
                         return null;
                       },
                       controller: nameController,
-                      decoration:
-                          InputDecoration(hintText: 'Enter Jobangebot Titel'),
-                      onChanged: (val) =>
-                          jobanzeigeProvider.changeJobanzeigeTitel(val),
+                      decoration: InputDecoration(hintText: 'Enter Hof Name '),
+                      onChanged: (val) => hofProvider.changeHofName(val),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+
+                    ///Standort Input Field
+                    TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please Enter Standort';
+                        }
+                        return null;
+                      },
+                      controller: standortController,
+                      decoration: InputDecoration(hintText: 'Enter Standort'),
+                      onChanged: (val) => hofProvider.changeStandort(val),
                     ),
                     SizedBox(
                       height: 20,
@@ -106,10 +126,8 @@ class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
                       child: Text('Save'),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          jobanzeigeProvider.status = true;
-                          jobanzeigeProvider.auftraggeberID = 'LeonsID1234';
-                          jobanzeigeProvider.hofID = "Leon's HofID 1234";
-                          jobanzeigeProvider.saveData();
+                          hofProvider.besitzerID = userID;
+                          hofProvider.saveData();
                           Navigator.of(context).pop();
                         }
                       },
@@ -120,7 +138,7 @@ class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
                       child: Text('Delete'),
                       style: ElevatedButton.styleFrom(primary: Colors.red),
                       onPressed: () {
-                        jobanzeigeProvider.removeData();
+                        hofProvider.removeData();
                         Navigator.of(context).pop();
                       },
                     ),

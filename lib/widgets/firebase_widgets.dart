@@ -1,5 +1,6 @@
 import 'package:agrargo/UI/login_riverpod/login.dart';
 import 'package:agrargo/UI/pages/helfer/4_a_job_angebot.dart';
+import 'package:agrargo/UI/pages/landwirt/8_add_hof_page.dart';
 import 'package:agrargo/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,21 @@ import 'package:agrargo/models/jobanzeige_model.dart';
 import '../models/hof_model.dart';
 
 ///Hof Card
-Card hofCard(HofModel hof) {
+Card hofCard(BuildContext context, HofModel hof) {
   return Card(
     child: ListTile(
       title: Text(hof.hofName!),
+      trailing: ElevatedButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(AddHofPage.routename, arguments: {
+            'hofID': hof.hofID,
+            'hofName': hof.hofName!,
+            'besitzerID': hof.besitzerID,
+            'standort': hof.standort,
+          });
+        },
+        child: Text('Edit'),
+      ),
     ),
   );
 }

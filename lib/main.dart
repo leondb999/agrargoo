@@ -4,6 +4,7 @@ import 'package:agrargo/UI/login_riverpod/register.dart';
 import 'package:agrargo/UI/login_riverpod/test_screen.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/UI/pages/landwirt/7_add_jobanzeige.dart';
+import 'package:agrargo/UI/pages/landwirt/8_add_hof_page.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
@@ -158,13 +159,14 @@ class MyApp extends StatelessWidget {
           '/test': (context) => TestScreen(),
           '/register': (context) => RegisterPage(),
           '/login': (context) => LoginPage(),
-          '/whoareyou': (context) => WhoAreYou(),
-          '/jobangebotuebersicht': (context) => JobangebotUebersichtPage(),
+          '/who-are-you': (context) => WhoAreYou(),
+          '/jobangebot-uebersicht': (context) => JobangebotUebersichtPage(),
           '/jobangebot': (context) => Jobangebot(),
-          '/helferprofil': (context) => HelferProfil(),
-          '/landwirtprofil': (context) => LandwirtProfil(),
-          '/helferuebersicht': (context) => HelferUebersichtPage(),
-          '/addeditjobanzeige': (context) => AddEditJobanzeige(),
+          '/helfer-profil': (context) => HelferProfil(),
+          '/landwirt-profil': (context) => LandwirtProfil(),
+          '/helfer-uebersicht': (context) => HelferUebersichtPage(),
+          '/add-edit-jobanzeige': (context) => AddEditJobanzeige(),
+          '/add-hof': (context) => AddHofPage(),
         },
       ),
     );

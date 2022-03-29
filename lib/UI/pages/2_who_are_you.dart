@@ -11,7 +11,7 @@ import '../login_riverpod/register.dart';
 import 'helfer/3_a_jobangebote_übersicht.dart';
 
 class WhoAreYou extends StatefulWidget {
-  static const routename = '/whoareyou';
+  static const routename = '/who-are-you';
 
   WhoAreYou();
 

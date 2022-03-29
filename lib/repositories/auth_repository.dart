@@ -1,5 +1,5 @@
 import 'package:agrargo/main.dart';
-import 'package:agrargo/repositories/custom_exception.dart';
+import 'package:agrargo/exception/custom_exception.dart';
 import 'package:agrargo/provider/general_providers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

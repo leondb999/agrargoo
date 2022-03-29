@@ -18,10 +18,35 @@ class HofProvider with ChangeNotifier {
   String? get getHofName => hofName;
   String? get getStandort => standort;
 
+  ///ändere Hofname
+  void changeHofName(String val) {
+    hofName = val;
+    notifyListeners();
+  }
+
+  void changeStandort(String val) {
+    standort = val;
+    notifyListeners();
+  }
+
+  ///lade Hof
+  loadValues(HofModel hof) {
+    hofID = hof.hofID;
+    besitzerID = hof.besitzerID;
+    hofName = hof.hofName;
+    standort = hof.standort;
+  }
+
+  ///Lösche Hof
+  void removeData() {
+    service.removeHof(hofID!);
+  }
+
+  ///Speichere Daten zu neuen oder aktualisierten Hof
   void saveData() {
     if (hofID == null) {
       String? newID = uuid.v4();
-      print("saveData() -- new jobanzeige ID:$newID ");
+      print("saveData()- -- new jobanzeige ID:$newID ");
       var newHof = HofModel(
         hofID: newID,
         besitzerID: getBesitzerID,
@@ -36,6 +61,7 @@ class HofProvider with ChangeNotifier {
         hofName: getHofName,
         standort: getStandort,
       );
+      service.saveHof(updateJobanzeige);
     }
   }
 

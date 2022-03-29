@@ -11,7 +11,7 @@ import '../../../widgets/layout_widgets.dart';
 
 class JobangebotUebersichtPage extends StatefulWidget {
   const JobangebotUebersichtPage({Key? key}) : super(key: key);
-  static const routename = '/jobangebotuebersicht';
+  static const routename = '/jobangebot-uebersicht';
   @override
   State<JobangebotUebersichtPage> createState() =>
       _JobangebotUebersichtPageState();

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class HelferUebersichtPage extends StatefulWidget {
   const HelferUebersichtPage({Key? key}) : super(key: key);
-  static const routename = '/helferuebersicht';
+  static const routename = '/helfer-uebersicht';
 
   @override
   _HelferUebersichtPageState createState() => _HelferUebersichtPageState();

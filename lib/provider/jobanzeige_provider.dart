@@ -54,6 +54,7 @@ class JobanzeigeProvider with ChangeNotifier {
         hofID: getHofID,
         titel: getTitel,
       );
+      service.saveJobanzeige(updateJobanzeige);
     }
   }
 
