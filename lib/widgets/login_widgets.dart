@@ -45,7 +45,7 @@ Container customTextFormField({
             //if (value!.isEmpty || !value.contains('@')) {
             //return 'Enter a invalid Email';}
             if (value!.isEmpty) {
-              return 'Email can\'t be empty';
+              return 'Email can\'t be emptyy';
             } else if (!emailRegExp.hasMatch(value)) {
               return 'Enter a correct email';
             }
