@@ -1,4 +1,3 @@
-import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/repositories/firestore_repository.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,7 +21,7 @@ class UserProvider with ChangeNotifier {
       String? userID, List<UserModel> userList) {
     List<UserModel> filteredList = [];
     userList.forEach((user) {
-      print("getUsernameByUserID: ${user.userID}");
+      //  print("getUsernameByUserID: ${user.userID}");
       if (user.userID == userID) {
         filteredList.add(user);
       }

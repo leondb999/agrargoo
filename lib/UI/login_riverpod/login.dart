@@ -2,17 +2,10 @@ import 'package:agrargo/UI/login_riverpod/register.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/widgets/login_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutterfire_ui/auth.dart';
-import 'package:flutterfire_ui/database.dart';
-import 'package:flutterfire_ui/firestore.dart';
-import 'package:flutterfire_ui/i10n.dart';
-
-import '../pages/landwirt/3_b_helfer_übersicht.dart';
 import '../pages/landwirt/6_b_landwirt_profil.dart';
 
 class LoginPage extends ConsumerStatefulWidget {

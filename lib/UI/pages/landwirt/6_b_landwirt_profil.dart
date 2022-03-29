@@ -1,7 +1,6 @@
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/models/user_model.dart';
-import 'package:agrargo/repositories/firestore_repository.dart';
 import 'package:agrargo/repositories/hof_provider.dart';
 import 'package:agrargo/repositories/jobanzeige_provider.dart';
 import 'package:agrargo/repositories/user_provider.dart';
@@ -15,8 +14,6 @@ import 'package:provider/provider.dart' as p;
 
 import '../../../controllers/auth_controller.dart';
 import '../../../main.dart';
-import '../helfer/4_a_job_angebot.dart';
-import 'package:provider/provider.dart' as p;
 
 class LandwirtProfil extends ConsumerStatefulWidget {
   const LandwirtProfil({Key? key}) : super(key: key);
@@ -148,8 +145,9 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                 Text(
                                     "Keine Höfe bis jetzt erstellt! Erstelle jetzt deinen ersten Hof"),
                                 ElevatedButton(
-                                    onPressed: () {},
-                                    child: Text("Erstelle Hof")),
+                                  child: Text("Erstelle Hof"),
+                                  onPressed: () {},
+                                ),
                               ],
                             )
                           : ListView.builder(

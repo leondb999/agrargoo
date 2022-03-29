@@ -1,13 +1,6 @@
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:agrargo/main.dart';
-import 'package:agrargo/repositories/custom_exception.dart';
-import 'package:agrargo/repositories/general_providers.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/jobanzeige_model.dart';
 
@@ -20,7 +13,7 @@ class FireStoreService {
   Stream<List<UserModel>> getUserList() {
     final x = _db.collection(('users')).get().then((value) {
       value.docs.forEach((doc) {
-        print("getUserList: ${doc.id} name: ${doc['name']}");
+        //   print("getUserList: ${doc.id} name: ${doc['name']}");
       });
     });
     return _db.collection(('users')).snapshots().map((snapshot) => snapshot.docs
@@ -33,7 +26,7 @@ class FireStoreService {
   Stream<List<JobanzeigeModel>> getJobanzeigenList() {
     final x = _db.collection(('jobAnzeigen')).get().then((value) {
       value.docs.forEach((doc) {
-        print("getJobanzeigen: ${doc.id} titel: ${doc['titel']}");
+        //    print("getJobanzeigen: ${doc.id} titel: ${doc['titel']}");
       });
     });
 
@@ -51,8 +44,8 @@ class FireStoreService {
         .get()
         .then((value) {
       value.docs.forEach((doc) {
-        print(
-            "getJobanzeigenByAuftraggeber: ${doc.id} titel: ${doc['titel']} auftraggeberID: ${doc['auftraggeberID']}");
+        //  print(
+        //       "getJobanzeigenByAuftraggeber: ${doc.id} titel: ${doc['titel']} auftraggeberID: ${doc['auftraggeberID']}");
       });
     });
 
