@@ -119,6 +119,7 @@ class _LoginPage_zwState extends State<LoginPage_zw> {
                           const SnackBar(
                               content: Text("Email & Password submitted")),
                         );
+
                         UserCredential userCredential = await FirebaseAuth
                             .instance
                             .createUserWithEmailAndPassword(

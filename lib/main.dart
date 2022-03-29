@@ -1,12 +1,20 @@
+import 'dart:math';
+
 import 'package:agrargo/UI/login_riverpod/register_riverpod.dart';
 import 'package:agrargo/UI/login_riverpod/test_screen.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
+import 'package:agrargo/UI/pages/7_add_jobanzeige.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
+import 'package:agrargo/models/jobanzeige.dart';
+import 'package:agrargo/repositories/firestore_repository.dart';
+import 'package:agrargo/repositories/jobanzeige_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as p;
 
 import 'UI/login_riverpod/login_riverpod.dart';
 import 'UI/pages/3_a_jobangebote_übersicht.dart';
@@ -25,26 +33,69 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'AgrarGo Riverpod',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    final firestoreService = FireStoreService();
+    return p.MultiProvider(
+      providers: [
+        p.ChangeNotifierProvider.value(value: JobanzeigeProvider()),
+
+        ///getJobanzeigen Provider with StreamBuilder
+        p.StreamProvider<List<Jobanzeige>>.value(
+          value: firestoreService.getJobanzeigen(),
+          child: StreamBuilder(
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (!snapshot.hasError) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                    return Text(
+                      'Offline!',
+                      style: TextStyle(fontSize: 24, color: Colors.red),
+                      textAlign: TextAlign.center,
+                    );
+                  case ConnectionState.waiting:
+                    return SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: CircularProgressIndicator(),
+                    );
+                  default:
+                    return ListView.builder(itemBuilder: (context, index) {
+                      return Text("Her könnten ihre Jobanzeigen stehen");
+                    });
+                }
+              } else {
+                return Text(
+                  "Error: ${snapshot.error}",
+                  style: TextStyle(fontSize: 17, color: Colors.red),
+                  textAlign: TextAlign.center,
+                );
+              }
+            },
+          ),
+          initialData: [],
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'AgrarGo Riverpod',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute: "/home",
+        routes: {
+          '/login': (context) => LoginRiverpodPage(),
+          '/home': (context) => HomeScreen(),
+          '/test': (context) => TestScreen(),
+          '/register': (context) => RegisterRiverpodPage(),
+          '/login': (context) => LoginRiverpodPage(),
+          '/whoareyou': (context) => WhoAreYou(),
+          '/jobangebotuebersicht': (context) => JobangebotUebersichtPage(),
+          '/jobangebot': (context) => Jobangebot(),
+          '/helferprofil': (context) => HelferProfil(),
+          '/landwirtprofil': (context) => LandwirtProfil(),
+          '/helferuebersicht': (context) => HelferUebersichtPage(),
+          '/addeditjobanzeige': (context) => AddEditJobanzeige(),
+        },
       ),
-      initialRoute: "/home",
-      routes: {
-        '/login': (context) => LoginRiverpodPage(),
-        '/home': (context) => HomeScreen(),
-        '/test': (context) => TestScreen(),
-        '/register': (context) => RegisterRiverpodPage(),
-        '/login': (context) => LoginRiverpodPage(),
-        '/whoareyou': (context) => WhoAreYou(),
-        '/jobangebotuebersicht': (context) => JobangebotUebersichtPage(),
-        '/jobangebot': (context) => Jobangebot(),
-        '/helferprofil': (context) => HelferProfil(),
-        '/landwirtprofil': (context) => LandwirtProfil(),
-        '/helferuebersicht': (context) => HelferUebersichtPage(),
-      },
     );
   }
 }

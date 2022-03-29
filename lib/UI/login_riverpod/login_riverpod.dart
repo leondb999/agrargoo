@@ -169,11 +169,13 @@ class _LoginRiverpodPageState extends ConsumerState<LoginRiverpodPage> {
                             print(
                                 "authControllerState Sign Out: $authControllerState");
 
-                            ///SignIn Anonymously
+                            ///SignIn Email & Password
+                            ///TODO Fix Bug: After Landwirt logs in he is navigated to home Page
                             ref
                                 .read(authControllerProvider.notifier)
                                 .signInEmail(
                                     context, _email.text, _password.text);
+                            print("_landwirt login: $_landwirt");
                             if (_landwirt == true) {
                               Navigator.pushNamed(
                                 context,
