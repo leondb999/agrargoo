@@ -1,4 +1,4 @@
-import 'package:agrargo/models/jobanzeige.dart';
+import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/repositories/firestore_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -12,7 +12,8 @@ class JobanzeigeProvider with ChangeNotifier {
   String? hofID;
   bool? status;
   String? titel;
-  // getters
+
+  /// Getters
   String? get getAuftraggeberID => auftraggeberID;
   String? get getHofID => hofID;
   bool? get getStatus => status;
@@ -59,5 +60,17 @@ class JobanzeigeProvider with ChangeNotifier {
   ///Lösche Anzeige
   void removeData() {
     service.removeItem(jobanzeigeID!);
+  }
+
+  ///Filter Jobanzeigen by ID
+  List<Jobanzeige> getAnzeigeByUserID(
+      String? userID, List<Jobanzeige> jobAnzeigeList) {
+    List<Jobanzeige> filteredList = [];
+    jobAnzeigeList.forEach((anzeige) {
+      if (anzeige.auftraggeberID == userID) {
+        filteredList.add(anzeige);
+      }
+    });
+    return filteredList;
   }
 }

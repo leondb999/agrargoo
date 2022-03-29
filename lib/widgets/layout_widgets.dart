@@ -1,11 +1,8 @@
-import 'package:agrargo/UI/login/login_page.dart';
-import 'package:agrargo/UI/login/profile_page.dart';
+import 'package:agrargo/UI/login_riverpod/login_riverpod.dart';
 import 'package:agrargo/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../UI/pages/0_home_page.dart';
 
 BottomNavigationBar navigationBar(int index, BuildContext context, User? user) {
   return BottomNavigationBar(
@@ -31,7 +28,7 @@ BottomNavigationBar navigationBar(int index, BuildContext context, User? user) {
         } else {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
+            MaterialPageRoute(builder: (context) => LoginRiverpodPage()),
           );
         }
       }

@@ -1,4 +1,4 @@
-import 'package:agrargo/models/jobanzeige.dart';
+import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/repositories/jobanzeige_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';

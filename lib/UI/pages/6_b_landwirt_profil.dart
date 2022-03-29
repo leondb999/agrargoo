@@ -1,12 +1,19 @@
+import 'package:agrargo/models/hof_model.dart';
+import 'package:agrargo/models/jobanzeige_model.dart';
+import 'package:agrargo/repositories/firestore_repository.dart';
+import 'package:agrargo/repositories/hof_provider.dart';
+import 'package:agrargo/repositories/jobanzeige_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as p;
 
 import '../../controllers/auth_controller.dart';
 import '../../main.dart';
 import '4_a_job_angebot.dart';
+import 'package:provider/provider.dart' as p;
 
 class LandwirtProfil extends ConsumerStatefulWidget {
   const LandwirtProfil({Key? key}) : super(key: key);
@@ -50,10 +57,18 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     User? authControllerState = ref.watch(authControllerProvider);
     String? userID = ref.read(authControllerProvider.notifier).state?.uid;
     print("User ID : $userID");
+    final firestoreService = FireStoreService();
+    final hofListeFilteredByUserID =
+        HofProvider().getHofByUserID(userID, p.Provider.of<List<Hof>>(context));
+
+    //final jobAnzeigeList = p.Provider.of<List<Jobanzeige>>(context);
+    ///Filter Jobanzeigen nach UserID des eingeloggten Landwirt Users
+    List<Jobanzeige> jobanzeigenListUser = JobanzeigeProvider()
+        .getAnzeigeByUserID(userID, p.Provider.of<List<Jobanzeige>>(context));
+
     final String? documentID =
         ref.read(authControllerProvider.notifier).state?.uid;
-    //_getHofID(userID!);
-    //_getAnzeigenByHofID(userID!);
+
     return Scaffold(
       appBar: AppBar(
           toolbarHeight: MediaQuery.of(context).size.height * 0.09,
@@ -90,209 +105,153 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                     onPressed: () {},
                   )
           ]),
-      body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              child: authControllerState == null
-                  ? Text("Nothing to See")
-                  : Column(
-                      children: [
-                        ///Show User Name from Firestore
-                        FutureBuilder<DocumentSnapshot>(
-                          future: usersCollection.doc(documentID).get(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<DocumentSnapshot> snapshot) {
-                            if (snapshot.hasError) {
-                              return Text("Something went wrong");
-                            }
-                            if (snapshot.hasData && !snapshot.data!.exists) {
-                              return Text("Document does not exist");
-                            }
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              Map<String, dynamic> data =
-                                  snapshot.data!.data() as Map<String, dynamic>;
-                              return Container(
-                                color: Colors.greenAccent,
-                                width: MediaQuery.of(context).size.width,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "User ID:  ${ref.read(authControllerProvider.notifier).state?.uid}",
-                                    ),
-                                    Text(
-                                      "Hi ${data['name']}",
-                                      style: TextStyle(fontSize: 30),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                            return SizedBox(
-                                width: 50, height: 50, child: Text(""));
-                          },
-                        ),
-                        SizedBox(
-                          height: 60,
-                        ),
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        child: authControllerState == null
+            ? Text("Nothing to See")
+            : Column(
+                children: [
+                  ///Show User Name from Firestore
+                  FutureBuilder<DocumentSnapshot>(
+                    future: usersCollection.doc(documentID).get(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      if (snapshot.hasError) {
+                        return Text("Something went wrong");
+                      }
+                      if (snapshot.hasData && !snapshot.data!.exists) {
+                        return Text("Document does not exist");
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        Map<String, dynamic> data =
+                            snapshot.data!.data() as Map<String, dynamic>;
+                        return Container(
+                          color: Colors.greenAccent,
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            children: [
+                              Text(
+                                "User ID:  ${ref.read(authControllerProvider.notifier).state?.uid}",
+                              ),
+                              Text(
+                                "Hi ${data['name']}",
+                                style: TextStyle(fontSize: 30),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      return SizedBox(width: 50, height: 50, child: Text(""));
+                    },
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
 
-                        ///Höfe with User ID from Firestore
-                        Column(
-                          children: [
-                            Text(
-                              "Alle Höfe",
-                              style: TextStyle(fontSize: 30),
-                            ),
-                            SingleChildScrollView(
-                              child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance
-                                    .collection('höfe')
-                                    .where('userID', isEqualTo: userID)
-                                    .snapshots(),
-                                builder: (context,
-                                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                                  if (snapshot.hasError) {
-                                    return Text('Something went wrong');
-                                  }
-                                  if (snapshot.hasData == null) {
-                                    return Text('User has no Höfe yet');
-                                  }
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return Container(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-                                  final List<DocumentSnapshot> documents =
-                                      snapshot.data!.docs;
-                                  return Container(
-                                    color: Colors.lightGreen,
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 100,
-                                    child: ListView(
-                                      children: documents
-                                          .map(
-                                            (doc) => Card(
-                                              child: ListTile(
-                                                title: Text(doc['hofName']),
-                                              ),
-                                            ),
-                                          )
-                                          .toList(),
+                  ///Höfe with User ID from Firestore
+                  SingleChildScrollView(
+                    child: Container(
+                        height: 200,
+                        child: hofListeFilteredByUserID.isEmpty
+                            ? Column(
+                                children: [
+                                  Text(
+                                      "Keine Höfe bis jetzt erstellt! Erstelle jetzt deinen ersten Hof"),
+                                  ElevatedButton(
+                                      onPressed: () {},
+                                      child: Text("Erstelle Hof")),
+                                ],
+                              )
+                            : ListView.builder(
+                                itemCount: hofListeFilteredByUserID.length,
+                                itemBuilder: (context, index) {
+                                  var hof = hofListeFilteredByUserID[index];
+                                  return Card(
+                                    child: ListTile(
+                                      title: Text(hof.hofName!),
                                     ),
                                   );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                                })),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
 
-                        /// Zeige Anzeigen des Users
-                        Column(
-                          children: [
-                            Text(
-                              "Alle Anzeigen",
-                              style: TextStyle(fontSize: 30),
-                            ),
-                            SingleChildScrollView(
-                              child: StreamBuilder<QuerySnapshot>(
-                                ///TODO Implement Join über hofCollection und jobanzeigenCollection | aktuell Abfrage über UserID
-                                stream: FirebaseFirestore.instance
-                                    .collection('jobAnzeigen')
-                                    .where('auftraggeberID', isEqualTo: userID)
-                                    .snapshots(),
-                                builder: (context,
-                                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                                  if (snapshot.hasError) {
-                                    return Text('Something went wrong');
-                                  }
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return Container(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-                                  final List<DocumentSnapshot> documents =
-                                      snapshot.data!.docs;
+                  /// Zeige Anzeigen des Users
+                  Column(
+                    children: [
+                      Text(
+                        "Alle Anzeigen",
+                        style: TextStyle(fontSize: 30),
+                      ),
+                      SingleChildScrollView(
+                        child: Container(
+                            height: MediaQuery.of(context).size.height,
+                            child: jobanzeigenListUser.isEmpty
+                                ? Text(
+                                    "Keine Jobanzeigen bis jetzt hochgeladen")
+                                : ListView.builder(
+                                    itemCount: jobanzeigenListUser.length,
+                                    itemBuilder: (context, index) {
+                                      var jobanzeige =
+                                          jobanzeigenListUser[index];
 
-                                  return Container(
-                                    height: 200,
-                                    color: Colors.amber,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: ListView(
-                                      children: documents
-                                          .map(
-                                            (doc) => Card(
-                                              child: ListTile(
-                                                title: Text(doc['titel']),
-                                                subtitle: Row(
-                                                  children: [
-                                                    Expanded(
-                                                      child: Container(
-                                                        //height: 100,
-                                                        //color: Colors.blueGrey,
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            SizedBox(
-                                                                height: 10),
-                                                            Text(
-                                                              "Auftraggeber ID: ${doc['auftraggeberID']}",
-                                                            ),
-                                                            SizedBox(
-                                                                height: 10),
-                                                            Text(
-                                                              "HofID: ${doc['hofID']}",
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
+                                      return Card(
+                                        color: Colors.grey,
+                                        margin: EdgeInsets.only(top: 10),
+                                        child: ListTile(
+                                          title: Text(jobanzeige.titel!,
+                                              style: TextStyle(fontSize: 30)),
+                                          subtitle: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  height: 50,
+                                                  color: Colors.amber,
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                          'Auftraggeber ID: ${jobanzeige.auftraggeberID}'),
+                                                      Text(
+                                                          "DocID der Jobanzeige: ${jobanzeige.jobanzeigeID!}"),
+                                                    ],
+                                                  ),
                                                 ),
-                                                trailing: _activeAnzeige(
-                                                    doc['status']),
-                                                onTap: () {
-                                                  Navigator.pushNamed(
-                                                    context,
-                                                    Jobangebot.routename,
-                                                  );
-                                                },
-                                                leading:
-                                                    Icon(Icons.arrow_right),
                                               ),
-                                            ),
-                                          )
-                                          .toList(),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-            ),
-          ],
-        ),
+                                            ],
+                                          ),
+                                          trailing: _activeAnzeige(
+                                              jobanzeigenListUser[index]
+                                                  .status!),
+                                          leading: Image.network(
+                                            "https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg",
+                                          ),
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                              context,
+                                              Jobangebot.routename,
+                                              arguments: {
+                                                'jobanzeige_ID':
+                                                    jobanzeige.jobanzeigeID!
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  )),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
       ),
     );
   }

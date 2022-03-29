@@ -1,6 +1,6 @@
 import 'package:agrargo/UI/pages/4_a_job_angebot.dart';
 import 'package:agrargo/UI/pages/7_add_jobanzeige.dart';
-import 'package:agrargo/models/jobanzeige.dart';
+import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +70,7 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
                           itemCount: jobAnzeigeList.length,
                           itemBuilder: (context, index) {
                             var jobanzeige = jobAnzeigeList[index];
+
                             return Card(
                               color: Colors.grey,
                               margin: EdgeInsets.only(top: 40),

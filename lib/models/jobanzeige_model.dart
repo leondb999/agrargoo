@@ -1,11 +1,3 @@
-import 'package:agrargo/main.dart';
-import 'package:agrargo/repositories/custom_exception.dart';
-import 'package:agrargo/repositories/general_providers.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 class Jobanzeige {
   String? jobanzeigeID;
   String? auftraggeberID;

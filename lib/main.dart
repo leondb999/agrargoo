@@ -5,8 +5,10 @@ import 'package:agrargo/UI/login_riverpod/test_screen.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/UI/pages/7_add_jobanzeige.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
-import 'package:agrargo/models/jobanzeige.dart';
+import 'package:agrargo/models/hof_model.dart';
+import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/repositories/firestore_repository.dart';
+import 'package:agrargo/repositories/hof_provider.dart';
 import 'package:agrargo/repositories/jobanzeige_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,6 +38,41 @@ class MyApp extends StatelessWidget {
     final firestoreService = FireStoreService();
     return p.MultiProvider(
       providers: [
+        ///Listens to changes at Hof
+        p.ChangeNotifierProvider.value(value: HofProvider()),
+        p.StreamProvider<List<Hof>>.value(
+          value: firestoreService.getHoefe(),
+          initialData: [],
+          child: StreamBuilder(builder: (context, snapshot) {
+            if (!snapshot.hasError) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return Text(
+                    'Offline!',
+                    style: TextStyle(fontSize: 24, color: Colors.red),
+                    textAlign: TextAlign.center,
+                  );
+                case ConnectionState.waiting:
+                  return SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: CircularProgressIndicator(),
+                  );
+                default:
+                  return ListView.builder(itemBuilder: (context, index) {
+                    return Text("Her könnten ihre Jobanzeigen stehen");
+                  });
+              }
+            } else {
+              return Text(
+                "Error: ${snapshot.error}",
+                style: TextStyle(fontSize: 17, color: Colors.red),
+                textAlign: TextAlign.center,
+              );
+            }
+          }),
+        ),
+
         p.ChangeNotifierProvider.value(value: JobanzeigeProvider()),
 
         ///getJobanzeigen Provider with StreamBuilder
