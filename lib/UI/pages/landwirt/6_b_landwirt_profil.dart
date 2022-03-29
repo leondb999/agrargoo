@@ -1,9 +1,9 @@
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/models/user_model.dart';
-import 'package:agrargo/repositories/hof_provider.dart';
-import 'package:agrargo/repositories/jobanzeige_provider.dart';
-import 'package:agrargo/repositories/user_provider.dart';
+import 'package:agrargo/provider/hof_provider.dart';
+import 'package:agrargo/provider/jobanzeige_provider.dart';
+import 'package:agrargo/provider/user_provider.dart';
 import 'package:agrargo/widgets/firebase_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
