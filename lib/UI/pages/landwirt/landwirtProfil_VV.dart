@@ -119,13 +119,15 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                       height: MediaQuery.of(context).size.height * 0.17,
                       color: Color(0xFF1f623c),
                       child: Center(
-                          child: Text("${userLoggedIn.first.name}`s Profil",
-                              style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontFamily: 'Open Sans',
-                                  fontSize: 50.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFFffffff))))),
+                          child: userLoggedIn.isEmpty
+                              ? Text("No User found")
+                              : Text("${userLoggedIn.first.name}`s Profil",
+                                  style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontFamily: 'Open Sans',
+                                      fontSize: 50.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFffffff))))),
                   /* Container(
                     color: Colors.greenAccent,
                     width: MediaQuery.of(context).size.width,
@@ -212,19 +214,20 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                       child: SingleChildScrollView(
                     child: Column(children: [
                       Container(
-                          height: MediaQuery.of(context).size.height,
-                          child: jobanzeigenListUser.isEmpty != null
-                              ? ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  itemCount: jobanzeigenListUser.length,
-                                  itemBuilder: (context, index) {
-                                    return jobAngebotCard(
-                                        context, jobanzeigenListUser[index]);
-                                  },
-                                )
-                              : Text(
-                                  "Aktuell hast du noch keine Jobanzeigen hochgeladen")),
+                        height: MediaQuery.of(context).size.height,
+                        child: jobanzeigenListUser.isEmpty
+                            ? Text("Keine Jobanzeigen bis jetzt hochgeladen")
+                            : ListView.builder(
+                                itemCount: jobanzeigenListUser.length,
+                                itemBuilder: (context, index) {
+                                  return jobAnzeigeCard(
+                                    context,
+                                    jobanzeigenListUser[index],
+                                    true,
+                                  );
+                                },
+                              ),
+                      ),
                     ]),
                   ))
                 ],
