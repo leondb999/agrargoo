@@ -52,29 +52,21 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
           Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.015),
-          Container(
-            height: 100,
-            width: MediaQuery.of(context).size.width,
-            child: IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                Navigator.of(context).pushNamed(AddEditJobanzeige.routename);
-              },
-            ),
-          ),
           Expanded(
             child: SingleChildScrollView(
               child: Container(
                   height: MediaQuery.of(context).size.height,
                   child: jobAnzeigeList != null
                       ? ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
                           itemCount: jobAnzeigeList.length,
                           itemBuilder: (context, index) {
                             return jobAngebotCard(
                                 context, jobAnzeigeList[index]);
                           },
                         )
-                      : Text("keine Jobanzeigen jetzt")),
+                      : Text("aktuell gibt es keine Jobanzeigen")),
             ),
           ),
         ],

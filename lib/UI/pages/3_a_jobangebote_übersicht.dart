@@ -1,4 +1,4 @@
-import 'package:agrargo/UI/pages/4_a_job_angebot.dart';
+/*import 'package:agrargo/UI/pages/4_a_job_angebot.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -272,7 +272,7 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
                                           fontFamily: 'Open Sans',
                                           fontSize: 25.0,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xFF000000))),
+                                          color: Color(0xFFFFFFFF))),
                                   SizedBox(width: 50),
                                   Icon(
                                     Icons.arrow_right,
@@ -327,4 +327,4 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
               color: Colors.white, size: 30.0)),
     ),
   );
-}
+}*/
