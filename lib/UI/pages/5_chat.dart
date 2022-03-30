@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class Chat extends StatefulWidget {
   const Chat({Key? key}) : super(key: key);
+  static const routename = '/chat';
 
   @override
   State<Chat> createState() => _Chat();

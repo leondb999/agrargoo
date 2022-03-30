@@ -8,22 +8,23 @@ import 'package:riverpod/riverpod.dart';
 
 import '../login_riverpod/login.dart';
 import '../login_riverpod/register.dart';
-import 'helfer/3_a_jobangebote_übersicht.dart';
+import 'helfer/3_a_jobangebote_uebersicht.dart';
 
-class WhoAreYou extends StatefulWidget {
-  static const routename = '/whoareyou';
+class WhoAreYou extends ConsumerStatefulWidget {
+  static const routename = '/who-are-you';
 
   WhoAreYou();
 
   @override
-  State<WhoAreYou> createState() => _WhoAreYouState();
+  _WhoAreYouState createState() => _WhoAreYouState();
 }
 
-class _WhoAreYouState extends State<WhoAreYou> {
+class _WhoAreYouState extends ConsumerState<WhoAreYou> {
   bool landwirt = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: appBar(context: context, ref: ref, home: true),
       resizeToAvoidBottomInset: false, // set it to false
       body: SingleChildScrollView(
         child: Column(

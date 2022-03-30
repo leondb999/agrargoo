@@ -4,10 +4,12 @@ import 'package:agrargo/UI/login_riverpod/register.dart';
 import 'package:agrargo/UI/login_riverpod/test_screen.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/UI/pages/landwirt/7_add_jobanzeige.dart';
+import 'package:agrargo/UI/pages/landwirt/8_add_hof_page.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/models/user_model.dart';
+import 'package:agrargo/provider/user_provider.dart';
 import 'package:agrargo/repositories/firestore_repository.dart';
 import 'package:agrargo/provider/hof_provider.dart';
 import 'package:agrargo/provider/jobanzeige_provider.dart';
@@ -18,9 +20,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
-
+import 'UI/pages/5_chat.dart';
+import 'widgets/layout_widgets.dart';
 import 'UI/login_riverpod/login.dart';
-import 'UI/pages/helfer/3_a_jobangebote_übersicht.dart';
+import 'UI/pages/helfer/3_a_jobangebote_uebersicht.dart';
 import 'UI/pages/landwirt/3_b_helfer_übersicht.dart';
 import 'UI/pages/helfer/4_a_job_angebot.dart';
 import 'UI/pages/helfer/6_a_helfer_profil.dart';
@@ -158,13 +161,15 @@ class MyApp extends StatelessWidget {
           '/test': (context) => TestScreen(),
           '/register': (context) => RegisterPage(),
           '/login': (context) => LoginPage(),
-          '/whoareyou': (context) => WhoAreYou(),
-          '/jobangebotuebersicht': (context) => JobangebotUebersichtPage(),
+          '/who-are-you': (context) => WhoAreYou(),
+          '/jobangebot-uebersicht': (context) => JobangebotUebersichtPage(),
           '/jobangebot': (context) => Jobangebot(),
-          '/helferprofil': (context) => HelferProfil(),
-          '/landwirtprofil': (context) => LandwirtProfil(),
-          '/helferuebersicht': (context) => HelferUebersichtPage(),
-          '/addeditjobanzeige': (context) => AddEditJobanzeige(),
+          '/helfer-profil': (context) => HelferProfil(),
+          '/landwirt-profil': (context) => LandwirtProfil(),
+          '/helfer-uebersicht': (context) => HelferUebersichtPage(),
+          '/add-edit-jobanzeige': (context) => AddEditJobanzeige(),
+          '/add-hof': (context) => AddHofPage(),
+          '/chat': (context) => Chat(),
         },
       ),
     );
@@ -208,48 +213,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     authControllerState?.reload();
     User? authControllerStateRead = ref.read(authControllerProvider);
     String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+    final userLoggedIn = UserProvider()
+        .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
     final String? documentID =
         ref.read(authControllerProvider.notifier).state?.uid;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text('Agrar Go')),
-        actions: [
-          authControllerState != null
-
-              ///Sign Out
-              ? ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(100, 5),
-                    primary: Colors.green,
-                  ),
-                  onPressed: () {
-                    print("authControllerState Sign Out: $authControllerState");
-                    ref.read(authControllerProvider.notifier).signOut(context);
-                  },
-                  child: Text("Sign Out"),
-                )
-
-              ///Sign In
-              : IconButton(
-                  splashColor: Colors.green,
-                  icon: Icon(
-                    Icons.login,
-                  ),
-                  onPressed: () {
-                    print("authControllerState Sign Out: $authControllerState");
-                    /*
-                    context
-                        .read(authControllerProvider.notifier)
-                        .signInAnonym();
-                 */
-                    authControllerState != null
-                        ? Navigator.pushReplacementNamed(context, "/login")
-                        : Navigator.pushReplacementNamed(context, "/login");
-                  },
-                ),
-        ],
-      ),
+      appBar: appBar(context: context, ref: ref, home: true),
+      bottomNavigationBar:
+          navigationBar(index: 0, context: context, ref: ref, home: true),
       body: SafeArea(
         child: Column(
           children: [

@@ -1,15 +1,5 @@
-import 'package:agrargo/UI/login_riverpod/test_screen.dart';
-import 'package:agrargo/controllers/auth_controller.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutterfire_ui/auth.dart';
-import 'package:flutterfire_ui/database.dart';
-import 'package:flutterfire_ui/firestore.dart';
-import 'package:flutterfire_ui/i10n.dart';
 
 Container customTextFormField({
   required TextEditingController controller,
@@ -45,7 +35,7 @@ Container customTextFormField({
             //if (value!.isEmpty || !value.contains('@')) {
             //return 'Enter a invalid Email';}
             if (value!.isEmpty) {
-              return 'Email can\'t be empty';
+              return 'Email can\'t be emptyy';
             } else if (!emailRegExp.hasMatch(value)) {
               return 'Enter a correct email';
             }
@@ -54,7 +44,7 @@ Container customTextFormField({
             if (value!.isEmpty) {
               return 'Password can\'t be empty';
             } else if (value.length < 8) {
-              return 'Enter a password with length at least 6';
+              return 'Enter a password with length at least 8';
             }
             return null;
         }

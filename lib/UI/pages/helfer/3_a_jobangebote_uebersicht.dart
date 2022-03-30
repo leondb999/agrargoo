@@ -1,28 +1,41 @@
 import 'package:agrargo/UI/pages/helfer/4_a_job_angebot.dart';
 import 'package:agrargo/UI/pages/landwirt/7_add_jobanzeige.dart';
+import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/widgets/firebase_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as p;
 
 import '../../../widgets/layout_widgets.dart';
 
-class JobangebotUebersichtPage extends StatefulWidget {
+class JobangebotUebersichtPage extends ConsumerStatefulWidget {
   const JobangebotUebersichtPage({Key? key}) : super(key: key);
-  static const routename = '/jobangebotuebersicht';
+  static const routename = '/jobangebot-uebersicht';
   @override
-  State<JobangebotUebersichtPage> createState() =>
+  _JobangebotUebersichtPageState createState() =>
       _JobangebotUebersichtPageState();
 }
 
-class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
+class _JobangebotUebersichtPageState
+    extends ConsumerState<JobangebotUebersichtPage> {
   @override
   Widget build(BuildContext context) {
-    final jobAnzeigeList = Provider.of<List<JobanzeigeModel>>(context);
+    User? authControllerState = ref.watch(authControllerProvider);
+
+    final jobAnzeigeList = p.Provider.of<List<JobanzeigeModel>>(context);
+    var activeAnzeigeList = [];
+    jobAnzeigeList.forEach((anzeige) {
+      if (anzeige.status == true) {
+        activeAnzeigeList.add(anzeige);
+      }
+    });
+    print("activeAnzeigeList: $activeAnzeigeList");
     return Scaffold(
-      appBar: appBar(),
+      appBar: AppBar(),
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
@@ -62,8 +75,8 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
                           shrinkWrap: true,
                           itemCount: jobAnzeigeList.length,
                           itemBuilder: (context, index) {
-                            return jobAngebotCard(
-                                context, jobAnzeigeList[index]);
+                            return jobAnzeigeCard(
+                                context, activeAnzeigeList[index], false);
                           },
                         )
                       : Text("aktuell gibt es keine Jobanzeigen")),

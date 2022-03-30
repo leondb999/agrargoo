@@ -6,7 +6,7 @@ import '4_a_job_angebot.dart';
 
 class HelferProfil extends StatefulWidget {
   const HelferProfil({Key? key}) : super(key: key);
-  static const routename = '/helferprofil';
+  static const routename = '/helfer-profil';
 
   @override
   _HelferProfilState createState() => _HelferProfilState();

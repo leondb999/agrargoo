@@ -33,7 +33,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
     });
     print("jobanzeigeID: $jobanzeigeID");
     return Scaffold(
-      appBar: appBar(),
+      appBar: AppBar(),
       resizeToAvoidBottomInset: false,
       body: Column(children: [
         FutureBuilder<DocumentSnapshot>(
