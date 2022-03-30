@@ -178,6 +178,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                     return jobAnzeigeCard(
                                       context,
                                       jobanzeigenListUser[index],
+                                      true,
                                     );
                                   },
                                 ),

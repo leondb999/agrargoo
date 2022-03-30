@@ -75,13 +75,13 @@ Widget _activeAnzeige(bool status) {
 }
 
 ///Jobangebot Card
-Card jobAnzeigeCard(BuildContext context, JobanzeigeModel jobanzeige) {
+Card jobAnzeigeCard(
+    BuildContext context, JobanzeigeModel jobanzeige, bool landwirtMode) {
   final auftraggeber = UserProvider().getUserNameByUserID(
       jobanzeige.auftraggeberID, p.Provider.of<List<UserModel>>(context));
   final hof = HofProvider().getHofByUserID(
       jobanzeige.auftraggeberID, p.Provider.of<List<HofModel>>(context));
   return Card(
-    color: Colors.grey,
     margin: EdgeInsets.only(top: 10),
     child: ListTile(
       title: Text(jobanzeige.titel!, style: TextStyle(fontSize: 30)),
@@ -91,14 +91,23 @@ Card jobAnzeigeCard(BuildContext context, JobanzeigeModel jobanzeige) {
             child: Container(
               height: 100,
               color: Colors.amber,
-              child: Column(
-                children: [
-                  Text('Auftraggeber ID: ${jobanzeige.auftraggeberID}'),
-                  Text("Jobanzeige ID: ${jobanzeige.jobanzeigeID!}"),
-                  Text("Auftraggeber Name: ${auftraggeber.first.name}"),
-                  Text('Standort:${hof.first.standort}'),
-                ],
-              ),
+              child: landwirtMode
+                  ? Column(
+                      children: [
+                        Text('Auftraggeber ID: ${jobanzeige.auftraggeberID}'),
+                        Text("Jobanzeige ID: ${jobanzeige.jobanzeigeID!}"),
+                        Text("Auftraggeber: ${auftraggeber.first.name}"),
+                        Text('Hof: ${hof.first.hofName}'),
+                        Text('Standort:${hof.first.standort}'),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        Text("Auftraggeber: ${auftraggeber.first.name}"),
+                        Text('Hof: ${hof.first.hofName}'),
+                        Text('Standort: ${hof.first.standort}'),
+                      ],
+                    ),
             ),
           ),
         ],
@@ -106,19 +115,21 @@ Card jobAnzeigeCard(BuildContext context, JobanzeigeModel jobanzeige) {
       trailing: Column(
         children: [
           _activeAnzeige(jobanzeige.status!),
-          ElevatedButton(
-            child: Text("Edit"),
-            onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(AddEditJobanzeige.routename, arguments: {
-                'hofID': jobanzeige.hofID,
-                'auftraggeberID': jobanzeige.auftraggeberID,
-                'status': jobanzeige.status,
-                'titel': jobanzeige.titel,
-                'jobanzeigeID': jobanzeige.jobanzeigeID,
-              });
-            },
-          ),
+          landwirtMode
+              ? ElevatedButton(
+                  child: Text("Edit"),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(AddEditJobanzeige.routename, arguments: {
+                      'hofID': jobanzeige.hofID,
+                      'auftraggeberID': jobanzeige.auftraggeberID,
+                      'status': jobanzeige.status,
+                      'titel': jobanzeige.titel,
+                      'jobanzeigeID': jobanzeige.jobanzeigeID,
+                    });
+                  },
+                )
+              : Text("")
         ],
       ),
       leading: Image.network(

@@ -21,6 +21,13 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
   @override
   Widget build(BuildContext context) {
     final jobAnzeigeList = Provider.of<List<JobanzeigeModel>>(context);
+    var activeAnzeigeList = [];
+    jobAnzeigeList.forEach((anzeige) {
+      if (anzeige.status == true) {
+        activeAnzeigeList.add(anzeige);
+      }
+    });
+    print("activeAnzeigeList: $activeAnzeigeList");
     return Scaffold(
       appBar: appBar(),
       resizeToAvoidBottomInset: false,
@@ -52,16 +59,6 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
           Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.015),
-          Container(
-            height: 100,
-            width: MediaQuery.of(context).size.width,
-            child: IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                Navigator.of(context).pushNamed(AddEditJobanzeige.routename);
-              },
-            ),
-          ),
           Expanded(
             child: SingleChildScrollView(
               child: Container(
@@ -71,7 +68,7 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
                           itemCount: jobAnzeigeList.length,
                           itemBuilder: (context, index) {
                             return jobAnzeigeCard(
-                                context, jobAnzeigeList[index]);
+                                context, activeAnzeigeList[index], false);
                           },
                         )
                       : Text("keine Jobanzeigen jetzt")),
