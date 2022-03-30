@@ -1,5 +1,8 @@
 import 'package:agrargo/UI/login_riverpod/login.dart';
+import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/UI/pages/5_chat.dart';
+import 'package:agrargo/UI/pages/helfer/6_a_helfer_profil.dart';
+import 'package:agrargo/UI/pages/landwirt/6_b_landwirt_profil.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/main.dart';
 import 'package:agrargo/models/user_model.dart';
@@ -10,32 +13,92 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
 import 'package:agrargo/controllers/auth_controller.dart';
 
-BottomNavigationBar navigationBar(int index, BuildContext context, User? user) {
+BottomNavigationBar navigationBar(
+    {required int index,
+    required BuildContext context,
+    required WidgetRef ref,
+    required bool home}) {
+  User? user = ref.read(authControllerProvider);
+  String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+  final userModel = UserProvider()
+      .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
+  print("user: $user");
   return BottomNavigationBar(
-    items: [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-      BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
-    ],
+    items: home
+        ? [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
+          ]
+        : [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
+          ],
     currentIndex: index,
     selectedItemColor: Colors.amber[800],
     onTap: (index) {
-      if (index == 0) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-      }
-      if (index == 1) {
-        if (user != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-          );
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-          );
+      print("index $index");
+      if (home == true) {
+        switch (index) {
+
+          ///Home Page
+          case 0:
+            Navigator.of(context).pushNamed(HomeScreen.routename);
+            break;
+
+          ///Profil Page
+          case 1:
+            if (user != null) {
+              ///User LoggedIn
+              if (userModel.first.landwirt == true) {
+                /// User ist ein Landwirt
+                Navigator.of(context).pushNamed(LandwirtProfil.routename);
+              } else {
+                ///User ist kein Landwirt
+                Navigator.of(context).pushNamed(HelferProfil.routename);
+              }
+            } else {
+              ///User ist ausgeloggt
+              Navigator.of(context).pushNamed(WhoAreYou.routename);
+            }
+            break;
+        }
+      } else {
+        switch (index) {
+
+          ///Home Page
+          case 0:
+            Navigator.of(context).pushNamed(HomeScreen.routename);
+            break;
+
+          ///Chat Page
+          case 1:
+            if (user != null) {
+              ///User ist eingeloggt
+              Navigator.of(context).pushNamed(Chat.routename);
+            } else {
+              ///User ist ausgeloggt
+              Navigator.of(context).pushNamed(WhoAreYou.routename);
+            }
+            break;
+
+          ///Profil Page
+          case 2:
+            if (user != null) {
+              ///User LoggedIn
+              if (userModel.first.landwirt == true) {
+                /// User ist ein Landwirt
+                Navigator.of(context).pushNamed(LandwirtProfil.routename);
+              } else {
+                ///User ist kein Landwirt
+                Navigator.of(context).pushNamed(HelferProfil.routename);
+              }
+            } else {
+              ///User ist ausgeloggt
+              Navigator.of(context).pushNamed(WhoAreYou.routename);
+            }
+
+            break;
         }
       }
     },
@@ -74,7 +137,7 @@ AppBar appBar({
           color: Color(0xFF9FB98B),
           padding: new EdgeInsets.only(right: 20.0),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, "/home");
+            Navigator.of(context).pushNamed(HomeScreen.routename);
           },
         ),
       ),
@@ -84,54 +147,7 @@ AppBar appBar({
       */
       actions: <Widget>[
         ///Home Button
-        IconButton(
-          icon: const Icon(Icons.home_sharp),
-          iconSize: MediaQuery.of(context).size.height * 0.05,
-          color: Color(0xFF9FB98B),
-          tooltip: 'Home',
-          padding: new EdgeInsets.only(right: 20.0),
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, "/home");
-          },
-        ),
-        home == true
 
-            ///Chat Button
-            ? SizedBox()
-            : IconButton(
-                icon: const Icon(Icons.message_sharp),
-                iconSize: MediaQuery.of(context).size.height * 0.05,
-                color: Color(0xFF9FB98B),
-                tooltip: 'Chat',
-                padding: new EdgeInsets.only(right: 20.0),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Chat.routename);
-                },
-              ),
-
-        ///Profil Button
-        IconButton(
-          icon: const Icon(Icons.account_circle_sharp),
-          iconSize: MediaQuery.of(context).size.height * 0.05,
-          color: Color(0xFF9FB98B),
-          tooltip: 'Profil',
-          padding: new EdgeInsets.only(right: 20.0),
-          onPressed: () {
-            if (user != null) {
-              ///User LoggedIn
-              if (userModel.first.landwirt == true) {
-                /// User ist ein Landwirt
-                Navigator.pushReplacementNamed(context, "/landwirt-profil");
-              } else {
-                ///User ist kein Landwirt
-                Navigator.pushReplacementNamed(context, "/helfer-profil");
-              }
-            } else {
-              ///User ist ausgeloggt
-              Navigator.pushReplacementNamed(context, "/who-are-you");
-            }
-          },
-        ),
         user != null
 
             ///Sign Out Button

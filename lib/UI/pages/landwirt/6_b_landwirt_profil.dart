@@ -75,7 +75,9 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
             userID, p.Provider.of<List<JobanzeigeModel>>(context));
 
     return Scaffold(
-      appBar: appBar(context: context, ref: ref),
+      appBar: appBar(context: context, ref: ref, home: false),
+      bottomNavigationBar:
+          navigationBar(index: 2, context: context, ref: ref, home: false),
       resizeToAvoidBottomInset: false,
       body: Container(
         child: authControllerState == null

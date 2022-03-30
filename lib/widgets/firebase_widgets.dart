@@ -92,7 +92,7 @@ Card jobAnzeigeCard(
             child: Container(
               height: 100,
               color: Colors.amber,
-              child: /*landwirtMode
+              child: landwirtMode
                   ? Column(
                       children: [
                         Text('Auftraggeber ID: ${jobanzeige.auftraggeberID}'),
@@ -102,14 +102,13 @@ Card jobAnzeigeCard(
                         Text('Standort:${hof.first.standort}'),
                       ],
                     )
-                  :*/
-                  Column(
-                children: [
-                  Text("Auftraggeber: ${auftraggeber.first.name}"),
-                  Text('Hof: ${hof.first.hofName}'),
-                  Text('Standort: ${hof.first.standort}'),
-                ],
-              ),
+                  : Column(
+                      children: [
+                        Text("Auftraggeber: ${auftraggeber.first.name}"),
+                        Text('Hof: ${hof.first.hofName}'),
+                        Text('Standort: ${hof.first.standort}'),
+                      ],
+                    ),
             ),
           ),
         ],

@@ -220,48 +220,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: true),
-      //appBar2(context, authControllerProvider, ref),
-
-      /*
-          AppBar(
-        title: Center(child: Text('Agrar Go')),
-        actions: [
-          authControllerState != null
-
-              ///Sign Out
-              ? ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(100, 5),
-                    primary: Colors.green,
-                  ),
-                  onPressed: () {
-                    print("authControllerState Sign Out: $authControllerState");
-                    ref.read(authControllerProvider.notifier).signOut(context);
-                  },
-                  child: Text("Sign Out"),
-                )
-
-              ///Sign In
-              : IconButton(
-                  splashColor: Colors.green,
-                  icon: Icon(
-                    Icons.login,
-                  ),
-                  onPressed: () {
-                    print("authControllerState Sign Out: $authControllerState");
-                    /*
-                    context
-                        .read(authControllerProvider.notifier)
-                        .signInAnonym();
-                 */
-                    authControllerState != null
-                        ? Navigator.pushReplacementNamed(context, "/login")
-                        : Navigator.pushReplacementNamed(context, "/login");
-                  },
-                ),
-        ],
-      ),
-    */
+      bottomNavigationBar:
+          navigationBar(index: 0, context: context, ref: ref, home: true),
       body: SafeArea(
         child: Column(
           children: [
@@ -491,7 +451,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ],
         ),
       ),
-      //  bottomNavigationBar: navigationBar(1, context, authControllerState),
     );
   }
 }
