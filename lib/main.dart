@@ -1,5 +1,6 @@
 import 'package:agrargo/UI/login_riverpod/register_riverpod.dart';
 import 'package:agrargo/UI/login_riverpod/test_screen.dart';
+import 'package:agrargo/UI/pages/1_a_landing_page_christina.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,8 +27,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: "/home",
+      initialRoute: "/landingpagech",
       routes: {
+        '/landingpagech': (context) => LandingPageCh(),
         '/login': (context) => LoginRiverpodPage(),
         '/home': (context) => HomeScreen(),
         '/test': (context) => TestScreen(),
