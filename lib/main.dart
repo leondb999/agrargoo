@@ -20,6 +20,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
+import 'UI/pages/5_chat.dart';
 import 'widgets/layout_widgets.dart';
 import 'UI/login_riverpod/login.dart';
 import 'UI/pages/helfer/3_a_jobangebote_uebersicht.dart';
@@ -168,6 +169,7 @@ class MyApp extends StatelessWidget {
           '/helfer-uebersicht': (context) => HelferUebersichtPage(),
           '/add-edit-jobanzeige': (context) => AddEditJobanzeige(),
           '/add-hof': (context) => AddHofPage(),
+          '/chat': (context) => Chat(),
         },
       ),
     );

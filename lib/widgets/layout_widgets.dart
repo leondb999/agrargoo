@@ -9,6 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
 import 'package:agrargo/controllers/auth_controller.dart';
 
+import '../UI/pages/5_chat.dart';
+
 BottomNavigationBar navigationBar(int index, BuildContext context, User? user) {
   return BottomNavigationBar(
     items: [
@@ -38,46 +40,6 @@ BottomNavigationBar navigationBar(int index, BuildContext context, User? user) {
         }
       }
     },
-  );
-}
-
-AppBar appBar2(BuildContext context, WidgetRef ref) {
-  User? user = ref.read(authControllerProvider);
-  User? authControllerState = ref.watch(authControllerProvider);
-  return AppBar(
-    actions: [
-      user != null
-
-          ///Sign Out
-          ? ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: const Size(100, 5),
-                primary: Colors.green,
-              ),
-              onPressed: () {
-                print("authControllerState Sign Out: $user");
-                ref.read(authControllerProvider.notifier).signOut(context);
-              },
-              child: Text("Sign Out"),
-            )
-          : IconButton(
-              splashColor: Colors.green,
-              icon: Icon(
-                Icons.login,
-              ),
-              onPressed: () {
-                print("authControllerState Sign Out: $user");
-                /*
-                    context
-                        .read(authControllerProvider.notifier)
-                        .signInAnonym();
-                 */
-                user != null
-                    ? Navigator.pushReplacementNamed(context, "/login")
-                    : Navigator.pushReplacementNamed(context, "/login");
-              },
-            ),
-    ],
   );
 }
 
@@ -143,7 +105,7 @@ AppBar appBar({
           tooltip: 'Chat',
           padding: new EdgeInsets.only(right: 20.0),
           onPressed: () {
-            //  Navigator.pushReplacementNamed(context, "/chat");
+            Navigator.of(context).pushNamed(Chat.routename);
           },
         ),
 
