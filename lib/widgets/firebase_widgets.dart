@@ -1,14 +1,10 @@
-import 'package:agrargo/UI/login_riverpod/login.dart';
 import 'package:agrargo/UI/pages/helfer/4_a_job_angebot.dart';
 import 'package:agrargo/UI/pages/landwirt/7_add_jobanzeige.dart';
 import 'package:agrargo/UI/pages/landwirt/8_add_hof_page.dart';
-import 'package:agrargo/main.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/provider/hof_provider.dart';
 import 'package:agrargo/provider/user_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import '../models/hof_model.dart';
 import 'package:provider/provider.dart' as p;

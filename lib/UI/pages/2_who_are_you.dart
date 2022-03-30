@@ -1,13 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:agrargo/UI/error_screen.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod/riverpod.dart';
 
 import '../login_riverpod/login.dart';
-import '../login_riverpod/register.dart';
 import 'helfer/3_a_jobangebote_uebersicht.dart';
 
 class WhoAreYou extends ConsumerStatefulWidget {
