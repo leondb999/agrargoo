@@ -81,6 +81,7 @@ Card jobAnzeigeCard(
       jobanzeige.auftraggeberID, p.Provider.of<List<UserModel>>(context));
   final hof = HofProvider().getHofByUserID(
       jobanzeige.auftraggeberID, p.Provider.of<List<HofModel>>(context));
+  print("auftraggeber ${auftraggeber.first}");
   return Card(
     margin: EdgeInsets.only(top: 10),
     child: ListTile(
@@ -91,7 +92,7 @@ Card jobAnzeigeCard(
             child: Container(
               height: 100,
               color: Colors.amber,
-              child: landwirtMode
+              child: /*landwirtMode
                   ? Column(
                       children: [
                         Text('Auftraggeber ID: ${jobanzeige.auftraggeberID}'),
@@ -101,18 +102,19 @@ Card jobAnzeigeCard(
                         Text('Standort:${hof.first.standort}'),
                       ],
                     )
-                  : Column(
-                      children: [
-                        Text("Auftraggeber: ${auftraggeber.first.name}"),
-                        Text('Hof: ${hof.first.hofName}'),
-                        Text('Standort: ${hof.first.standort}'),
-                      ],
-                    ),
+                  :*/
+                  Column(
+                children: [
+                  Text("Auftraggeber: ${auftraggeber.first.name}"),
+                  Text('Hof: ${hof.first.hofName}'),
+                  Text('Standort: ${hof.first.standort}'),
+                ],
+              ),
             ),
           ),
         ],
       ),
-      trailing: Column(
+      /*  trailing: Column(
         children: [
           _activeAnzeige(jobanzeige.status!),
           landwirtMode
@@ -142,6 +144,7 @@ Card jobAnzeigeCard(
           arguments: {'jobanzeige_ID': jobanzeige.jobanzeigeID!},
         );
       },
+      */
     ),
   );
 }

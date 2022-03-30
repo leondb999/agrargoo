@@ -1,4 +1,5 @@
 import 'package:agrargo/UI/login_riverpod/login.dart';
+import 'package:agrargo/UI/pages/5_chat.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/main.dart';
 import 'package:agrargo/models/user_model.dart';
@@ -41,53 +42,14 @@ BottomNavigationBar navigationBar(int index, BuildContext context, User? user) {
   );
 }
 
-AppBar appBar2(BuildContext context, WidgetRef ref) {
-  User? user = ref.read(authControllerProvider);
-  User? authControllerState = ref.watch(authControllerProvider);
-  return AppBar(
-    actions: [
-      user != null
-
-          ///Sign Out
-          ? ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: const Size(100, 5),
-                primary: Colors.green,
-              ),
-              onPressed: () {
-                print("authControllerState Sign Out: $user");
-                ref.read(authControllerProvider.notifier).signOut(context);
-              },
-              child: Text("Sign Out"),
-            )
-          : IconButton(
-              splashColor: Colors.green,
-              icon: Icon(
-                Icons.login,
-              ),
-              onPressed: () {
-                print("authControllerState Sign Out: $user");
-                /*
-                    context
-                        .read(authControllerProvider.notifier)
-                        .signInAnonym();
-                 */
-                user != null
-                    ? Navigator.pushReplacementNamed(context, "/login")
-                    : Navigator.pushReplacementNamed(context, "/login");
-              },
-            ),
-    ],
-  );
-}
-
 AppBar appBar({
   required BuildContext context,
   required WidgetRef ref,
+  bool? home,
 }) {
   User? user = ref.read(authControllerProvider);
   String? userID = ref.read(authControllerProvider.notifier).state?.uid;
-  var x = p.Provider.of<List<UserModel>>(context);
+
   final userModel = UserProvider()
       .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
   print("user: $user");
@@ -100,10 +62,8 @@ AppBar appBar({
 
       ///Home Button
       title: Container(
-        height: 100,
-        width: 100,
         child: IconButton(
-          tooltip: 'Home',
+          tooltip: 'Helfer Übersicht',
           icon: Image.asset('Images/agrargo_logo_large.png'),
           /*
           Image.network(
@@ -134,18 +94,20 @@ AppBar appBar({
             Navigator.pushReplacementNamed(context, "/home");
           },
         ),
+        home == true
 
-        ///Chat Button
-        IconButton(
-          icon: const Icon(Icons.message_sharp),
-          iconSize: MediaQuery.of(context).size.height * 0.05,
-          color: Color(0xFF9FB98B),
-          tooltip: 'Chat',
-          padding: new EdgeInsets.only(right: 20.0),
-          onPressed: () {
-            //  Navigator.pushReplacementNamed(context, "/chat");
-          },
-        ),
+            ///Chat Button
+            ? SizedBox()
+            : IconButton(
+                icon: const Icon(Icons.message_sharp),
+                iconSize: MediaQuery.of(context).size.height * 0.05,
+                color: Color(0xFF9FB98B),
+                tooltip: 'Chat',
+                padding: new EdgeInsets.only(right: 20.0),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Chat.routename);
+                },
+              ),
 
         ///Profil Button
         IconButton(
