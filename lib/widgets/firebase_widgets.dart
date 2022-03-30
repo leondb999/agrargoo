@@ -113,7 +113,7 @@ Card jobAnzeigeCard(
           ),
         ],
       ),
-      /*  trailing: Column(
+      trailing: Column(
         children: [
           _activeAnzeige(jobanzeige.status!),
           landwirtMode
@@ -143,7 +143,6 @@ Card jobAnzeigeCard(
           arguments: {'jobanzeige_ID': jobanzeige.jobanzeigeID!},
         );
       },
-      */
     ),
   );
 }
