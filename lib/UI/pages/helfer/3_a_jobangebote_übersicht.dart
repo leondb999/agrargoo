@@ -70,7 +70,7 @@ class _JobangebotUebersichtPageState extends State<JobangebotUebersichtPage> {
                       ? ListView.builder(
                           itemCount: jobAnzeigeList.length,
                           itemBuilder: (context, index) {
-                            return jobAngebotCard(
+                            return jobAnzeigeCard(
                                 context, jobAnzeigeList[index]);
                           },
                         )

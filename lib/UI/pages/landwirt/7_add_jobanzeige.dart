@@ -1,11 +1,14 @@
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/provider/jobanzeige_provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as p;
 import 'package:flutter/material.dart';
 
+import '../../../controllers/auth_controller.dart';
+
 ///https://github.com/Mashood97/flutter_firestore/blob/master/lib/screens/edit_add_product.dart
-class AddEditJobanzeige extends StatefulWidget {
+class AddEditJobanzeige extends ConsumerStatefulWidget {
   const AddEditJobanzeige({Key? key}) : super(key: key);
   static const routename = '/add-edit-jobanzeige';
 
@@ -13,7 +16,7 @@ class AddEditJobanzeige extends StatefulWidget {
   _AddEditJobanzeigeState createState() => _AddEditJobanzeigeState();
 }
 
-class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
+class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final priceController = TextEditingController();
@@ -23,6 +26,11 @@ class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
     priceController.text = '';
   }
 
+  String? _hofID = "";
+  String? _hofName = "";
+  String? _standort = "";
+  bool? isSwitched = true;
+  bool? checkStatus;
   @override
   void initState() {
     // TODO: implement initState
@@ -31,12 +39,18 @@ class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
     Future.delayed(Duration(microseconds: 10), () {
       routeData =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      setState(() {
+        _hofID = routeData['hofID'];
+        _hofName = routeData['hofName'];
+        _standort = routeData['standort'];
+      });
     }).then(
       (value) => routeData == null
           ? Future.delayed(Duration.zero, () {
               clearData();
               final jobanzeigeProvider =
-                  Provider.of<JobanzeigeProvider>(context, listen: false);
+                  p.Provider.of<JobanzeigeProvider>(context, listen: false);
+
               jobanzeigeProvider.loadValues(JobanzeigeModel());
             })
           : Future.delayed(
@@ -44,9 +58,12 @@ class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
               () {
                 print("routeData: $routeData");
                 nameController.text = routeData['titel'];
-
+                setState(() {
+                  isSwitched = routeData['status'];
+                  checkStatus = routeData['status'];
+                });
                 final jobanzeigeProvider =
-                    Provider.of<JobanzeigeProvider>(context, listen: false);
+                    p.Provider.of<JobanzeigeProvider>(context, listen: false);
                 JobanzeigeModel anzeige = JobanzeigeModel(
                   titel: routeData['titel'],
                   hofID: routeData['hofID'],
@@ -70,7 +87,9 @@ class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
 
   @override
   Widget build(BuildContext context) {
-    final jobanzeigeProvider = Provider.of<JobanzeigeProvider>(context);
+    final jobanzeigeProvider = p.Provider.of<JobanzeigeProvider>(context);
+    String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+
     print(
         "jobanzeige titel: ${jobanzeigeProvider.titel}, status: ${jobanzeigeProvider.status}, auftraggeberID: ${jobanzeigeProvider.getAuftraggeberID}, hofID: ${jobanzeigeProvider.getHofID}");
     return Scaffold(
@@ -101,14 +120,33 @@ class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
                       height: 20,
                     ),
 
+                    isSwitched!
+                        ? Text(
+                            "Anzeige wird veröffentlicht, Status: Active | isSwitched = $isSwitched",
+                            style: TextStyle(color: Colors.green),
+                          )
+                        : Text(
+                            'Anzeige nicht veröffentlicht, Status: Deactivated | isSwitched = $isSwitched',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                    Switch(
+                        value: isSwitched!,
+                        onChanged: (value) {
+                          setState(() {
+                            isSwitched = value;
+                          });
+                          jobanzeigeProvider.changeStatus(isSwitched!);
+                        }),
+
                     /// Add Buttn
                     ElevatedButton(
                       child: Text('Save'),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          jobanzeigeProvider.status = true;
-                          jobanzeigeProvider.auftraggeberID = 'LeonsID1234';
-                          jobanzeigeProvider.hofID = "Leon's HofID 1234";
+                          jobanzeigeProvider.status = jobanzeigeProvider.status;
+                          jobanzeigeProvider.auftraggeberID = userID;
+                          jobanzeigeProvider.hofID = _hofID;
+                          jobanzeigeProvider.status = isSwitched!;
                           jobanzeigeProvider.saveData();
                           Navigator.of(context).pop();
                         }
@@ -124,6 +162,20 @@ class _AddEditJobanzeigeState extends State<AddEditJobanzeige> {
                         Navigator.of(context).pop();
                       },
                     ),
+
+                    Container(
+                      height: 200,
+                      child: Column(
+                        children: [
+                          Text('Vorschau'),
+                          Text("HofID: $_hofID"),
+                          Text("AuftraggeberID: $userID"),
+                          Text("HofName: $_hofName"),
+                          Text('Standort: $_standort'),
+                          Text('Anzeigen Titel: ${nameController.text}'),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),

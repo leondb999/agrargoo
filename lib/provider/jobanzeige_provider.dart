@@ -25,6 +25,11 @@ class JobanzeigeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void changeStatus(bool val) {
+    status = val;
+    notifyListeners();
+  }
+
   ///lade Jobanzeige
   loadValues(JobanzeigeModel jobanzeige) {
     jobanzeigeID = jobanzeige.jobanzeigeID;
@@ -35,20 +40,21 @@ class JobanzeigeProvider with ChangeNotifier {
   }
 
   void saveData() {
+    print("jobanzeigeID = ${jobanzeigeID}");
     if (jobanzeigeID == null) {
       String? newID = uuid.v4();
       print("saveData()- -- new jobanzeige ID:$newID ");
       var newAnzeige = JobanzeigeModel(
         jobanzeigeID: newID,
         auftraggeberID: getAuftraggeberID,
-        status: getStatus,
+        status: status,
         hofID: getHofID,
         titel: getTitel,
       );
       service.saveJobanzeige(newAnzeige);
     } else {
       var updateJobanzeige = JobanzeigeModel(
-        status: getStatus,
+        status: status,
         auftraggeberID: getAuftraggeberID,
         jobanzeigeID: jobanzeigeID,
         hofID: getHofID,

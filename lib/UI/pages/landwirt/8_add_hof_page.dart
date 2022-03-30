@@ -101,9 +101,7 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                       decoration: InputDecoration(hintText: 'Enter Hof Name '),
                       onChanged: (val) => hofProvider.changeHofName(val),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    SizedBox(height: 20),
 
                     ///Standort Input Field
                     TextFormField(
@@ -117,9 +115,7 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                       decoration: InputDecoration(hintText: 'Enter Standort'),
                       onChanged: (val) => hofProvider.changeStandort(val),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    SizedBox(height: 20),
 
                     /// Add Buttn
                     ElevatedButton(

@@ -1,3 +1,4 @@
+import 'package:agrargo/UI/pages/landwirt/7_add_jobanzeige.dart';
 import 'package:agrargo/UI/pages/landwirt/8_add_hof_page.dart';
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
@@ -137,33 +138,30 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                   SizedBox(height: 30),
 
                   ///Höfe with User ID from Firestore
-                  SingleChildScrollView(
-                    child: Container(
-                      height: 200,
-                      child: hofListeFilteredByUserID.isEmpty
-                          ? Column(
-                              children: [
-                                Text(
-                                    "Keine Höfe bis jetzt erstellt! Erstelle jetzt deinen ersten Hof"),
-                                ElevatedButton(
-                                  child: Text("Erstelle Hof"),
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pushNamed(AddHofPage.routename);
-                                  },
-                                ),
-                              ],
-                            )
-                          : ListView.builder(
-                              itemCount: hofListeFilteredByUserID.length,
-                              itemBuilder: (context, index) {
-                                return hofCard(
-                                    context, hofListeFilteredByUserID[index]);
-                              },
-                            ),
-                    ),
+                  Container(
+                    height: 300,
+                    child: hofListeFilteredByUserID.isEmpty
+                        ? Column(
+                            children: [
+                              Text(
+                                  "Keine Höfe bis jetzt erstellt! Erstelle jetzt deinen ersten Hof"),
+                              ElevatedButton(
+                                child: Text("Erstelle Hof"),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushNamed(AddHofPage.routename);
+                                },
+                              ),
+                            ],
+                          )
+                        : ListView.builder(
+                            itemCount: hofListeFilteredByUserID.length,
+                            itemBuilder: (context, index) {
+                              return hofCard(
+                                  context, hofListeFilteredByUserID[index]);
+                            },
+                          ),
                   ),
-                  SizedBox(height: 10),
 
                   /// Zeige Anzeigen des Users
                   Column(
@@ -171,13 +169,13 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                       Text("Alle Anzeigen", style: TextStyle(fontSize: 30)),
                       SingleChildScrollView(
                         child: Container(
-                          height: MediaQuery.of(context).size.height,
+                          height: 300,
                           child: jobanzeigenListUser.isEmpty
                               ? Text("Keine Jobanzeigen bis jetzt hochgeladen")
                               : ListView.builder(
                                   itemCount: jobanzeigenListUser.length,
                                   itemBuilder: (context, index) {
-                                    return jobAngebotCard(
+                                    return jobAnzeigeCard(
                                       context,
                                       jobanzeigenListUser[index],
                                     );
