@@ -14,6 +14,41 @@ class _Chat extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false, // set it to false
+        appBar: AppBar(
+            iconTheme: IconThemeData(
+              color: Color(0xFF9FB98B), //change your color here
+            ),
+            toolbarHeight: MediaQuery.of(context).size.height * 0.09,
+            backgroundColor: Colors.white,
+            title: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+                child: Image.asset('Images/logo_small.png')),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.home_sharp),
+                iconSize: MediaQuery.of(context).size.height * 0.05,
+                color: Color(0xFF9FB98B),
+                tooltip: 'Home',
+                padding: new EdgeInsets.only(right: 20.0),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.message_sharp),
+                iconSize: MediaQuery.of(context).size.height * 0.05,
+                color: Color(0xFF9FB98B),
+                tooltip: 'Chat',
+                padding: new EdgeInsets.only(right: 20.0),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.account_circle_sharp),
+                iconSize: MediaQuery.of(context).size.height * 0.05,
+                color: Color(0xFF9FB98B),
+                tooltip: 'Profil',
+                padding: new EdgeInsets.only(right: 20.0),
+                onPressed: () {},
+              ),
+            ]),
         body: SingleChildScrollView(
             child: Column(children: [
           Container(
