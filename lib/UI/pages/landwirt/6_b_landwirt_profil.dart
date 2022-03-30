@@ -85,63 +85,94 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
             : Column(
                 children: [
                   Container(
-                    color: Colors.greenAccent,
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      children: [
-                        userLoggedIn.isEmpty
-                            ? Text("No User found")
-                            : Column(
-                                children: [
-                                  Text(
-                                    " Hi ${userLoggedIn.first.name}",
-                                    style: TextStyle(fontSize: 30),
-                                  ),
-                                  Text("User ID: $userID"),
-                                ],
-                              ),
-                      ],
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.17,
+                      color: Color(0xFF1f623c),
+                      child: Center(
+                          child: userLoggedIn.isEmpty
+                              ? Text("No User found")
+                              : Text("${userLoggedIn.first.name}`s Profil",
+                                  style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontFamily: 'Open Sans',
+                                      fontSize: 50.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFffffff))))),
+
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.015),
+
+                  ///Höfe with User ID from Firestore
+                  SingleChildScrollView(
+                    child: Container(
+                      child: hofListeFilteredByUserID.isEmpty
+                          ? Column(
+                              children: [
+                                Text("Du hast bis jetzt keinen Hof erstellt!"),
+                                SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.03),
+                                ElevatedButton(
+                                  child: Text("Erstelle deinen Hof"),
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Color(0xFF9FB98B),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 50, vertical: 20),
+                                      textStyle: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pushNamed(AddHofPage.routename);
+                                  },
+                                ),
+                              ],
+                            )
+                          : ListView.builder(
+                              itemCount: hofListeFilteredByUserID.length,
+                              itemBuilder: (context, index) {
+                                return hofCard(
+                                    context, hofListeFilteredByUserID[index]);
+                              },
+                            ),
                     ),
                   ),
 
-                  SizedBox(height: 30),
-
-                  ///Höfe with User ID from Firestore
-                  Container(
-                    height: 300,
-                    child: hofListeFilteredByUserID.isEmpty
-                        ? Column(
-                            children: [
-                              Text(
-                                  "Keine Höfe bis jetzt erstellt! Erstelle jetzt deinen ersten Hof"),
-                              ElevatedButton(
-                                child: Text("Erstelle Hof"),
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pushNamed(AddHofPage.routename);
-                                },
-                              ),
-                            ],
-                          )
-                        : ListView.builder(
-                            itemCount: hofListeFilteredByUserID.length,
-                            itemBuilder: (context, index) {
-                              return hofCard(
-                                  context, hofListeFilteredByUserID[index]);
-                            },
-                          ),
-                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  Divider(),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.025),
+                  Row(children: <Widget>[
+                    Expanded(flex: 1, child: Text("")),
+                    Expanded(
+                        flex: 10,
+                        child: Center(
+                          child: Text("Alle Anzeigen",
+                              style: TextStyle(fontSize: 30)),
+                        )),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(AddEditJobanzeige.routename);
+                          },
+                        ),
+                      ),
+                    ),
+                  ]),
 
                   /// Zeige Anzeigen des Users
-                  Column(
-                    children: [
-                      Text("Alle Anzeigen", style: TextStyle(fontSize: 30)),
-                      SingleChildScrollView(
-                        child: Container(
-                          height: 300,
-                          child: jobanzeigenListUser.isEmpty
-                              ? Text("Keine Jobanzeigen bis jetzt hochgeladen")
-                              : ListView.builder(
+                  Expanded(
+                      child: SingleChildScrollView(
+                    child: Column(children: [
+                      Container(
+                          height: MediaQuery.of(context).size.height,
+                          child: jobanzeigenListUser.isEmpty != null
+                              ? ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
                                   itemCount: jobanzeigenListUser.length,
                                   itemBuilder: (context, index) {
                                     return jobAnzeigeCard(
@@ -150,11 +181,11 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                       true,
                                     );
                                   },
-                                ),
-                        ),
-                      ),
-                    ],
-                  ),
+                                )
+                              : Text(
+                                  "Aktuell hast du noch keine Jobanzeigen hochgeladen")),
+                    ]),
+                  ))
                 ],
               ),
       ),

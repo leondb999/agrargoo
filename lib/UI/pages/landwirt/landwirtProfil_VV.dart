@@ -167,7 +167,10 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                       textStyle: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold)),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pushNamed(AddHofPage.routename);
+                                  },
                                 ),
                               ],
                             )
@@ -219,8 +222,11 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                   shrinkWrap: true,
                                   itemCount: jobanzeigenListUser.length,
                                   itemBuilder: (context, index) {
-                                    return jobAngebotCard(
-                                        context, jobanzeigenListUser[index]);
+                                    return jobAnzeigeCard(
+                                      context,
+                                      jobanzeigenListUser[index],
+                                      true,
+                                    );
                                   },
                                 )
                               : Text(
