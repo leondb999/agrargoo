@@ -174,7 +174,8 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                           : ListView.builder(
                               itemCount: hofListeFilteredByUserID.length,
                               itemBuilder: (context, index) {
-                                return hofCard(hofListeFilteredByUserID[index]);
+                                return hofCard(
+                                    context, hofListeFilteredByUserID[index]);
                               },
                             ),
                     ),

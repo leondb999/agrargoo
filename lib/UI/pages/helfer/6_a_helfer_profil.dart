@@ -16,7 +16,7 @@ class _HelferProfilState extends State<HelferProfil> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBar(),
+        //appBar: appBar(),
         resizeToAvoidBottomInset: false,
         body: Column(children: [
           Container(
