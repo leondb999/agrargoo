@@ -9,6 +9,7 @@ import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/models/user_model.dart';
+import 'package:agrargo/provider/user_provider.dart';
 import 'package:agrargo/repositories/firestore_repository.dart';
 import 'package:agrargo/provider/hof_provider.dart';
 import 'package:agrargo/provider/jobanzeige_provider.dart';
@@ -19,9 +20,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
-
+import 'widgets/layout_widgets.dart';
 import 'UI/login_riverpod/login.dart';
-import 'UI/pages/helfer/3_a_jobangebote_übersicht.dart';
+import 'UI/pages/helfer/3_a_jobangebote_uebersicht.dart';
 import 'UI/pages/landwirt/3_b_helfer_übersicht.dart';
 import 'UI/pages/helfer/4_a_job_angebot.dart';
 import 'UI/pages/helfer/6_a_helfer_profil.dart';
@@ -210,11 +211,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     authControllerState?.reload();
     User? authControllerStateRead = ref.read(authControllerProvider);
     String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+    final userLoggedIn = UserProvider()
+        .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
     final String? documentID =
         ref.read(authControllerProvider.notifier).state?.uid;
 
     return Scaffold(
-      appBar: AppBar(
+      appBar:
+          //appBar2(context, authControllerProvider, ref),
+
+          appBar(
+        context: context,
+        ref: ref,
+      ),
+
+      /*
+          AppBar(
         title: Center(child: Text('Agrar Go')),
         actions: [
           authControllerState != null
@@ -252,6 +264,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
         ],
       ),
+    */
       body: SafeArea(
         child: Column(
           children: [

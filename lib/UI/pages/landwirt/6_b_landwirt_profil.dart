@@ -7,6 +7,7 @@ import 'package:agrargo/provider/hof_provider.dart';
 import 'package:agrargo/provider/jobanzeige_provider.dart';
 import 'package:agrargo/provider/user_provider.dart';
 import 'package:agrargo/widgets/firebase_widgets.dart';
+import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -74,41 +75,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
             userID, p.Provider.of<List<JobanzeigeModel>>(context));
 
     return Scaffold(
-      appBar: AppBar(
-          toolbarHeight: MediaQuery.of(context).size.height * 0.09,
-          backgroundColor: Colors.white,
-          title: Image.network(
-              'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none'),
-          actions: <Widget>[
-            authControllerState != null
-
-                ///Sign Out Button
-                ? ElevatedButton(
-                    child: Text("Sign Out"),
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(100, 5),
-                      primary: Colors.green,
-                    ),
-                    onPressed: () {
-                      print(
-                          "authControllerState Sign Out: $authControllerState");
-                      ref
-                          .read(authControllerProvider.notifier)
-                          .signOut(context);
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, HomeScreen.routename, (route) => false);
-                    },
-                  )
-
-                ///Profil Button
-                : IconButton(
-                    icon: const Icon(Icons.account_circle_sharp, size: 50),
-                    color: Color(0xFF9FB98B),
-                    tooltip: 'Profil',
-                    padding: new EdgeInsets.only(right: 38.0),
-                    onPressed: () {},
-                  )
-          ]),
+      appBar: appBar(context: context, ref: ref),
       resizeToAvoidBottomInset: false,
       body: Container(
         child: authControllerState == null

@@ -19,7 +19,7 @@ Card hofCard(BuildContext context, HofModel hof) {
     child: ListTile(
       title: Text('Name ${hof.hofName!}'),
       subtitle: Container(
-        height: 300,
+        height: 150,
         child: Row(
           children: [
             Column(
