@@ -8,6 +8,7 @@ import 'package:agrargo/main.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/provider/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
@@ -161,4 +162,28 @@ AppBar appBar({
               )
             : SizedBox(),
       ]);
+}
+
+Expanded profilPictureExpanded(String image) {
+  return Expanded(
+      flex: 1,
+      child: Container(
+        color: Colors.red,
+        child: FutureBuilder(
+          future: FirebaseStorage.instance.ref().child(image).getDownloadURL(),
+          builder: (context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return SizedBox(
+                  height: 50, width: 50, child: CircularProgressIndicator());
+            }
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Container(
+                  height: 300,
+                  width: 300,
+                  child: Image.network(snapshot.data!));
+            }
+            return Text("No Image");
+          },
+        ),
+      ));
 }

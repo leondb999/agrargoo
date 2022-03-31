@@ -38,6 +38,8 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
   ///Hof Collection
   final hofCollection =
       FirebaseFirestore.instance.collection('höfe').snapshots();
+  Image profilImage = Image.network(
+      'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none');
 
   ///Firebase Storage
 
@@ -56,6 +58,19 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     // TODO: implement initState
     // checkAuthentification();
     super.initState();
+
+    Future.delayed(Duration(microseconds: 10), () async {
+      String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+      //      V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg
+
+      final url = await FirebaseStorage.instance
+          .ref()
+          .child('$userID.jpg')
+          .getDownloadURL();
+      setState(() {
+        profilImage = Image.network(url);
+      });
+    });
   }
 
   @override
@@ -78,10 +93,6 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
 
     /// ---------------- Image ------------------------
 
-    final fireImage = FirebaseStorage.instance
-        .ref()
-        .child('V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg');
-
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
       bottomNavigationBar:
@@ -96,16 +107,36 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.17,
                       color: Color(0xFF1f623c),
-                      child: Center(
-                          child: userLoggedIn.isEmpty
-                              ? Text("No User found")
-                              : Text("${userLoggedIn.first.name}`s Profil",
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 50.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFFffffff))))),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              color: Colors.yellow,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: Container(
+                              color: Colors.blue,
+                              child: Center(
+                                  child: userLoggedIn.isEmpty
+                                      ? Text("No User found")
+                                      : Text(
+                                          "${userLoggedIn.first.name}`s Profil",
+                                          style: TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                              fontFamily: 'Open Sans',
+                                              fontSize: 50.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xFFffffff)))),
+                            ),
+                          ),
+                          profilImage,
+                          //     profilPictureExpanded(
+                          //       'V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg'),
+                        ],
+                      )),
 
                   SizedBox(height: 30),
 
@@ -199,28 +230,6 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                     },
                   )),
           */
-                  Expanded(
-                      child: FutureBuilder(
-                    future: FirebaseStorage.instance
-                        .ref()
-                        .child('V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg')
-                        .getDownloadURL(),
-                    builder: (context, AsyncSnapshot<String> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return Image.network(snapshot.data!);
-                        /*     return ListView.builder(itemBuilder: ((context, index) {
-                          final String url = snapshot.data!;
-                          return Card(
-                            child: ListTile(
-                              leading: Image.network(url),
-                            ),
-                          );
-                        }));
-                        */
-                      }
-                      return Text("Hi");
-                    },
-                  )),
 
                   /// Zeige Anzeigen des Users
                   Expanded(
