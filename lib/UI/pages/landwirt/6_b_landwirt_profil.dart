@@ -6,10 +6,12 @@ import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/provider/hof_provider.dart';
 import 'package:agrargo/provider/jobanzeige_provider.dart';
 import 'package:agrargo/provider/user_provider.dart';
+import 'package:agrargo/repositories/firebase_storage_repository.dart';
 import 'package:agrargo/widgets/firebase_widgets.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,6 +40,9 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
   final hofCollection =
       FirebaseFirestore.instance.collection('höfe').snapshots();
 
+  ///Firebase Storage
+  final FirebaseStorage storage = FirebaseStorage.instance;
+
   checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
       if (user != null) {
@@ -59,7 +64,6 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
   Widget build(BuildContext context) {
     User? authControllerState = ref.watch(authControllerProvider);
     String? userID = ref.read(authControllerProvider.notifier).state?.uid;
-    print("User ID : $userID");
 
     /// User Liste
     final userLoggedIn = UserProvider()
@@ -100,7 +104,29 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                       color: Color(0xFFffffff))))),
 
                   SizedBox(height: 30),
+                  /*Expanded(
+                    child: FutureBuilder(
+                      future: FireStorageService().getImageList(),
+                      builder: (context,
+                          AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return ListView.builder(
+                              itemBuilder: (context, index) {
+                            final Map<String, dynamic> image =
+                                snapshot.data![index];
 
+                            return Card(
+                              child: ListTile(
+                                leading: Image.network(image['url']),
+                              ),
+                            );
+                          });
+                        }
+                        return Text("Hi");
+                      },
+                    ),
+                  ),
+*/
                   ///Höfe with User ID from Firestore
                   Container(
                     height: MediaQuery.of(context).size.height * 0.20,
@@ -159,6 +185,25 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                       ),
                     ),
                   ]),
+                  Expanded(
+                      child: FutureBuilder(
+                    future: FireStorageService().getImageList(),
+                    builder: (context,
+                        AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return ListView.builder(itemBuilder: ((context, index) {
+                          final Map<String, dynamic> image =
+                              snapshot.data!.first;
+                          return Card(
+                            child: ListTile(
+                              leading: Image.network(image['url']),
+                            ),
+                          );
+                        }));
+                      }
+                      return Text("Hi");
+                    },
+                  )),
 
                   /// Zeige Anzeigen des Users
                   Expanded(

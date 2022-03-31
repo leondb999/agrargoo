@@ -1,10 +1,11 @@
 import 'package:agrargo/models/user_model.dart';
+import 'package:agrargo/repositories/firebase_storage_repository.dart';
 import 'package:agrargo/repositories/firestore_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
 
 class UserProvider with ChangeNotifier {
-  final service = FireStoreService();
+  final serviceFirestore = FireStoreService();
   var uuid = Uuid();
 
   String? userID;

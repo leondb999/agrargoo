@@ -1,10 +1,17 @@
+import 'package:firebase/firebase.dart';
+
 class UserModel {
   String? userID;
   String? name;
   String? email;
   bool? landwirt;
 
-  UserModel({this.userID, this.name, this.email, this.landwirt});
+  UserModel({
+    this.userID,
+    this.name,
+    this.email,
+    this.landwirt,
+  });
 
   Map<String, dynamic> createMap() {
     return {

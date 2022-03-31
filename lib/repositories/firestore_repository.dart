@@ -74,7 +74,7 @@ class FireStoreService {
   Stream<List<HofModel>> getHoefeList() {
     final x = _db.collection(('höfe')).get().then((value) {
       value.docs.forEach((doc) {
-        print("getHöfe: ${doc.id} name: ${doc['hofName']}");
+        // print("getHöfe: ${doc.id} name: ${doc['hofName']}");
       });
     });
 

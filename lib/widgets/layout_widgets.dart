@@ -22,7 +22,7 @@ BottomNavigationBar navigationBar(
   String? userID = ref.read(authControllerProvider.notifier).state?.uid;
   final userModel = UserProvider()
       .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
-  print("user: $user");
+//  print("user: $user");
   return BottomNavigationBar(
     items: home
         ? [
@@ -37,7 +37,6 @@ BottomNavigationBar navigationBar(
     currentIndex: index,
     selectedItemColor: Colors.amber[800],
     onTap: (index) {
-      print("index $index");
       if (home == true) {
         switch (index) {
 
@@ -115,7 +114,7 @@ AppBar appBar({
 
   final userModel = UserProvider()
       .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
-  print("user: $user");
+  // print("user: $user");
   return AppBar(
       iconTheme: IconThemeData(
         color: Color(0xFF9FB98B), //change your color here
@@ -155,7 +154,7 @@ AppBar appBar({
                 style: ElevatedButton.styleFrom(
                     fixedSize: const Size(100, 5), primary: Colors.green),
                 onPressed: () {
-                  print("authControllerState Sign Out: $user");
+                  //  print("authControllerState Sign Out: $user");
                   ref.read(authControllerProvider.notifier).signOut(context);
                 },
                 child: Text("Sign Out"),
