@@ -40,6 +40,15 @@ Card hofCard({
                 SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                 Text("HofID: ${hof.hofID}"),
                 Text("Standort: ${hof.standort}"),
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(AddEditJobanzeige.routename, arguments: {
+                      'hofID': hof.hofID,
+                    });
+                  },
+                ),
               ],
             ),
           ],
@@ -93,7 +102,6 @@ Card jobAnzeigeCard(
   ///Hof Provider
   final hof = HofProvider().getHofByUserID(
       jobanzeige.auftraggeberID, p.Provider.of<List<HofModel>>(context));
-  print("auftraggeber ${auftraggeber.first}");
 
   return Card(
     elevation: 6.0,
