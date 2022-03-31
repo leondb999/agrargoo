@@ -16,7 +16,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
-
 import '../../../controllers/auth_controller.dart';
 import '../../../main.dart';
 
@@ -41,7 +40,6 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
       FirebaseFirestore.instance.collection('höfe').snapshots();
 
   ///Firebase Storage
-  final FirebaseStorage storage = FirebaseStorage.instance;
 
   checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
@@ -78,6 +76,12 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
         .getAnzeigeByUserID(
             userID, p.Provider.of<List<JobanzeigeModel>>(context));
 
+    /// ---------------- Image ------------------------
+
+    final fireImage = FirebaseStorage.instance
+        .ref()
+        .child('V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg');
+
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
       bottomNavigationBar:
@@ -104,29 +108,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                       color: Color(0xFFffffff))))),
 
                   SizedBox(height: 30),
-                  /*Expanded(
-                    child: FutureBuilder(
-                      future: FireStorageService().getImageList(),
-                      builder: (context,
-                          AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          return ListView.builder(
-                              itemBuilder: (context, index) {
-                            final Map<String, dynamic> image =
-                                snapshot.data![index];
 
-                            return Card(
-                              child: ListTile(
-                                leading: Image.network(image['url']),
-                              ),
-                            );
-                          });
-                        }
-                        return Text("Hi");
-                      },
-                    ),
-                  ),
-*/
                   ///Höfe with User ID from Firestore
                   Container(
                     height: MediaQuery.of(context).size.height * 0.20,
@@ -185,6 +167,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                       ),
                     ),
                   ]),
+                  /*
                   Expanded(
                       child: FutureBuilder(
                     future: FireStorageService().getImageList(),
@@ -196,10 +179,44 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                               snapshot.data!.first;
                           return Card(
                             child: ListTile(
-                              leading: Image.network(image['url']),
+                              leading: Image.network(
+                                'https://firebasestorage.googleapis.com/v0/b/agrargo-2571b.appspot.com/o/V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg?alt=media&token=159bfc8f-4ba5-45ef-9fa7-63c694ee640c',
+
+                                //image['url
+/*                                image:
+                                    'https://firebasestorage.googleapis.com/v0/b/agrargo-2571b.appspot.com/o/V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg?alt=media&token=159bfc8f-4ba5-45ef-9fa7-63c694ee640c',
+                                    maxSizeBytes: 15 * 1024 * 1024),
+                                */
+                                // Works with standard parameters, e.g.
+
+                                // ... etc.
+                              ),
                             ),
                           );
                         }));
+                      }
+                      return Text("Hi");
+                    },
+                  )),
+          */
+                  Expanded(
+                      child: FutureBuilder(
+                    future: FirebaseStorage.instance
+                        .ref()
+                        .child('V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg')
+                        .getDownloadURL(),
+                    builder: (context, AsyncSnapshot<String> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return Image.network(snapshot.data!);
+                        /*     return ListView.builder(itemBuilder: ((context, index) {
+                          final String url = snapshot.data!;
+                          return Card(
+                            child: ListTile(
+                              leading: Image.network(url),
+                            ),
+                          );
+                        }));
+                        */
                       }
                       return Text("Hi");
                     },

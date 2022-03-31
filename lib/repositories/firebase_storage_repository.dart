@@ -11,10 +11,11 @@ class FireStorageService {
   Future<List<Map<String, dynamic>>> getImageList() async {
     List<Map<String, dynamic>> files = [];
     final x = await _storage.ref().list();
+
     final List<Reference> allFiles = x.items;
     await Future.forEach<Reference>(allFiles, (file) async {
       final String fileUrl = await file.getDownloadURL();
-
+      print("fileURL: $fileUrl");
       files.add({
         'url': fileUrl,
         'path': file.fullPath,

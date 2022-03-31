@@ -50,3 +50,14 @@ https://github.com/sbis04/flutter-authentication/blob/master/lib/utils/fire_auth
 https://github.com/2002Bishwajeet/authentication_riverpod
 
 -->https://www.youtube.com/watch?v=vrPk6LB9bjo&ab_channel=MarcusNg
+
+
+#Firebase Storage
+https://www.youtube.com/watch?v=cHcEE_gcaVY&ab_channel=ProtoCodersPoint
+
+#gsutil
+https://cloud.google.com/storage/docs/gsutil_install
+1. gcloud init 
+
+# Flutter Web Configuration for Android Studio
+https://www.youtube.com/watch?v=yLNczKeqXyo&ab_channel=LearnAppCode

@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["https://agrargo-2571b.web.app"],
+    "responseHeader": ["Content-Type"],
+    "method": ["GET", "HEAD"],
+    "maxAgeSeconds": 3600
+  }
+]

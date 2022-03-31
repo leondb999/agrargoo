@@ -64,7 +64,8 @@ class DefaultFirebaseOptions {
     projectId: 'agrargo-2571b',
     databaseURL: 'https://agrargo-2571b-default-rtdb.firebaseio.com',
     storageBucket: 'agrargo-2571b.appspot.com',
-    iosClientId: '277800976688-81n8c9mpulo66kf31kgjm42qcjos7lmq.apps.googleusercontent.com',
+    iosClientId:
+        '277800976688-81n8c9mpulo66kf31kgjm42qcjos7lmq.apps.googleusercontent.com',
     iosBundleId: 'com.example-agrargo',
   );
 }
