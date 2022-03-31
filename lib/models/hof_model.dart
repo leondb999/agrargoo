@@ -3,8 +3,15 @@ class HofModel {
   String? besitzerID;
   String? hofName;
   String? standort;
+  String? hofImageURL;
 
-  HofModel({this.hofID, this.besitzerID, this.hofName, this.standort});
+  HofModel({
+    this.hofID,
+    this.besitzerID,
+    this.hofName,
+    this.standort,
+    this.hofImageURL,
+  });
 
   Map<String, dynamic> createMap() {
     return {
@@ -12,6 +19,7 @@ class HofModel {
       'besitzerID': besitzerID,
       'hofName': hofName,
       'standort': standort,
+      'hofImageURL': hofImageURL,
     };
   }
 
@@ -19,5 +27,6 @@ class HofModel {
       : hofID = documentID,
         besitzerID = firestoreMap['besitzerID'],
         hofName = firestoreMap['hofName'],
-        standort = firestoreMap['standort'];
+        standort = firestoreMap['standort'],
+        hofImageURL = firestoreMap['hofImageURL'];
 }

@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:path/path.dart' as path;
 import 'package:agrargo/UI/pages/landwirt/7_add_jobanzeige.dart';
 import 'package:agrargo/UI/pages/landwirt/8_add_hof_page.dart';
 import 'package:agrargo/models/hof_model.dart';
@@ -10,11 +13,13 @@ import 'package:agrargo/repositories/firebase_storage_repository.dart';
 import 'package:agrargo/widgets/firebase_widgets.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart' as p;
 import '../../../controllers/auth_controller.dart';
 import '../../../main.dart';
@@ -41,7 +46,20 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
   Image profilImage = Image.network(
       'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none');
 
-  ///Firebase Storage
+  File? _photo;
+  final ImagePicker _picker = ImagePicker();
+  Future imgFromGallery() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _photo = File(pickedFile.path);
+        //uploadFile();
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
 
   checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
@@ -85,6 +103,8 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     ///Hof Liste
     final hofListeFilteredByUserID = HofProvider()
         .getHofByUserID(userID, p.Provider.of<List<HofModel>>(context));
+    print(
+        "hofListeFilteredByUserID.first.hofImageURL: ${hofListeFilteredByUserID.first.hofImageURL}");
 
     ///Jobanzeigen Filtered by UserID
     List<JobanzeigeModel> jobanzeigenListUser = JobanzeigeProvider()
@@ -132,13 +152,42 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                               color: Color(0xFFffffff)))),
                             ),
                           ),
-                          profilImage,
+                          Row(
+                            children: [
+                              profilImage,
+
+                              ///Upload Button
+                              ElevatedButton(
+                                child: Text('UPLOAD FILE'),
+                                onPressed: () async {
+                                  var picked =
+                                      await FilePicker.platform.pickFiles();
+
+                                  if (picked != null) {
+                                    print(
+                                        "fileName: ${picked.files.first.name}");
+                                    String fileExtension = getFileExtension(
+                                        picked.files.first.name);
+                                    print("FileType: $fileExtension");
+                                    Uint8List fileBytes =
+                                        picked.files.first.bytes!;
+                                    await FirebaseStorage.instance
+                                        .ref("$userID$fileExtension")
+                                        .putData(fileBytes);
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+
                           //     profilPictureExpanded(
                           //       'V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg'),
                         ],
                       )),
 
                   SizedBox(height: 30),
+
+                  ///File Picker https://camposha.info/flutter/flutter-filepicker/#gsc.tab=0
 
                   ///Höfe with User ID from Firestore
                   Container(
@@ -170,7 +219,9 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                             itemCount: hofListeFilteredByUserID.length,
                             itemBuilder: (context, index) {
                               return hofCard(
-                                  context, hofListeFilteredByUserID[index]);
+                                context: context,
+                                hof: hofListeFilteredByUserID[index],
+                              );
                             },
                           ),
                   ),
@@ -198,38 +249,6 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                       ),
                     ),
                   ]),
-                  /*
-                  Expanded(
-                      child: FutureBuilder(
-                    future: FireStorageService().getImageList(),
-                    builder: (context,
-                        AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return ListView.builder(itemBuilder: ((context, index) {
-                          final Map<String, dynamic> image =
-                              snapshot.data!.first;
-                          return Card(
-                            child: ListTile(
-                              leading: Image.network(
-                                'https://firebasestorage.googleapis.com/v0/b/agrargo-2571b.appspot.com/o/V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg?alt=media&token=159bfc8f-4ba5-45ef-9fa7-63c694ee640c',
-
-                                //image['url
-/*                                image:
-                                    'https://firebasestorage.googleapis.com/v0/b/agrargo-2571b.appspot.com/o/V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg?alt=media&token=159bfc8f-4ba5-45ef-9fa7-63c694ee640c',
-                                    maxSizeBytes: 15 * 1024 * 1024),
-                                */
-                                // Works with standard parameters, e.g.
-
-                                // ... etc.
-                              ),
-                            ),
-                          );
-                        }));
-                      }
-                      return Text("Hi");
-                    },
-                  )),
-          */
 
                   /// Zeige Anzeigen des Users
                   Expanded(

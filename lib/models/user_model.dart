@@ -5,12 +5,14 @@ class UserModel {
   String? name;
   String? email;
   bool? landwirt;
+  String? profilImageURL;
 
   UserModel({
     this.userID,
     this.name,
     this.email,
     this.landwirt,
+    this.profilImageURL,
   });
 
   Map<String, dynamic> createMap() {
@@ -19,6 +21,7 @@ class UserModel {
       'name': name,
       'email': email,
       'landwirt': landwirt,
+      'profilImageURL': profilImageURL,
     };
   }
 
@@ -26,5 +29,6 @@ class UserModel {
       : userID = documentID,
         name = firestoreMap['name'],
         email = firestoreMap['email'],
-        landwirt = firestoreMap['landwirt'];
+        landwirt = firestoreMap['landwirt'],
+        profilImageURL = firestoreMap['profilImageURL'];
 }

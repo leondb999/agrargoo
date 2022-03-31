@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:agrargo/UI/login_riverpod/login.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/UI/pages/5_chat.dart';
@@ -7,6 +9,7 @@ import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/main.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/provider/user_provider.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -186,4 +189,28 @@ Expanded profilPictureExpanded(String image) {
           },
         ),
       ));
+}
+
+String getFileExtension(String fileName) {
+  return "." + fileName.split('.').last;
+}
+
+///Upload Button
+ElevatedButton addProfilImageButton(String userID) {
+  return ElevatedButton(
+    child: Text('UPLOAD FILE'),
+    onPressed: () async {
+      var picked = await FilePicker.platform.pickFiles();
+
+      if (picked != null) {
+        print("fileName: ${picked.files.first.name}");
+        String fileExtension = getFileExtension(picked.files.first.name);
+        print("FileType: $fileExtension");
+        Uint8List fileBytes = picked.files.first.bytes!;
+        await FirebaseStorage.instance
+            .ref("$userID$fileExtension")
+            .putData(fileBytes);
+      }
+    },
+  );
 }

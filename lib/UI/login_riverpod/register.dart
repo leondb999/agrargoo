@@ -1,5 +1,6 @@
 import 'package:agrargo/UI/login_riverpod/test_screen.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -114,6 +115,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   ),
                 ),
               ),
+
+              ///File Picker https://camposha.info/flutter/flutter-filepicker/#gsc.tab=0
+
               Expanded(
                 flex: 2,
                 child: Container(

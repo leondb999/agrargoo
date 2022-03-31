@@ -10,13 +10,25 @@ import '../models/hof_model.dart';
 import 'package:provider/provider.dart' as p;
 
 ///Hof Card
-Card hofCard(BuildContext context, HofModel hof) {
+Card hofCard({
+  required BuildContext context,
+  required HofModel hof,
+}) {
   return Card(
     elevation: 6.0,
     margin: new EdgeInsets.symmetric(horizontal: 30.0, vertical: 13.0),
     child: ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       title: Text('Name:  ${hof.hofName!}'),
+      leading: hof.hofImageURL!.isNotEmpty
+          ? Image.network(hof.hofImageURL!)
+
+          ///TODO Finde ein besseres DEFAULT Bild was dem Nutzer angezeigt werden soll wenn er noch kein Bild für einen Hof hochgeladen hat
+          : Image.network(
+              'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
+              height: 50,
+              width: 50,
+            ),
       subtitle: Container(
         child: Row(
           children: [
@@ -43,6 +55,7 @@ Card hofCard(BuildContext context, HofModel hof) {
                 'hofName': hof.hofName!,
                 'besitzerID': hof.besitzerID,
                 'standort': hof.standort,
+                'hofImageURL': hof.hofImageURL,
               });
             },
             child: Text(

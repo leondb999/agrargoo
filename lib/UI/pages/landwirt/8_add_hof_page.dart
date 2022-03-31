@@ -1,13 +1,19 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/provider/hof_provider.dart';
 import 'package:agrargo/provider/jobanzeige_provider.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
 import 'package:flutter/material.dart';
 
 import '../../../controllers/auth_controller.dart';
+import '../../../widgets/layout_widgets.dart';
 
 class AddHofPage extends ConsumerStatefulWidget {
   const AddHofPage({Key? key}) : super(key: key);
@@ -22,6 +28,10 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
   final nameController = TextEditingController();
   final standortController = TextEditingController();
   var routeData;
+
+  File? uploadedImage;
+  String? uploadedImageURL = "";
+
   void clearData() {
     nameController.text = '';
     standortController.text = '';
@@ -55,9 +65,14 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                 HofModel anzeige = HofModel(
                   hofID: routeData['hofID'],
                   besitzerID: routeData['besitzerID'],
+                  hofName: routeData['hofName'],
                   standort: routeData['standort'],
+                  hofImageURL: routeData['hofImageURL'],
                 );
                 hofProvider.loadValues(anzeige);
+                setState(() {
+                  uploadedImageURL = routeData['hofImageURL'];
+                });
               },
             ),
     );
@@ -117,12 +132,38 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                     ),
                     SizedBox(height: 20),
 
+                    ///Upload Button
+                    ElevatedButton(
+                      child: Text('UPLOAD FILE'),
+                      onPressed: () async {
+                        var picked = await FilePicker.platform.pickFiles();
+
+                        if (picked != null) {
+                          print("fileName: ${picked.files.first.name}");
+                          String fileExtension =
+                              getFileExtension(picked.files.first.name);
+                          print("FileType: $fileExtension");
+                          Uint8List fileBytes = picked.files.first.bytes!;
+                          FirebaseStorage storage = FirebaseStorage.instance;
+                          Reference ref =
+                              storage.ref("${hofProvider.hofID}$fileExtension");
+                          await ref.putData(fileBytes);
+                          String urlString = await ref.getDownloadURL();
+                          print("getDownloadURL(): $urlString");
+                          setState(() {
+                            uploadedImageURL = urlString;
+                          });
+                        }
+                      },
+                    ),
+
                     /// Add Buttn
                     ElevatedButton(
                       child: Text('Save'),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           hofProvider.besitzerID = userID;
+                          hofProvider.hofImageURL = uploadedImageURL;
                           hofProvider.saveData();
                           Navigator.of(context).pop();
                         }
@@ -138,6 +179,11 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                         Navigator.of(context).pop();
                       },
                     ),
+
+                    ///Show Uploaded File
+                    uploadedImageURL!.isNotEmpty
+                        ? Image.network(uploadedImageURL!)
+                        : Text("No Image Uploaded Yet"),
                   ],
                 ),
               ),
