@@ -1,6 +1,7 @@
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/widgets/firebase_widgets.dart';
+import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +31,10 @@ class _JobangebotUebersichtPageState
     });
     print("activeAnzeigeList: $activeAnzeigeList");
     return Scaffold(
-      appBar: AppBar(),
+      appBar: appBar(context: context, ref: ref, home: false),
       resizeToAvoidBottomInset: false,
+      bottomNavigationBar:
+          navigationBar(index: 0, context: context, ref: ref, home: true),
       body: Column(
         children: [
           Container(
@@ -68,7 +71,7 @@ class _JobangebotUebersichtPageState
                       ? ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          itemCount: jobAnzeigeList.length,
+                          itemCount: jobAnzeigeList.length - 1,
                           itemBuilder: (context, index) {
                             return jobAnzeigeCard(
                                 context, activeAnzeigeList[index], false);

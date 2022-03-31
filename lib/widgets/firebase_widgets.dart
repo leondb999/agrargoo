@@ -86,11 +86,15 @@ Widget _activeAnzeige(bool status) {
 ///Jobangebot Card
 Card jobAnzeigeCard(
     BuildContext context, JobanzeigeModel jobanzeige, bool landwirtMode) {
+  ///User Provider
   final auftraggeber = UserProvider().getUserNameByUserID(
       jobanzeige.auftraggeberID, p.Provider.of<List<UserModel>>(context));
+
+  ///Hof Provider
   final hof = HofProvider().getHofByUserID(
       jobanzeige.auftraggeberID, p.Provider.of<List<HofModel>>(context));
   print("auftraggeber ${auftraggeber.first}");
+
   return Card(
     elevation: 6.0,
     margin: new EdgeInsets.symmetric(horizontal: 70.0, vertical: 13.0),
@@ -104,8 +108,10 @@ Card jobAnzeigeCard(
                 border: new Border(
                     right: new BorderSide(width: 1.0, color: Colors.white54))),
             child: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+              backgroundImage: hof.first.hofImageURL != null
+                  ? NetworkImage(hof.first.hofImageURL!)
+                  : NetworkImage(
+                      'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
             )),
         title: Text(
           jobanzeige.titel!,
