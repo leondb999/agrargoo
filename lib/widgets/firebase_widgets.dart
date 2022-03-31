@@ -21,7 +21,10 @@ Card hofCard({
       contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       title: Text('Name:  ${hof.hofName!}'),
       leading: hof.hofImageURL!.isNotEmpty
-          ? Image.network(hof.hofImageURL!)
+          ? Image.network(
+              hof.hofImageURL!,
+              // 'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
+            )
 
           ///TODO Finde ein besseres DEFAULT Bild was dem Nutzer angezeigt werden soll wenn er noch kein Bild für einen Hof hochgeladen hat
           : Image.network(

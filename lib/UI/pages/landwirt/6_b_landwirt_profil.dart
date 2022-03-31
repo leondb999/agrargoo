@@ -78,16 +78,16 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     super.initState();
 
     Future.delayed(Duration(microseconds: 10), () async {
-      String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+      // String? userID = ref.read(authControllerProvider.notifier).state?.uid;
       //      V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg
-
+/*
       final url = await FirebaseStorage.instance
           .ref()
           .child('$userID.jpg')
           .getDownloadURL();
       setState(() {
         profilImage = Image.network(url);
-      });
+      });*/
     });
   }
 
@@ -103,8 +103,10 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     ///Hof Liste
     final hofListeFilteredByUserID = HofProvider()
         .getHofByUserID(userID, p.Provider.of<List<HofModel>>(context));
-    print(
-        "hofListeFilteredByUserID.first.hofImageURL: ${hofListeFilteredByUserID.first.hofImageURL}");
+    /*if (hofListeFilteredByUserID.first.hofImageURL != null) {
+      print(
+          "hofListeFilteredByUserID.first.hofImageURL: ${hofListeFilteredByUserID.first.hofImageURL}");
+    }*/
 
     ///Jobanzeigen Filtered by UserID
     List<JobanzeigeModel> jobanzeigenListUser = JobanzeigeProvider()
@@ -222,6 +224,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                 context: context,
                                 hof: hofListeFilteredByUserID[index],
                               );
+                              //return Text("hi");
                             },
                           ),
                   ),
