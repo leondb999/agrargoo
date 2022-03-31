@@ -1,3 +1,6 @@
+import 'package:agrargo/UI/pages/landwirt/6_b_landwirt_profil.dart';
+import 'package:agrargo/controllers/auth_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +22,8 @@ class _WhoAreYouState extends ConsumerState<WhoAreYou> {
   bool landwirt = false;
   @override
   Widget build(BuildContext context) {
+    User? authControllerState = ref.watch(authControllerProvider);
+
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: true),
       resizeToAvoidBottomInset: false, // set it to false
@@ -46,11 +51,18 @@ class _WhoAreYouState extends ConsumerState<WhoAreYou> {
                     setState(() {
                       landwirt = true;
                     });
-                    Navigator.pushNamed(
-                      context,
-                      LoginPage.routename,
-                      arguments: {'landwirt': landwirt},
-                    );
+                    if (authControllerState != null) {
+                      Navigator.pushNamed(
+                        context,
+                        LandwirtProfil.routename,
+                      );
+                    } else {
+                      Navigator.pushNamed(
+                        context,
+                        LoginPage.routename,
+                        arguments: {'landwirt': landwirt},
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                       primary: Color(0xFF9FB98B),
