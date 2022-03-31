@@ -71,7 +71,7 @@ class _JobangebotUebersichtPageState
                       ? ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          itemCount: jobAnzeigeList.length - 1,
+                          itemCount: jobAnzeigeList.length,
                           itemBuilder: (context, index) {
                             return jobAnzeigeCard(
                                 context, activeAnzeigeList[index], false);

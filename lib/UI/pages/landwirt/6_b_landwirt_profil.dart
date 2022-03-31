@@ -238,19 +238,6 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                           child: Text("Alle Anzeigen",
                               style: TextStyle(fontSize: 30)),
                         )),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(AddEditJobanzeige.routename);
-                          },
-                        ),
-                      ),
-                    ),
                   ]),
 
                   /// Zeige Anzeigen des Users
