@@ -109,42 +109,15 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     print(
         "userLoggedIn: ${userLoggedIn.name} profilImageURL: ${userLoggedIn.profilImageURL}");
 
-    /// UserProvider
-    // var userModelProvider = p.Provider.of<UserProvider>(context);
-    // print("userModelProvider: ${userModelProvider.name}");
-    //var userList = p.Provider.of<List<UserModel>>(context);
-
-    /// User Liste
-    //  final userLoggedIn = UserProvider()
-    //    .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
-    //print(
-    //  "userLoggedIn: ${userLoggedIn.first.userID} profilImageURL: ${userLoggedIn.first.profilImageURL}");
-
     /// Hof Liste
-    //   final hofListeFilteredByUserID = HofProvider()
-    //     .getHofByUserID(userID, p.Provider.of<List<HofModel>>(context));
-    /*if (hofListeFilteredByUserID.first.hofImageURL != null) {
-      print(
-          "hofListeFilteredByUserID.first.hofImageURL: ${hofListeFilteredByUserID.first.hofImageURL}");
-    }*/
+    final hofListeFilteredByUserID = HofProvider()
+        .getHofByUserID(userID, p.Provider.of<List<HofModel>>(context));
 
     ///Jobanzeigen Filtered by UserID
-//    List<JobanzeigeModel> jobanzeigenListUser = JobanzeigeProvider()
-    //      .getAnzeigeByUserID(
-    //        userID, p.Provider.of<List<JobanzeigeModel>>(context));
+    List<JobanzeigeModel> jobanzeigenListUser = JobanzeigeProvider()
+        .getAnzeigeByUserID(
+            userID, p.Provider.of<List<JobanzeigeModel>>(context));
 
-    /// ---------------- Image ------------------------
-/*
-          final url = await FirebaseStorage.instance
-              .ref()
-              .child('$userID.jpg')
-              .getDownloadURL();
-          setState(
-            () {
-              profilImage = Image.network(url);
-            },
-          );
- */
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
       bottomNavigationBar:
@@ -230,61 +203,6 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                 }
                               },
                             ),
-/*
-                              ///Upload Button
-                              ElevatedButton(
-                                child: Text('UPLOAD PROFIL IMAGE'),
-                                onPressed: () async {
-                                  var picked =
-                                      await FilePicker.platform.pickFiles();
-
-                                  if (picked != null) {
-
-                                    String fileExtension = getFileExtension(
-                                        picked.files.first.name);
-
-                                    Uint8List fileBytes =
-                                        picked.files.first.bytes!;
-                                    FirebaseStorage storage =
-                                        FirebaseStorage.instance;
-
-                                    Reference ref =
-                                        storage.ref("${userID}$fileExtension");
-                                    await FirebaseStorage.instance
-                                        .ref("$userID$fileExtension")
-                                        .putData(fileBytes);
-                                    await ref.putData(fileBytes);
-                                    String urlString =
-                                        await ref.getDownloadURL();
-                                    print("getDownloadURL(): $urlString");
-
-                                    ///Save URL String to fireStore
-                                    // String urlString =
-                                    //       " https://firebasestorage.googleapis.com/v0/b/agrargo-2571b.appspot.com/o/03a76017-1f2d-4abe-bef9-66212ceafd66.jpg?alt=media&token=f441ebdb-9bf0-4c90-b1db-436db3521e42";
-                                    print("URL String: $urlString");
-                                    userModelProvider
-                                        .changeHofImageURL(urlString);
-                                    userModelProvider.userID = userID;
-                                    userModelProvider.profilImageURL =
-                                        urlString;
-                                    userModelProvider.landwirt =
-                                        userLoggedIn.first.landwirt;
-                                    userModelProvider.email =
-                                        userLoggedIn.first.email;
-
-                                    userModelProvider.saveData();
-                                    /*
-                                    final url = await FirebaseStorage.instance
-                                        .ref()
-                                        .child('$userID.jpg')
-                                        .getDownloadURL();
-                                    setState(() {
-                                      profilImage = Image.network(url);
-                                    });*/
-                                  }
-                                },
-                              ),
-                              */
                           ],
                         ),
 
@@ -293,7 +211,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                       ],
                     ),
                   ),
-/*
+
                   SizedBox(height: 30),
 
                   ///File Picker https://camposha.info/flutter/flutter-filepicker/#gsc.tab=0
@@ -372,7 +290,6 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                       ),
                     ),
                   ),
-*/
                 ],
               ),
       ),
