@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:agrargo/controllers/hof_controller.dart';
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/provider/hof_provider.dart';
@@ -31,7 +32,7 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
 
   File? uploadedImage;
   String? uploadedImageURL = "";
-
+  HofModel hofModel = HofModel();
   void clearData() {
     nameController.text = '';
     standortController.text = '';
@@ -45,31 +46,35 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
     Future.delayed(Duration(microseconds: 10), () {
       routeData =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      print("routeData: $routeData");
+      String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+      setState(() {
+        hofModel.besitzerID = userID;
+      });
+      print("hofmodel: besitzerID ${hofModel.besitzerID}");
     }).then(
       (value) => routeData == null
           ? Future.delayed(Duration.zero, () {
               clearData();
-              final hofProvider =
-                  p.Provider.of<HofProvider>(context, listen: false);
-              hofProvider.loadValues(HofModel());
+              String? userID =
+                  ref.read(authControllerProvider.notifier).state?.uid;
+              setState(() {
+                hofModel.besitzerID = userID;
+              });
             })
           : Future.delayed(
               Duration.zero,
               () {
-                print("routeData: $routeData");
+                ///Befülle Input Felder
                 nameController.text = routeData['hofName'];
                 standortController.text = routeData['standort'];
 
-                final hofProvider =
-                    p.Provider.of<HofProvider>(context, listen: false);
-                HofModel anzeige = HofModel(
-                  hofID: routeData['hofID'],
-                  besitzerID: routeData['besitzerID'],
-                  hofName: routeData['hofName'],
-                  standort: routeData['standort'],
-                  hofImageURL: routeData['hofImageURL'],
-                );
-                hofProvider.loadValues(anzeige);
+                ///Befülle Hofmodel mit Daten aus dem vorherigen Screen (über Route)
+                hofModel.hofID = routeData['hofID'];
+                hofModel.hofName = routeData['hofName'];
+                hofModel.standort = routeData['standort'];
+                hofModel.hofImageURL = routeData['hofImageURL'];
+
                 setState(() {
                   uploadedImageURL = routeData['hofImageURL'];
                 });
@@ -90,9 +95,12 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
   Widget build(BuildContext context) {
     final hofProvider = p.Provider.of<HofProvider>(context);
     String? userID = ref.read(authControllerProvider.notifier).state?.uid;
-
+    setState(() {
+      hofModel.besitzerID = userID;
+    });
     print(
-        "hof Name: ${hofProvider.hofName}, standort: ${hofProvider.standort}, besitzerID: ${hofProvider.getBesitzerID}, hofID: ${hofProvider.getHofID}");
+        "hof Name: ${hofModel.hofName}, standort: ${hofModel.standort}, besitzerID: ${hofModel.besitzerID}, hofID: ${hofModel.hofID}");
+
     return Scaffold(
       appBar: AppBar(title: Text('Add Hof ')),
       body: SafeArea(
@@ -106,30 +114,37 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                   children: [
                     ///Name Input Field
                     TextFormField(
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please Enter Hof Name ';
-                        }
-                        return null;
-                      },
-                      controller: nameController,
-                      decoration: InputDecoration(hintText: 'Enter Hof Name '),
-                      onChanged: (val) => hofProvider.changeHofName(val),
-                    ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please Enter Hof Name ';
+                          }
+                          return null;
+                        },
+                        controller: nameController,
+                        decoration:
+                            InputDecoration(hintText: 'Enter Hof Name '),
+                        onChanged: (val) {
+                          setState(() {
+                            hofModel.hofName = val;
+                          });
+                        }),
                     SizedBox(height: 20),
 
                     ///Standort Input Field
                     TextFormField(
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please Enter Standort';
-                        }
-                        return null;
-                      },
-                      controller: standortController,
-                      decoration: InputDecoration(hintText: 'Enter Standort'),
-                      onChanged: (val) => hofProvider.changeStandort(val),
-                    ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please Enter Standort';
+                          }
+                          return null;
+                        },
+                        controller: standortController,
+                        decoration: InputDecoration(hintText: 'Enter Standort'),
+                        onChanged: (val) {
+                          setState(() {
+                            hofModel.standort = val;
+                          });
+                        }),
                     SizedBox(height: 20),
 
                     ///Upload Button
@@ -139,19 +154,21 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                         var picked = await FilePicker.platform.pickFiles();
 
                         if (picked != null) {
-                          print("fileName: ${picked.files.first.name}");
                           String fileExtension =
                               getFileExtension(picked.files.first.name);
-                          print("FileType: $fileExtension");
+
                           Uint8List fileBytes = picked.files.first.bytes!;
                           FirebaseStorage storage = FirebaseStorage.instance;
-                          Reference ref =
+                          Reference reference =
                               storage.ref("${hofProvider.hofID}$fileExtension");
-                          await ref.putData(fileBytes);
-                          String urlString = await ref.getDownloadURL();
-                          print("getDownloadURL(): $urlString");
+                          await FirebaseStorage.instance
+                              .ref("${hofProvider.hofID}$fileExtension")
+                              .putData(fileBytes);
+                          String url = await reference.getDownloadURL();
+
                           setState(() {
-                            uploadedImageURL = urlString;
+                            uploadedImageURL = url;
+                            hofModel.hofImageURL = url;
                           });
                         }
                       },
@@ -162,9 +179,20 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                       child: Text('Save'),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          hofProvider.besitzerID = userID;
-                          hofProvider.hofImageURL = uploadedImageURL;
-                          hofProvider.saveData();
+                          print(
+                              "hofmodel: hofID: ${hofModel.hofID}, besitzerID: ${hofModel.besitzerID}, hofName: ${hofModel.hofName}, standort: ${hofModel.standort}");
+                          if (hofModel.hofImageURL == null) {
+                            setState(() {
+                              ///Default Image als Hof Bild
+                              hofModel.hofImageURL =
+                                  'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none';
+                            });
+                          }
+                          ref
+                              .read(
+                                  hofModelFirestoreControllerProvider.notifier)
+                              .saveHof(hofModel);
+
                           Navigator.of(context).pop();
                         }
                       },
@@ -175,7 +203,10 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                       child: Text('Delete'),
                       style: ElevatedButton.styleFrom(primary: Colors.red),
                       onPressed: () {
-                        hofProvider.removeData();
+                        ref
+                            .read(hofModelFirestoreControllerProvider.notifier)
+                            .removeHof(hofModel.hofID!);
+
                         Navigator.of(context).pop();
                       },
                     ),

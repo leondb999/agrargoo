@@ -13,6 +13,8 @@ import '../UI/pages/profil/6_b_landwirt_profil.dart';
 
 abstract class BaseFirestoreHofModelRepository {
   Stream<List<HofModel>> getHofModels();
+  Future<void> saveHof(HofModel hof);
+  Future<void> removeHof(String hofID);
 }
 
 ///Riverpod Provider
@@ -23,6 +25,7 @@ class FireHofModelRepository implements BaseFirestoreHofModelRepository {
   final Reader _read;
   const FireHofModelRepository(this._read);
 
+  ///Get
   @override
   Stream<List<HofModel>> getHofModels() {
     return _read(firestoreProvider).collection('höfe').snapshots().map(
@@ -30,5 +33,20 @@ class FireHofModelRepository implements BaseFirestoreHofModelRepository {
               .map((doc) => HofModel.fromFirestore(doc.data(), doc.id))
               .toList(),
         );
+  }
+
+  ///Speichern
+  @override
+  Future<void> saveHof(HofModel hof) {
+    return _read(firestoreProvider)
+        .collection('höfe')
+        .doc(hof.hofID)
+        .set(hof.createMap());
+  }
+
+  ///Löschen
+  @override
+  Future<void> removeHof(String hofID) {
+    return _read(firestoreProvider).collection('höfe').doc(hofID).delete();
   }
 }

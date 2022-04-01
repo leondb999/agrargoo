@@ -7,6 +7,7 @@ import 'package:agrargo/repositories/firestore_user_model_riverpod_repository.da
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 import '../repositories/auth_repository.dart';
 import '../repositories/firestore_jobanzeige_model_riverpod_repository.dart';
@@ -20,7 +21,7 @@ final jobanzeigeModelFirestoreControllerProvider = StateNotifierProvider<
 class FirestoreJobanzeigeModelController
     extends StateNotifier<List<JobanzeigeModel>?> {
   final Reader _read;
-
+  var uuid = Uuid();
   StreamSubscription<List<JobanzeigeModel?>>? _streamSubscription;
 
   FirestoreJobanzeigeModelController(this._read) : super(null) {
@@ -38,14 +39,20 @@ class FirestoreJobanzeigeModelController
     super.dispose();
   }
 
+  ///Get
   void getJobanzeigeModelList() async {
     _read(fireJobanzeigeModelRepositoryProvider).getJobanzeigeModels();
   }
 
+  ///Speichern
   void saveJobanzeige(JobanzeigeModel anzeige) {
+    if (anzeige.jobanzeigeID == null) {
+      anzeige.jobanzeigeID = uuid.v4();
+    }
     _read(fireJobanzeigeModelRepositoryProvider).saveJobanzeige(anzeige);
   }
 
+  ///Löschen
   void removeJobanzeige(String jobanzeigeID) {
     _read(fireJobanzeigeModelRepositoryProvider).removeJobanzeige(jobanzeigeID);
   }
