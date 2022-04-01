@@ -46,6 +46,8 @@ Card hofCard({
                     Navigator.of(context)
                         .pushNamed(AddEditJobanzeige.routename, arguments: {
                       'hofID': hof.hofID,
+                      'hofName': hof.hofName,
+                      'standort': hof.standort,
                     });
                   },
                 ),

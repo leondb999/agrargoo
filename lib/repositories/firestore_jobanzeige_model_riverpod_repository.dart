@@ -13,6 +13,8 @@ import '../UI/pages/profil/6_b_landwirt_profil.dart';
 
 abstract class BaseFirestoreJobanzeigeModelRepository {
   Stream<List<JobanzeigeModel>> getJobanzeigeModels();
+  Future<void> saveJobanzeige(JobanzeigeModel anzeige);
+  Future<void> removeJobanzeige(String jobanzeigeID);
 }
 
 ///Riverpod Provider
@@ -26,6 +28,7 @@ class FireJobanzeigeModelRepository
 
   const FireJobanzeigeModelRepository(this._read);
 
+  ///Get
   @override
   Stream<List<JobanzeigeModel>> getJobanzeigeModels() {
     return _read(firestoreProvider).collection('jobAnzeigen').snapshots().map(
@@ -33,5 +36,23 @@ class FireJobanzeigeModelRepository
               .map((doc) => JobanzeigeModel.fromFirestore(doc.data(), doc.id))
               .toList(),
         );
+  }
+
+  ///Speichern
+  @override
+  Future<void> saveJobanzeige(JobanzeigeModel anzeige) {
+    return _read(firestoreProvider)
+        .collection('jobAnzeigen')
+        .doc(anzeige.jobanzeigeID)
+        .set(anzeige.createMap());
+  }
+
+  ///Löschen
+  @override
+  Future<void> removeJobanzeige(String jobanzeigeID) {
+    return _read(firestoreProvider)
+        .collection('jobAnzeigen')
+        .doc(jobanzeigeID)
+        .delete();
   }
 }

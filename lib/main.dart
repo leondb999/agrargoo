@@ -10,6 +10,7 @@ import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/provider/user_provider.dart';
+import 'package:agrargo/repositories/firestore_jobanzeige_model_riverpod_repository.dart';
 import 'package:agrargo/repositories/firestore_repository.dart';
 import 'package:agrargo/provider/hof_provider.dart';
 import 'package:agrargo/provider/jobanzeige_provider.dart';

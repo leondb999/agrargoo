@@ -64,3 +64,6 @@ TODO Christina & Verena --> neue Run Configuration einfügen, damit die aus Fire
 https://www.youtube.com/watch?v=yLNczKeqXyo&ab_channel=LearnAppCode
 https://docs.flutter.dev/development/tools/web-renderers
 Command, um Projekt zu releasen: flutter build web --web-renderer html --release
+
+#Firestore Commands
+https://parthpanchal53.medium.com/flutter-firebase-firestore-crud-app-using-riverpod-981811e2a73d

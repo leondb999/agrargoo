@@ -1,11 +1,13 @@
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/jobanzeige_model.dart';
+import '../provider/general_providers.dart';
 
 ///https://medium.com/analytics-vidhya/magic-of-flutter-provider-and-firestore-66f1a86903c3
-
+///Klasse um normale DB Abfragen zu machen
 class FireStoreService {
   FirebaseFirestore _db = FirebaseFirestore.instance;
 
@@ -22,26 +24,6 @@ class FireStoreService {
         .toList());
   }
 
-  ///Lösche User
-  Future<void> removeUser(String userID) {
-    return _db.collection('users').doc(userID).delete();
-  }
-
-  ///Speicher User
-  Future<void> saveUser(UserModel userModel) {
-    return _db
-        .collection('users')
-        .doc(userModel.userID)
-        .set(userModel.createMap());
-  }
-
-  Future<void> updateUser(String userID, String profilImageURL) {
-    return _db
-        .collection('users')
-        .doc(userID)
-        .update({'profilImageURL': '$profilImageURL'});
-  }
-
 /////////////////////////////////////////////// JobanzeigeModel ///////////////////////////////////////////////
   ///Get alle Jobanzeigen
   Stream<List<JobanzeigeModel>> getJobanzeigenList() {
@@ -53,28 +35,6 @@ class FireStoreService {
 
     return _db.collection(('jobAnzeigen')).snapshots().map((snapshot) =>
         snapshot.docs
-            .map((doc) => JobanzeigeModel.fromFirestore(doc.data(), doc.id))
-            .toList());
-  }
-
-  ///Get Jobanzeige By Auftraggeber
-  Stream<List<JobanzeigeModel>> getJobanzeigenByAuftraggeber(String userID) {
-    final x = _db
-        .collection(('jobAnzeigen'))
-        .where('auftraggeberID', isEqualTo: userID)
-        .get()
-        .then((value) {
-      value.docs.forEach((doc) {
-        //  print(
-        //       "getJobanzeigenByAuftraggeber: ${doc.id} titel: ${doc['titel']} auftraggeberID: ${doc['auftraggeberID']}");
-      });
-    });
-
-    return _db
-        .collection(('jobAnzeigen'))
-        .where('auftraggeberID', isEqualTo: userID)
-        .snapshots()
-        .map((snapshot) => snapshot.docs
             .map((doc) => JobanzeigeModel.fromFirestore(doc.data(), doc.id))
             .toList());
   }

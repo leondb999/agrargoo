@@ -1,3 +1,4 @@
+import 'package:agrargo/controllers/jobanzeige_controller.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/provider/jobanzeige_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +32,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
   String? _standort = "";
   bool? isSwitched = true;
   bool? checkStatus;
+  JobanzeigeModel anzeige = JobanzeigeModel();
   @override
   void initState() {
     // TODO: implement initState
@@ -39,40 +41,39 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
     Future.delayed(Duration(microseconds: 10), () {
       routeData =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+      print("routeData: $routeData");
       setState(() {
-        _hofID = routeData['hofID'];
+        anzeige.hofID = routeData['hofID'];
+        anzeige.auftraggeberID = userID;
+        anzeige.status = isSwitched;
         _hofName = routeData['hofName'];
         _standort = routeData['standort'];
       });
-      print("AddJobanzeige: $_hofID");
     }).then(
       (value) => routeData == null
-          ? Future.delayed(Duration.zero, () {
-              clearData();
-              final jobanzeigeProvider =
-                  p.Provider.of<JobanzeigeProvider>(context, listen: false);
-
-              jobanzeigeProvider.loadValues(JobanzeigeModel());
-            })
+          ? Future.delayed(Duration.zero, () {})
           : Future.delayed(
               Duration.zero,
               () {
-                print("routeData: $routeData");
                 nameController.text = routeData['titel'];
                 setState(() {
                   isSwitched = routeData['status'];
                   checkStatus = routeData['status'];
                 });
-                final jobanzeigeProvider =
-                    p.Provider.of<JobanzeigeProvider>(context, listen: false);
-                JobanzeigeModel anzeige = JobanzeigeModel(
+                String? userID =
+                    ref.read(authControllerProvider.notifier).state?.uid;
+
+                anzeige.titel = routeData['titel'];
+                anzeige.status = isSwitched;
+
+                anzeige = JobanzeigeModel(
                   titel: routeData['titel'],
                   hofID: routeData['hofID'],
                   jobanzeigeID: routeData['jobanzeigeID'],
-                  auftraggeberID: routeData['auftraggeberID'],
+                  auftraggeberID: userID,
                   status: routeData['status'],
                 );
-                jobanzeigeProvider.loadValues(anzeige);
               },
             ),
     );
@@ -88,12 +89,17 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
 
   @override
   Widget build(BuildContext context) {
-    final jobanzeigeProvider = p.Provider.of<JobanzeigeProvider>(context);
-    print("jobanzeigeProvider: ${jobanzeigeProvider.titel}");
+    if (anzeige.titel != null) {
+      print(
+          "jobanzeige: titel ${anzeige.titel}, hofID: ${anzeige.hofID}, auftraggeberID: ${anzeige.auftraggeberID}, status: ${anzeige.status}");
+    }
+    print("hello");
+    //final jobanzeigeProvider = p.Provider.of<JobanzeigeProvider>(context);
+    //  print("jobanzeigeProvider: ${jobanzeigeProvider.titel}");
     String? userID = ref.read(authControllerProvider.notifier).state?.uid;
 
-    print(
-        "jobanzeige titel: ${jobanzeigeProvider.titel}, status: ${jobanzeigeProvider.status}, auftraggeberID: ${jobanzeigeProvider.getAuftraggeberID}, hofID: ${jobanzeigeProvider.getHofID}");
+    //  print(
+    //    "jobanzeige titel: ${jobanzeigeProvider.titel}, status: ${jobanzeigeProvider.status}, auftraggeberID: ${jobanzeigeProvider.getAuftraggeberID}, hofID: ${jobanzeigeProvider.getHofID}");
     return Scaffold(
       appBar: AppBar(title: Text('Add / Edit Jobangebot Screen')),
       body: SafeArea(
@@ -106,18 +112,21 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                 child: Column(
                   children: [
                     TextFormField(
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please Enter Titel';
-                        }
-                        return null;
-                      },
-                      controller: nameController,
-                      decoration:
-                          InputDecoration(hintText: 'Enter Jobangebot Titel'),
-                      onChanged: (val) =>
-                          jobanzeigeProvider.changeJobanzeigeTitel(val),
-                    ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please Enter Titel';
+                          }
+                          return null;
+                        },
+                        controller: nameController,
+                        decoration:
+                            InputDecoration(hintText: 'Enter Jobangebot Titel'),
+                        onChanged: (val) {
+                          // jobanzeigeProvider.changeJobanzeigeTitel(val),
+                          setState(() {
+                            anzeige.titel = val;
+                          });
+                        }),
                     SizedBox(
                       height: 20,
                     ),
@@ -136,8 +145,9 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                         onChanged: (value) {
                           setState(() {
                             isSwitched = value;
+                            anzeige.status = isSwitched;
                           });
-                          jobanzeigeProvider.changeStatus(isSwitched!);
+                          //jobanzeigeProvider.changeStatus(isSwitched!);
                         }),
 
                     /// Add Buttn
@@ -145,11 +155,17 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                       child: Text('Save'),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
+                          ref
+                              .read(jobanzeigeModelFirestoreControllerProvider
+                                  .notifier)
+                              .saveJobanzeige(anzeige);
+                          /*
                           jobanzeigeProvider.status = jobanzeigeProvider.status;
                           jobanzeigeProvider.auftraggeberID = userID;
                           jobanzeigeProvider.hofID = _hofID;
                           jobanzeigeProvider.status = isSwitched!;
                           jobanzeigeProvider.saveData();
+                          */
                           Navigator.of(context).pop();
                         }
                       },
@@ -160,7 +176,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                       child: Text('Delete'),
                       style: ElevatedButton.styleFrom(primary: Colors.red),
                       onPressed: () {
-                        jobanzeigeProvider.removeData();
+                        // jobanzeigeProvider.removeData();
                         Navigator.of(context).pop();
                       },
                     ),
@@ -170,7 +186,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                       child: Column(
                         children: [
                           Text('Vorschau'),
-                          Text("HofID: $_hofID"),
+                          Text("HofID: ${anzeige.hofID}"),
                           Text("AuftraggeberID: $userID"),
                           Text("HofName: $_hofName"),
                           Text('Standort: $_standort'),

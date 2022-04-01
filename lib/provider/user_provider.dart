@@ -49,28 +49,4 @@ class UserProvider with ChangeNotifier {
     landwirt = userModel.landwirt;
     profilImageURL = userModel.profilImageURL;
   }
-
-  ///Lösche User
-  void removeData() {
-    service.removeUser(userID!);
-  }
-
-  void saveData() {
-    print("jobanzeigeID = $userID");
-
-    var updateUserModel = UserModel(
-      email: email,
-      landwirt: landwirt,
-      name: name,
-      profilImageURL: profilImageURL,
-      userID: userID,
-    );
-    service.saveUser(updateUserModel);
-  }
-
-  void updateUserProfilUrl() {
-    print(
-        "userID: $userID | profilImageURL: $profilImageURL | email: $email | landwirt: $landwirt");
-    service.updateUser(userID!, profilImageURL!);
-  }
 }

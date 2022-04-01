@@ -39,7 +39,10 @@ class FirestoreJobanzeigeModelController
   }
 
   void getJobanzeigeModelList() async {
-    final jobanzeigeModelList =
-        _read(fireUserModelRepositoryProvider).getUserModels();
+    _read(fireJobanzeigeModelRepositoryProvider).getJobanzeigeModels();
+  }
+
+  void saveJobanzeige(JobanzeigeModel anzeige) {
+    _read(fireJobanzeigeModelRepositoryProvider).saveJobanzeige(anzeige);
   }
 }

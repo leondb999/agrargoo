@@ -84,29 +84,29 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
 
     ///Alle gespeicherten User in der Firestore Collection
     final userList = ref.watch(userModelFirestoreControllerProvider);
-    print("userList: $userList");
+    //  print("userList: $userList");
 
     ///LoggedIn User
     String? userID = ref.read(authControllerProvider.notifier).state!.uid;
     final userLoggedIn =
         UserProvider().getUserNameByUserID(userID, userList!).first;
 
-    print(
-        "userLoggedIn: ${userLoggedIn.name} profilImageURL: ${userLoggedIn.profilImageURL}");
+    //print(
+    //    "userLoggedIn: ${userLoggedIn.name} profilImageURL: ${userLoggedIn.profilImageURL}");
 
     /// Hof Liste
     final hofList = ref.watch(hofModelFirestoreControllerProvider);
-    print("hofList: $hofList");
+    //  print("hofList: $hofList");
     final hofListeFilteredByUserID =
         HofProvider().getHofByUserID(userID, hofList!);
 
     ///Jobanzeigen Filtered by UserID
     final jobanzeigeModelList =
         ref.watch(jobanzeigeModelFirestoreControllerProvider);
-    print("jobanzeigeModelList: ${jobanzeigeModelList}");
+    // print("jobanzeigeModelList: ${jobanzeigeModelList}");
     List<JobanzeigeModel> jobanzeigenListUser =
         JobanzeigeProvider().getAnzeigeByUserID(userID, jobanzeigeModelList!);
-    print("jobanzeigenListUser: ${jobanzeigenListUser}");
+    // print("jobanzeigenListUser: ${jobanzeigenListUser}");
 
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
