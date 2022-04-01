@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../UI/pages/profil/6_a_helfer_profil.dart';
 import '../UI/pages/profil/6_b_landwirt_profil.dart';
 
-abstract class BaseFirestoreUserRepository {
+abstract class BaseFirestoreUserModelRepository {
   Stream<List<UserModel>> getUserModels();
   Future<bool> updateProfilPicture(UserModel userModel, String url);
 }
@@ -19,7 +19,7 @@ abstract class BaseFirestoreUserRepository {
 final fireUserModelRepositoryProvider = Provider<FireUserModelRepository>(
     (ref) => FireUserModelRepository(ref.read));
 
-class FireUserModelRepository implements BaseFirestoreUserRepository {
+class FireUserModelRepository implements BaseFirestoreUserModelRepository {
   final Reader _read;
 
   const FireUserModelRepository(this._read);
@@ -32,9 +32,6 @@ class FireUserModelRepository implements BaseFirestoreUserRepository {
               .toList(),
         );
   }
-
-  @override
-  Stream<List<UserModel>> get UserModels => throw UnimplementedError();
 
   @override
   Future<bool> updateProfilPicture(UserModel userModel, String url) async {

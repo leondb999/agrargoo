@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:agrargo/controllers/hof_controller.dart';
-import 'package:agrargo/repositories/firestore_user_riverpod_repository.dart';
+import 'package:agrargo/repositories/firestore_user_model_riverpod_repository.dart';
 import 'package:path/path.dart' as path;
 import 'package:agrargo/UI/pages/add/7_add_jobanzeige_landwirt.dart';
 import 'package:agrargo/UI/pages/add/8_add_hof_page_landwirt.dart';
@@ -24,9 +24,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart' as p;
 import '../../../controllers/auth_controller.dart';
+import '../../../controllers/jobanzeige_controller.dart';
 import '../../../controllers/user_controller.dart';
 import '../../../main.dart';
-import '../../../repositories/firestore_hof_riverpod_repository.dart';
+import '../../../repositories/firestore_hof_model_riverpod_repository.dart';
 
 class LandwirtProfil extends ConsumerStatefulWidget {
   const LandwirtProfil({Key? key}) : super(key: key);
@@ -100,9 +101,12 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
         HofProvider().getHofByUserID(userID, hofList!);
 
     ///Jobanzeigen Filtered by UserID
-    List<JobanzeigeModel> jobanzeigenListUser = JobanzeigeProvider()
-        .getAnzeigeByUserID(
-            userID, p.Provider.of<List<JobanzeigeModel>>(context));
+    final jobanzeigeModelList =
+        ref.watch(jobanzeigeModelFirestoreControllerProvider);
+    print("jobanzeigeModelList: ${jobanzeigeModelList}");
+    List<JobanzeigeModel> jobanzeigenListUser =
+        JobanzeigeProvider().getAnzeigeByUserID(userID, jobanzeigeModelList!);
+    print("jobanzeigenListUser: ${jobanzeigenListUser}");
 
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
