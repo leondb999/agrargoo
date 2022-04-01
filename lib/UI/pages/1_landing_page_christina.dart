@@ -180,7 +180,8 @@ class _LandingPageChState extends State<LandingPageCh> {
                                     onPressed: () {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
-                                              builder: (context) => Chat()));
+                                              builder: (context) =>
+                                                  WhoAreYou()));
                                     },
                                     child: Text('Los gehts!'),
                                     style: ElevatedButton.styleFrom(
