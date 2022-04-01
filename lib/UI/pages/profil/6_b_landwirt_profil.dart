@@ -185,12 +185,51 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                         ),
                         Row(
                           children: [
-                            ///Todo implement function with Error handling for Error:   Error: [firebase_storage/object-not-found] No object exists at the desired reference.
+                            ///Todo implement function with Error handling for Error:   Error: [firebase_storage/object-not-found] No object exists at the desired reference. ||ALso, um zu prüfen, ob die URL eine valide URL ist
                             userLoggedIn.profilImageURL == null
                                 ? Image.network(
                                     'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
                                   )
                                 : Image.network(userLoggedIn.profilImageURL!),
+                            ElevatedButton(
+                              child: Text("Upload Picture"),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Color(0xFF9FB98B),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 50, vertical: 20),
+                                  textStyle: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                              onPressed: () async {
+                                var picked =
+                                    await FilePicker.platform.pickFiles();
+                                if (picked != null) {
+                                  String fileExtension =
+                                      getFileExtension(picked.files.first.name);
+
+                                  Uint8List fileBytes =
+                                      picked.files.first.bytes!;
+                                  FirebaseStorage storage =
+                                      FirebaseStorage.instance;
+                                  Reference reference =
+                                      storage.ref("${userID}$fileExtension");
+                                  await FirebaseStorage.instance
+                                      .ref("$userID$fileExtension")
+                                      .putData(fileBytes);
+
+                                  String urlString =
+                                      await reference.getDownloadURL();
+                                  print("getDownloadURL(): $urlString");
+                                  ref
+                                      .watch(userFireStoreControllerProvider
+                                          .notifier)
+                                      .updateURL(userLoggedIn, urlString);
+                                  //  'https://firebasestorage.googleapis.com/v0/b/agrargo-2571b.appspot.com/o/03a76017-1f2d-4abe-bef9-66212ceafd66.jpg?alt=media&token=f441ebdb-9bf0-4c90-b1db-436db3521e42',
+                                  //"Hi",
+
+                                }
+                              },
+                            ),
 /*
                               ///Upload Button
                               ElevatedButton(
@@ -200,11 +239,9 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                       await FilePicker.platform.pickFiles();
 
                                   if (picked != null) {
-                                    print(
-                                        "fileName: ${picked.files.first.name}");
+
                                     String fileExtension = getFileExtension(
                                         picked.files.first.name);
-                                    print("FileType: $fileExtension");
 
                                     Uint8List fileBytes =
                                         picked.files.first.bytes!;

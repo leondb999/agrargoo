@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../UI/pages/chatDetailPage.dart';
+import '../UI/pages/chat/chatDetailPage.dart';
 
 class ConversationList extends StatefulWidget {
   String name;

@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:agrargo/UI/login_riverpod/login.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
-import 'package:agrargo/UI/pages/5_chat.dart';
+import 'package:agrargo/UI/pages/chat/5_chat.dart';
 import 'package:agrargo/UI/pages/profil/6_a_helfer_profil.dart';
 import 'package:agrargo/UI/pages/profil/6_b_landwirt_profil.dart';
 import 'package:agrargo/controllers/auth_controller.dart';

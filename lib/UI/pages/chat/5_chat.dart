@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../widgets/conversationList.dart';
+import '../../../widgets/conversationList.dart';
 import 'chatUsersModel.dart';
 
-import '../../repositories/firebase_storage_repository.dart';
+import '../../../repositories/firebase_storage_repository.dart';
 
 class Chat extends ConsumerStatefulWidget {
   static const routename = '/chat';

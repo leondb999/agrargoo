@@ -12,6 +12,7 @@ import '../UI/pages/profil/6_b_landwirt_profil.dart';
 
 abstract class BaseFirestoreUserRepository {
   Stream<List<UserModel>> getUserModels();
+  Future<bool> updateUserModel(UserModel userModel, String url);
 }
 
 final fireUserRepositoryProvider =
@@ -37,4 +38,20 @@ class FireUserRepository implements BaseFirestoreUserRepository {
   @override
   // TODO: implement UserModels
   Stream<List<UserModel>> get UserModels => throw UnimplementedError();
+
+  @override
+  Future<bool> updateUserModel(UserModel userModel, String url) async {
+    // TODO: implement updateUserModel
+    try {
+      _read(firestoreProvider)
+          .collection('users')
+          .doc(userModel.userID)
+          .update({'profilImageURL': url});
+      return true;
+    } catch (e) {
+      print(e);
+      return Future.error(e);
+    }
+    throw UnimplementedError();
+  }
 }

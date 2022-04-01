@@ -33,11 +33,16 @@ class FirestoreUserModelController extends StateNotifier<List<UserModel>?> {
     super.dispose();
   }
 
+  void getUserByID() {
+    String? userID = _read(authControllerProvider.notifier).state!.uid;
+  }
+
   void getUserModelList() async {
     final userModelList = _read(fireUserRepositoryProvider).getUserModels();
   }
 
-  void getUserByID() {
-    String? userID = _read(authControllerProvider.notifier).state!.uid;
+  void updateURL(UserModel userModel, String url) async {
+    bool success =
+        await _read(fireUserRepositoryProvider).updateUserModel(userModel, url);
   }
 }

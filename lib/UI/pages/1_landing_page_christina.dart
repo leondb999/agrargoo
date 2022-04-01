@@ -1,6 +1,6 @@
 import 'package:agrargo/UI/error_screen.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
-import 'package:agrargo/UI/pages/5_chat.dart';
+import 'package:agrargo/UI/pages/chat/5_chat.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';

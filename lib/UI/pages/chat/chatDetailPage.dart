@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../models/chatMessageModel.dart';
+import '../../../models/chatMessageModel.dart';
 
 class ChatDetailPage extends ConsumerStatefulWidget {
   @override
