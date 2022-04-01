@@ -45,4 +45,8 @@ class FirestoreJobanzeigeModelController
   void saveJobanzeige(JobanzeigeModel anzeige) {
     _read(fireJobanzeigeModelRepositoryProvider).saveJobanzeige(anzeige);
   }
+
+  void removeJobanzeige(String jobanzeigeID) {
+    _read(fireJobanzeigeModelRepositoryProvider).removeJobanzeige(jobanzeigeID);
+  }
 }

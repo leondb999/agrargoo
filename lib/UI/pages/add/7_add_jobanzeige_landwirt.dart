@@ -27,7 +27,6 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
     priceController.text = '';
   }
 
-  String? _hofID = "";
   String? _hofName = "";
   String? _standort = "";
   bool? isSwitched = true;
@@ -43,6 +42,8 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       String? userID = ref.read(authControllerProvider.notifier).state?.uid;
       print("routeData: $routeData");
+
+      ///Hof Daten | um eine Jobanzeige zu einem Hof & User zuzuordnen, werden beim laden der Seite automaitsch HofID, UserID in der anzeige gespeichert
       setState(() {
         anzeige.hofID = routeData['hofID'];
         anzeige.auftraggeberID = userID;
@@ -61,19 +62,10 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                   isSwitched = routeData['status'];
                   checkStatus = routeData['status'];
                 });
-                String? userID =
-                    ref.read(authControllerProvider.notifier).state?.uid;
 
                 anzeige.titel = routeData['titel'];
-                anzeige.status = isSwitched;
-
-                anzeige = JobanzeigeModel(
-                  titel: routeData['titel'],
-                  hofID: routeData['hofID'],
-                  jobanzeigeID: routeData['jobanzeigeID'],
-                  auftraggeberID: userID,
-                  status: routeData['status'],
-                );
+                anzeige.status = routeData['status'];
+                anzeige.jobanzeigeID = routeData['jobanzeigeID'];
               },
             ),
     );
@@ -89,17 +81,13 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
 
   @override
   Widget build(BuildContext context) {
+    String? userID = ref.read(authControllerProvider.notifier).state?.uid;
     if (anzeige.titel != null) {
       print(
           "jobanzeige: titel ${anzeige.titel}, hofID: ${anzeige.hofID}, auftraggeberID: ${anzeige.auftraggeberID}, status: ${anzeige.status}");
     }
     print("hello");
-    //final jobanzeigeProvider = p.Provider.of<JobanzeigeProvider>(context);
-    //  print("jobanzeigeProvider: ${jobanzeigeProvider.titel}");
-    String? userID = ref.read(authControllerProvider.notifier).state?.uid;
 
-    //  print(
-    //    "jobanzeige titel: ${jobanzeigeProvider.titel}, status: ${jobanzeigeProvider.status}, auftraggeberID: ${jobanzeigeProvider.getAuftraggeberID}, hofID: ${jobanzeigeProvider.getHofID}");
     return Scaffold(
       appBar: AppBar(title: Text('Add / Edit Jobangebot Screen')),
       body: SafeArea(
@@ -159,13 +147,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                               .read(jobanzeigeModelFirestoreControllerProvider
                                   .notifier)
                               .saveJobanzeige(anzeige);
-                          /*
-                          jobanzeigeProvider.status = jobanzeigeProvider.status;
-                          jobanzeigeProvider.auftraggeberID = userID;
-                          jobanzeigeProvider.hofID = _hofID;
-                          jobanzeigeProvider.status = isSwitched!;
-                          jobanzeigeProvider.saveData();
-                          */
+
                           Navigator.of(context).pop();
                         }
                       },
@@ -176,7 +158,13 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                       child: Text('Delete'),
                       style: ElevatedButton.styleFrom(primary: Colors.red),
                       onPressed: () {
-                        // jobanzeigeProvider.removeData();
+                        if (anzeige.jobanzeigeID != null) {
+                          ref
+                              .read(jobanzeigeModelFirestoreControllerProvider
+                                  .notifier)
+                              .removeJobanzeige(anzeige.jobanzeigeID!);
+                        }
+
                         Navigator.of(context).pop();
                       },
                     ),
