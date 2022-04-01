@@ -14,7 +14,7 @@ import 'package:flutterfire_ui/i10n.dart';
 
 import '../../main.dart';
 import '../../widgets/login_widgets.dart';
-import '../pages/landwirt/6_b_landwirt_profil.dart';
+import '../pages/profil/6_b_landwirt_profil.dart';
 
 ///https://www.geeksforgeeks.org/flutter-arguments-in-named-routes/
 ///TODO Vorname & Nachname

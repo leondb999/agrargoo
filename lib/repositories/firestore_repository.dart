@@ -10,6 +10,7 @@ class FireStoreService {
   FirebaseFirestore _db = FirebaseFirestore.instance;
 
 /////////////////////////////////////////////// UserModel  ///////////////////////////////////////////////
+  ///Get User
   Stream<List<UserModel>> getUserList() {
     final x = _db.collection(('users')).get().then((value) {
       value.docs.forEach((doc) {
@@ -21,8 +22,28 @@ class FireStoreService {
         .toList());
   }
 
+  ///Lösche User
+  Future<void> removeUser(String userID) {
+    return _db.collection('users').doc(userID).delete();
+  }
+
+  ///Speicher User
+  Future<void> saveUser(UserModel userModel) {
+    return _db
+        .collection('users')
+        .doc(userModel.userID)
+        .set(userModel.createMap());
+  }
+
+  Future<void> updateUser(String userID, String profilImageURL) {
+    return _db
+        .collection('users')
+        .doc(userID)
+        .update({'profilImageURL': '$profilImageURL'});
+  }
+
 /////////////////////////////////////////////// JobanzeigeModel ///////////////////////////////////////////////
-  ///get alle Jobanzeigen
+  ///Get alle Jobanzeigen
   Stream<List<JobanzeigeModel>> getJobanzeigenList() {
     final x = _db.collection(('jobAnzeigen')).get().then((value) {
       value.docs.forEach((doc) {
@@ -36,7 +57,7 @@ class FireStoreService {
             .toList());
   }
 
-  /// Landwirt
+  ///Get Jobanzeige By Auftraggeber
   Stream<List<JobanzeigeModel>> getJobanzeigenByAuftraggeber(String userID) {
     final x = _db
         .collection(('jobAnzeigen'))
@@ -58,7 +79,7 @@ class FireStoreService {
             .toList());
   }
 
-  ///update
+  ///Speicher Jobanzeige
   Future<void> saveJobanzeige(JobanzeigeModel anzeige) {
     return _db
         .collection('jobAnzeigen')
@@ -66,11 +87,13 @@ class FireStoreService {
         .set(anzeige.createMap());
   }
 
+  ///Lösche Jobanzeige
   Future<void> removeJobanzeige(String jobanzeigeID) {
     return _db.collection('jobAnzeigen').doc(jobanzeigeID).delete();
   }
 
 /////////////////////////////////////////////// HofModel ///////////////////////////////////////////////
+  ///Get Hof
   Stream<List<HofModel>> getHoefeList() {
     final x = _db.collection(('höfe')).get().then((value) {
       value.docs.forEach((doc) {
@@ -83,10 +106,12 @@ class FireStoreService {
         .toList());
   }
 
+  ///Speicher Hof
   Future<void> saveHof(HofModel hof) {
     return _db.collection('höfe').doc(hof.hofID).set(hof.createMap());
   }
 
+  ///Lösche Hof
   Future<void> removeHof(String hofID) {
     return _db.collection('höfe').doc(hofID).delete();
   }

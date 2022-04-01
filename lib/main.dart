@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:agrargo/UI/login_riverpod/register.dart';
 import 'package:agrargo/UI/login_riverpod/test_screen.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
-import 'package:agrargo/UI/pages/landwirt/7_add_jobanzeige.dart';
-import 'package:agrargo/UI/pages/landwirt/8_add_hof_page.dart';
+import 'package:agrargo/UI/pages/add/7_add_jobanzeige_landwirt.dart';
+import 'package:agrargo/UI/pages/add/8_add_hof_page_landwirt.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
@@ -23,17 +23,21 @@ import 'package:provider/provider.dart' as p;
 import 'UI/pages/5_chat.dart';
 import 'widgets/layout_widgets.dart';
 import 'UI/login_riverpod/login.dart';
-import 'UI/pages/helfer/3_a_jobangebote_uebersicht.dart';
-import 'UI/pages/landwirt/3_b_helfer_übersicht.dart';
-import 'UI/pages/helfer/4_a_job_angebot.dart';
-import 'UI/pages/helfer/6_a_helfer_profil.dart';
-import 'UI/pages/landwirt/6_b_landwirt_profil.dart';
+import 'UI/pages/uebersichten/3_a_jobangebote_uebersicht_helfer.dart';
+import 'UI/pages/uebersichten/3_b_helfer_übersicht_landwirt.dart';
+import 'UI/pages/angebot/4_a_job_angebot_landwirt.dart';
+import 'UI/pages/profil/6_a_helfer_profil.dart';
+import 'UI/pages/profil/6_b_landwirt_profil.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(ProviderScope(child: MyApp()));
+  runApp(
+    ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -43,6 +47,8 @@ class MyApp extends StatelessWidget {
     return p.MultiProvider(
       providers: [
         ///User Provider
+        p.ChangeNotifierProvider.value(value: UserProvider()),
+
         p.StreamProvider<List<UserModel>>.value(
           value: firestoreService.getUserList(),
           initialData: [],

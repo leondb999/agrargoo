@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../widgets/layout_widgets.dart';
-import '4_a_job_angebot.dart';
+import '../angebot/4_a_job_angebot_landwirt.dart';
 
 class HelferProfil extends StatefulWidget {
   const HelferProfil({Key? key}) : super(key: key);

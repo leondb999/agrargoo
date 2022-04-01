@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:agrargo/repositories/firestore_riverpod_repository.dart';
 import 'package:path/path.dart' as path;
-import 'package:agrargo/UI/pages/landwirt/7_add_jobanzeige.dart';
-import 'package:agrargo/UI/pages/landwirt/8_add_hof_page.dart';
+import 'package:agrargo/UI/pages/add/7_add_jobanzeige_landwirt.dart';
+import 'package:agrargo/UI/pages/add/8_add_hof_page_landwirt.dart';
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/models/user_model.dart';
@@ -22,6 +23,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart' as p;
 import '../../../controllers/auth_controller.dart';
+import '../../../controllers/user_controller.dart';
 import '../../../main.dart';
 
 class LandwirtProfil extends ConsumerStatefulWidget {
@@ -44,8 +46,8 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
   final hofCollection =
       FirebaseFirestore.instance.collection('höfe').snapshots();
   Image profilImage = Image.network(
-      'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none');
-
+    'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
+  );
   File? _photo;
   final ImagePicker _picker = ImagePicker();
   Future imgFromGallery() async {
@@ -76,45 +78,73 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     // TODO: implement initState
     // checkAuthentification();
     super.initState();
-
     Future.delayed(Duration(microseconds: 10), () async {
-      // String? userID = ref.read(authControllerProvider.notifier).state?.uid;
-      //      V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg
-/*
+      String? userID = ref.read(authControllerProvider.notifier).state!.uid;
+
       final url = await FirebaseStorage.instance
           .ref()
           .child('$userID.jpg')
           .getDownloadURL();
-      setState(() {
-        profilImage = Image.network(url);
-      });*/
+      setState(
+        () {
+          profilImage = Image.network(url);
+        },
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    ///Authentication State check: Logged In or Logged Out
     User? authControllerState = ref.watch(authControllerProvider);
-    String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+
+    ///Alle gespeicherten User in der Firestore Collection
+    final userList = ref.watch(userFireStoreControllerProvider);
+
+    ///LoggedIn User
+    String? userID = ref.read(authControllerProvider.notifier).state!.uid;
+    final userLoggedIn =
+        UserProvider().getUserNameByUserID(userID, userList!).first;
+
+    print(
+        "userLoggedIn: ${userLoggedIn.name} profilImageURL: ${userLoggedIn.profilImageURL}");
+
+    /// UserProvider
+    // var userModelProvider = p.Provider.of<UserProvider>(context);
+    // print("userModelProvider: ${userModelProvider.name}");
+    //var userList = p.Provider.of<List<UserModel>>(context);
 
     /// User Liste
-    final userLoggedIn = UserProvider()
-        .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
+    //  final userLoggedIn = UserProvider()
+    //    .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
+    //print(
+    //  "userLoggedIn: ${userLoggedIn.first.userID} profilImageURL: ${userLoggedIn.first.profilImageURL}");
 
-    ///Hof Liste
-    final hofListeFilteredByUserID = HofProvider()
-        .getHofByUserID(userID, p.Provider.of<List<HofModel>>(context));
+    /// Hof Liste
+    //   final hofListeFilteredByUserID = HofProvider()
+    //     .getHofByUserID(userID, p.Provider.of<List<HofModel>>(context));
     /*if (hofListeFilteredByUserID.first.hofImageURL != null) {
       print(
           "hofListeFilteredByUserID.first.hofImageURL: ${hofListeFilteredByUserID.first.hofImageURL}");
     }*/
 
     ///Jobanzeigen Filtered by UserID
-    List<JobanzeigeModel> jobanzeigenListUser = JobanzeigeProvider()
-        .getAnzeigeByUserID(
-            userID, p.Provider.of<List<JobanzeigeModel>>(context));
+//    List<JobanzeigeModel> jobanzeigenListUser = JobanzeigeProvider()
+    //      .getAnzeigeByUserID(
+    //        userID, p.Provider.of<List<JobanzeigeModel>>(context));
 
     /// ---------------- Image ------------------------
-
+/*
+          final url = await FirebaseStorage.instance
+              .ref()
+              .child('$userID.jpg')
+              .getDownloadURL();
+          setState(
+            () {
+              profilImage = Image.network(url);
+            },
+          );
+ */
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
       bottomNavigationBar:
@@ -126,41 +156,45 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
             : Column(
                 children: [
                   Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.17,
-                      color: Color(0xFF1f623c),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              color: Colors.yellow,
-                            ),
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.17,
+                    color: Color(0xFF1f623c),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            color: Colors.yellow,
                           ),
-                          Expanded(
-                            flex: 4,
-                            child: Container(
-                              color: Colors.blue,
-                              child: Center(
-                                  child: userLoggedIn.isEmpty
-                                      ? Text("No User found")
-                                      : Text(
-                                          "${userLoggedIn.first.name}`s Profil",
-                                          style: TextStyle(
-                                              fontStyle: FontStyle.italic,
-                                              fontFamily: 'Open Sans',
-                                              fontSize: 50.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFFffffff)))),
-                            ),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: Container(
+                            color: Colors.blue,
+                            child: Center(
+                                child: userLoggedIn == null
+                                    ? Text("No User found")
+                                    : Text("${userLoggedIn.name}`s Profil",
+                                        style: TextStyle(
+                                            fontStyle: FontStyle.italic,
+                                            fontFamily: 'Open Sans',
+                                            fontSize: 50.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFFffffff)))),
                           ),
-                          Row(
-                            children: [
-                              profilImage,
-
+                        ),
+                        Row(
+                          children: [
+                            ///Todo implement function with Error handling for Error:   Error: [firebase_storage/object-not-found] No object exists at the desired reference.
+                            userLoggedIn.profilImageURL == null
+                                ? Image.network(
+                                    'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
+                                  )
+                                : Image.network(userLoggedIn.profilImageURL!),
+/*
                               ///Upload Button
                               ElevatedButton(
-                                child: Text('UPLOAD FILE'),
+                                child: Text('UPLOAD PROFIL IMAGE'),
                                 onPressed: () async {
                                   var picked =
                                       await FilePicker.platform.pickFiles();
@@ -171,22 +205,58 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                     String fileExtension = getFileExtension(
                                         picked.files.first.name);
                                     print("FileType: $fileExtension");
+
                                     Uint8List fileBytes =
                                         picked.files.first.bytes!;
+                                    FirebaseStorage storage =
+                                        FirebaseStorage.instance;
+
+                                    Reference ref =
+                                        storage.ref("${userID}$fileExtension");
                                     await FirebaseStorage.instance
                                         .ref("$userID$fileExtension")
                                         .putData(fileBytes);
+                                    await ref.putData(fileBytes);
+                                    String urlString =
+                                        await ref.getDownloadURL();
+                                    print("getDownloadURL(): $urlString");
+
+                                    ///Save URL String to fireStore
+                                    // String urlString =
+                                    //       " https://firebasestorage.googleapis.com/v0/b/agrargo-2571b.appspot.com/o/03a76017-1f2d-4abe-bef9-66212ceafd66.jpg?alt=media&token=f441ebdb-9bf0-4c90-b1db-436db3521e42";
+                                    print("URL String: $urlString");
+                                    userModelProvider
+                                        .changeHofImageURL(urlString);
+                                    userModelProvider.userID = userID;
+                                    userModelProvider.profilImageURL =
+                                        urlString;
+                                    userModelProvider.landwirt =
+                                        userLoggedIn.first.landwirt;
+                                    userModelProvider.email =
+                                        userLoggedIn.first.email;
+
+                                    userModelProvider.saveData();
+                                    /*
+                                    final url = await FirebaseStorage.instance
+                                        .ref()
+                                        .child('$userID.jpg')
+                                        .getDownloadURL();
+                                    setState(() {
+                                      profilImage = Image.network(url);
+                                    });*/
                                   }
                                 },
                               ),
-                            ],
-                          ),
+                              */
+                          ],
+                        ),
 
-                          //     profilPictureExpanded(
-                          //       'V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg'),
-                        ],
-                      )),
-
+                        //     profilPictureExpanded(
+                        //       'V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg'),
+                      ],
+                    ),
+                  ),
+/*
                   SizedBox(height: 30),
 
                   ///File Picker https://camposha.info/flutter/flutter-filepicker/#gsc.tab=0
@@ -265,6 +335,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                       ),
                     ),
                   ),
+*/
                 ],
               ),
       ),

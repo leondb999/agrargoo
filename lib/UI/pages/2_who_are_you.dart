@@ -1,4 +1,4 @@
-import 'package:agrargo/UI/pages/landwirt/6_b_landwirt_profil.dart';
+import 'package:agrargo/UI/pages/profil/6_b_landwirt_profil.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../login_riverpod/login.dart';
-import 'helfer/3_a_jobangebote_uebersicht.dart';
+import 'uebersichten/3_a_jobangebote_uebersicht_helfer.dart';
 
 class WhoAreYou extends ConsumerStatefulWidget {
   static const routename = '/who-are-you';

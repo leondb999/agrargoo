@@ -14,7 +14,7 @@ import 'package:provider/provider.dart' as p;
 
 import '../../../controllers/auth_controller.dart';
 import '../../../main.dart';
-import '7_add_jobanzeige.dart';
+import '../add/7_add_jobanzeige_landwirt.dart';
 
 class LandwirtProfil extends ConsumerStatefulWidget {
   const LandwirtProfil({Key? key}) : super(key: key);

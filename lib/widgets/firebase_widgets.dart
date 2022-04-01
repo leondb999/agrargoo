@@ -1,6 +1,6 @@
-import 'package:agrargo/UI/pages/helfer/4_a_job_angebot.dart';
-import 'package:agrargo/UI/pages/landwirt/7_add_jobanzeige.dart';
-import 'package:agrargo/UI/pages/landwirt/8_add_hof_page.dart';
+import 'package:agrargo/UI/pages/angebot/4_a_job_angebot_landwirt.dart';
+import 'package:agrargo/UI/pages/add/7_add_jobanzeige_landwirt.dart';
+import 'package:agrargo/UI/pages/add/8_add_hof_page_landwirt.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/provider/hof_provider.dart';
 import 'package:agrargo/provider/user_provider.dart';

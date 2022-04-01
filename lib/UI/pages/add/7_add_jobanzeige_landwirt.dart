@@ -89,6 +89,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
   @override
   Widget build(BuildContext context) {
     final jobanzeigeProvider = p.Provider.of<JobanzeigeProvider>(context);
+    print("jobanzeigeProvider: ${jobanzeigeProvider.titel}");
     String? userID = ref.read(authControllerProvider.notifier).state?.uid;
 
     print(

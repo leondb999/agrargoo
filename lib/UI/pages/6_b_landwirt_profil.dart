@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 import '../../widgets/layout_widgets.dart';
-import '4_a_job_angebot.dart';
+import '4_a_job_angebot_landwirt.dart';
 
 class ProfilLandwirt extends StatefulWidget {
   const ProfilLandwirt({Key? key}) : super(key: key);
