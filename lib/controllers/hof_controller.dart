@@ -1,30 +1,26 @@
 import 'dart:async';
-
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/repositories/firestore_user_riverpod_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../models/hof_model.dart';
+import '../repositories/firestore_hof_riverpod_repository.dart';
 
-import '../repositories/auth_repository.dart';
-
-final userModelFirestoreControllerProvider =
-    StateNotifierProvider<FirestoreUserModelController, List<UserModel>?>(
-  (ref) => FirestoreUserModelController(ref.read)..getUserModelList(),
+final hofModelFirestoreControllerProvider =
+    StateNotifierProvider<FirestoreHofModelController, List<HofModel>?>(
+  (ref) => FirestoreHofModelController(ref.read)..getUserModelList(),
 );
 
-class FirestoreUserModelController extends StateNotifier<List<UserModel>?> {
+class FirestoreHofModelController extends StateNotifier<List<HofModel>?> {
   final Reader _read;
 
-  StreamSubscription<List<UserModel?>>? _streamSubscription;
+  StreamSubscription<List<HofModel?>>? _streamSubscription;
 
-  FirestoreUserModelController(this._read) : super(null) {
+  FirestoreHofModelController(this._read) : super(null) {
     _streamSubscription?.cancel();
-    _streamSubscription = _read(fireUserModelRepositoryProvider)
-        .getUserModels()
-        .listen((userModel) {
-      state = userModel;
+    _streamSubscription =
+        _read(fireHofModelRepositoryProvider).getHofModels().listen((hofModel) {
+      state = hofModel;
     });
   }
 

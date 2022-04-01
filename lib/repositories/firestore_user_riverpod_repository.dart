@@ -12,19 +12,17 @@ import '../UI/pages/profil/6_b_landwirt_profil.dart';
 
 abstract class BaseFirestoreUserRepository {
   Stream<List<UserModel>> getUserModels();
-  Future<bool> updateUserModel(UserModel userModel, String url);
+  Future<bool> updateProfilPicture(UserModel userModel, String url);
 }
 
-final fireUserRepositoryProvider =
-    Provider<FireUserRepository>((ref) => FireUserRepository(ref.read));
+///Riverpod Provider
+final fireUserModelRepositoryProvider = Provider<FireUserModelRepository>(
+    (ref) => FireUserModelRepository(ref.read));
 
-class FireUserRepository implements BaseFirestoreUserRepository {
+class FireUserModelRepository implements BaseFirestoreUserRepository {
   final Reader _read;
 
-  const FireUserRepository(this._read);
-
-  @override
-  // TODO: implement allUserModels
+  const FireUserModelRepository(this._read);
 
   @override
   Stream<List<UserModel>> getUserModels() {
@@ -36,12 +34,10 @@ class FireUserRepository implements BaseFirestoreUserRepository {
   }
 
   @override
-  // TODO: implement UserModels
   Stream<List<UserModel>> get UserModels => throw UnimplementedError();
 
   @override
-  Future<bool> updateUserModel(UserModel userModel, String url) async {
-    // TODO: implement updateUserModel
+  Future<bool> updateProfilPicture(UserModel userModel, String url) async {
     try {
       _read(firestoreProvider)
           .collection('users')

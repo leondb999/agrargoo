@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:agrargo/repositories/firestore_riverpod_repository.dart';
+import 'package:agrargo/controllers/hof_controller.dart';
+import 'package:agrargo/repositories/firestore_user_riverpod_repository.dart';
 import 'package:path/path.dart' as path;
 import 'package:agrargo/UI/pages/add/7_add_jobanzeige_landwirt.dart';
 import 'package:agrargo/UI/pages/add/8_add_hof_page_landwirt.dart';
@@ -25,6 +26,7 @@ import 'package:provider/provider.dart' as p;
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/user_controller.dart';
 import '../../../main.dart';
+import '../../../repositories/firestore_hof_riverpod_repository.dart';
 
 class LandwirtProfil extends ConsumerStatefulWidget {
   const LandwirtProfil({Key? key}) : super(key: key);
@@ -45,23 +47,6 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
   ///Hof Collection
   final hofCollection =
       FirebaseFirestore.instance.collection('höfe').snapshots();
-  Image profilImage = Image.network(
-    'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
-  );
-  File? _photo;
-  final ImagePicker _picker = ImagePicker();
-  Future imgFromGallery() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _photo = File(pickedFile.path);
-        //uploadFile();
-      } else {
-        print('No image selected.');
-      }
-    });
-  }
 
   checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
@@ -78,6 +63,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     // TODO: implement initState
     // checkAuthentification();
     super.initState();
+/*
     Future.delayed(Duration(microseconds: 10), () async {
       String? userID = ref.read(authControllerProvider.notifier).state!.uid;
 
@@ -85,12 +71,9 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
           .ref()
           .child('$userID.jpg')
           .getDownloadURL();
-      setState(
-        () {
-          profilImage = Image.network(url);
-        },
-      );
-    });
+      setState(() {});
+
+    });*/
   }
 
   @override
@@ -99,7 +82,8 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     User? authControllerState = ref.watch(authControllerProvider);
 
     ///Alle gespeicherten User in der Firestore Collection
-    final userList = ref.watch(userFireStoreControllerProvider);
+    final userList = ref.watch(userModelFirestoreControllerProvider);
+    print("userList: $userList");
 
     ///LoggedIn User
     String? userID = ref.read(authControllerProvider.notifier).state!.uid;
@@ -110,8 +94,10 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
         "userLoggedIn: ${userLoggedIn.name} profilImageURL: ${userLoggedIn.profilImageURL}");
 
     /// Hof Liste
-    final hofListeFilteredByUserID = HofProvider()
-        .getHofByUserID(userID, p.Provider.of<List<HofModel>>(context));
+    final hofList = ref.watch(hofModelFirestoreControllerProvider);
+    print("hofList: $hofList");
+    final hofListeFilteredByUserID =
+        HofProvider().getHofByUserID(userID, hofList!);
 
     ///Jobanzeigen Filtered by UserID
     List<JobanzeigeModel> jobanzeigenListUser = JobanzeigeProvider()
@@ -173,6 +159,8 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                   textStyle: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold)),
+
+                              ///Todo implement CircularProgressindicator um dem Nutzer zu zeigen, dass das Profilbild grade am hochladen ist
                               onPressed: () async {
                                 var picked =
                                     await FilePicker.platform.pickFiles();
@@ -194,12 +182,10 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                       await reference.getDownloadURL();
                                   print("getDownloadURL(): $urlString");
                                   ref
-                                      .watch(userFireStoreControllerProvider
-                                          .notifier)
+                                      .watch(
+                                          userModelFirestoreControllerProvider
+                                              .notifier)
                                       .updateURL(userLoggedIn, urlString);
-                                  //  'https://firebasestorage.googleapis.com/v0/b/agrargo-2571b.appspot.com/o/03a76017-1f2d-4abe-bef9-66212ceafd66.jpg?alt=media&token=f441ebdb-9bf0-4c90-b1db-436db3521e42',
-                                  //"Hi",
-
                                 }
                               },
                             ),
