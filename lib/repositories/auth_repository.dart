@@ -6,8 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../UI/pages/helfer/6_a_helfer_profil.dart';
-import '../UI/pages/landwirt/6_b_landwirt_profil.dart';
+import '../UI/pages/profil/6_a_helfer_profil.dart';
+import '../UI/pages/profil/6_b_landwirt_profil.dart';
 
 abstract class BaseAuthRepository {
   Stream<User?> get authStateChanges;

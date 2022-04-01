@@ -19,6 +19,7 @@ class Jobangebot extends ConsumerStatefulWidget {
 class _JobangebotState extends ConsumerState<Jobangebot> {
   final usersCollection = FirebaseFirestore.instance.collection('users');
   String _jobanzeigeID = "";
+
   @override
   Widget build(BuildContext context) {
     User? authControllerState = ref.watch(authControllerProvider);
@@ -51,13 +52,23 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
             if (snapshot.connectionState == ConnectionState.done) {
               Map<String, dynamic> data =
                   snapshot.data!.data() as Map<String, dynamic>;
-              return Container(
-                width: MediaQuery.of(context).size.width * 0.95,
-                child: Row(
+              return Column(children: [
+                Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.17,
+                    color: Color(0xFF1f623c),
+                    child: Center(
+                        child: Text("${data['titel']}",
+                            style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontFamily: 'Open Sans',
+                                fontSize: 50.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFFffffff))))),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(children: [
-                      Text("Title: ${data['titel']}"),
                       Icon(
                         Icons.place,
                         color: Colors.black,
@@ -91,7 +102,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                     )
                   ],
                 ),
-              );
+              ]);
             }
             return Column(
               children: [
@@ -213,6 +224,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                       Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
+                            height: 36,
                             child: Text("Stundenlohn",
                                 style: TextStyle(
                                     fontStyle: FontStyle.normal,
@@ -254,13 +266,6 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("weitere Infos zum Hof",
-                              style: TextStyle(
-                                  fontStyle: FontStyle.normal,
-                                  fontFamily: 'Open Sans',
-                                  fontSize: 17.0,
-                                  fontWeight: FontWeight.normal,
-                                  color: Color(0xFF000000))),
                           Row(
                             children: [
                               Icon(

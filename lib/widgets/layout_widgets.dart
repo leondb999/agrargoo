@@ -1,41 +1,107 @@
+import 'dart:typed_data';
+
 import 'package:agrargo/UI/login_riverpod/login.dart';
+import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/UI/pages/5_chat.dart';
+import 'package:agrargo/UI/pages/profil/6_a_helfer_profil.dart';
+import 'package:agrargo/UI/pages/profil/6_b_landwirt_profil.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/main.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/provider/user_provider.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
 import 'package:agrargo/controllers/auth_controller.dart';
 
-BottomNavigationBar navigationBar(int index, BuildContext context, User? user) {
+BottomNavigationBar navigationBar(
+    {required int index,
+    required BuildContext context,
+    required WidgetRef ref,
+    required bool home}) {
+  User? user = ref.read(authControllerProvider);
+  String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+  final userModel = UserProvider()
+      .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
+//  print("user: $user");
   return BottomNavigationBar(
-    items: [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-      BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
-    ],
+    items: home
+        ? [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
+          ]
+        : [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
+          ],
     currentIndex: index,
     selectedItemColor: Colors.amber[800],
     onTap: (index) {
-      if (index == 0) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-      }
-      if (index == 1) {
-        if (user != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-          );
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-          );
+      if (home == true) {
+        switch (index) {
+
+          ///Home Page
+          case 0:
+            Navigator.of(context).pushNamed(HomeScreen.routename);
+            break;
+
+          ///Profil Page
+          case 1:
+            if (user != null) {
+              ///User LoggedIn
+              if (userModel.first.landwirt == true) {
+                /// User ist ein Landwirt
+                Navigator.of(context).pushNamed(LandwirtProfil.routename);
+              } else {
+                ///User ist kein Landwirt
+                Navigator.of(context).pushNamed(HelferProfil.routename);
+              }
+            } else {
+              ///User ist ausgeloggt
+              Navigator.of(context).pushNamed(WhoAreYou.routename);
+            }
+            break;
+        }
+      } else {
+        switch (index) {
+
+          ///Home Page
+          case 0:
+            Navigator.of(context).pushNamed(HomeScreen.routename);
+            break;
+
+          ///Chat Page
+          case 1:
+            if (user != null) {
+              ///User ist eingeloggt
+              Navigator.of(context).pushNamed(Chat.routename);
+            } else {
+              ///User ist ausgeloggt
+              Navigator.of(context).pushNamed(WhoAreYou.routename);
+            }
+            break;
+
+          ///Profil Page
+          case 2:
+            if (user != null) {
+              ///User LoggedIn
+              if (userModel.first.landwirt == true) {
+                /// User ist ein Landwirt
+                Navigator.of(context).pushNamed(LandwirtProfil.routename);
+              } else {
+                ///User ist kein Landwirt
+                Navigator.of(context).pushNamed(HelferProfil.routename);
+              }
+            } else {
+              ///User ist ausgeloggt
+              Navigator.of(context).pushNamed(WhoAreYou.routename);
+            }
+
+            break;
         }
       }
     },
@@ -52,7 +118,7 @@ AppBar appBar({
 
   final userModel = UserProvider()
       .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
-  print("user: $user");
+  // print("user: $user");
   return AppBar(
       iconTheme: IconThemeData(
         color: Color(0xFF9FB98B), //change your color here
@@ -74,7 +140,7 @@ AppBar appBar({
           color: Color(0xFF9FB98B),
           padding: new EdgeInsets.only(right: 20.0),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, "/home");
+            Navigator.of(context).pushNamed(HomeScreen.routename);
           },
         ),
       ),
@@ -84,54 +150,7 @@ AppBar appBar({
       */
       actions: <Widget>[
         ///Home Button
-        IconButton(
-          icon: const Icon(Icons.home_sharp),
-          iconSize: MediaQuery.of(context).size.height * 0.05,
-          color: Color(0xFF9FB98B),
-          tooltip: 'Home',
-          padding: new EdgeInsets.only(right: 20.0),
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, "/home");
-          },
-        ),
-        home == true
 
-            ///Chat Button
-            ? SizedBox()
-            : IconButton(
-                icon: const Icon(Icons.message_sharp),
-                iconSize: MediaQuery.of(context).size.height * 0.05,
-                color: Color(0xFF9FB98B),
-                tooltip: 'Chat',
-                padding: new EdgeInsets.only(right: 20.0),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Chat.routename);
-                },
-              ),
-
-        ///Profil Button
-        IconButton(
-          icon: const Icon(Icons.account_circle_sharp),
-          iconSize: MediaQuery.of(context).size.height * 0.05,
-          color: Color(0xFF9FB98B),
-          tooltip: 'Profil',
-          padding: new EdgeInsets.only(right: 20.0),
-          onPressed: () {
-            if (user != null) {
-              ///User LoggedIn
-              if (userModel.first.landwirt == true) {
-                /// User ist ein Landwirt
-                Navigator.pushReplacementNamed(context, "/landwirt-profil");
-              } else {
-                ///User ist kein Landwirt
-                Navigator.pushReplacementNamed(context, "/helfer-profil");
-              }
-            } else {
-              ///User ist ausgeloggt
-              Navigator.pushReplacementNamed(context, "/who-are-you");
-            }
-          },
-        ),
         user != null
 
             ///Sign Out Button
@@ -139,11 +158,59 @@ AppBar appBar({
                 style: ElevatedButton.styleFrom(
                     fixedSize: const Size(100, 5), primary: Colors.green),
                 onPressed: () {
-                  print("authControllerState Sign Out: $user");
+                  //  print("authControllerState Sign Out: $user");
                   ref.read(authControllerProvider.notifier).signOut(context);
                 },
                 child: Text("Sign Out"),
               )
             : SizedBox(),
       ]);
+}
+
+Expanded profilPictureExpanded(String image) {
+  return Expanded(
+      flex: 1,
+      child: Container(
+        color: Colors.red,
+        child: FutureBuilder(
+          future: FirebaseStorage.instance.ref().child(image).getDownloadURL(),
+          builder: (context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return SizedBox(
+                  height: 50, width: 50, child: CircularProgressIndicator());
+            }
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Container(
+                  height: 300,
+                  width: 300,
+                  child: Image.network(snapshot.data!));
+            }
+            return Text("No Image");
+          },
+        ),
+      ));
+}
+
+String getFileExtension(String fileName) {
+  return "." + fileName.split('.').last;
+}
+
+///Upload Button
+ElevatedButton addProfilImageButton(String userID) {
+  return ElevatedButton(
+    child: Text('UPLOAD FILE'),
+    onPressed: () async {
+      var picked = await FilePicker.platform.pickFiles();
+
+      if (picked != null) {
+        print("fileName: ${picked.files.first.name}");
+        String fileExtension = getFileExtension(picked.files.first.name);
+        print("FileType: $fileExtension");
+        Uint8List fileBytes = picked.files.first.bytes!;
+        await FirebaseStorage.instance
+            .ref("$userID$fileExtension")
+            .putData(fileBytes);
+      }
+    },
+  );
 }

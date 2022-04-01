@@ -11,12 +11,14 @@ class HofProvider with ChangeNotifier {
   String? besitzerID;
   String? hofName;
   String? standort;
+  String? hofImageURL;
 
   ///Getters
   String? get getHofID => hofID;
   String? get getBesitzerID => besitzerID;
   String? get getHofName => hofName;
   String? get getStandort => standort;
+  String? get getHofImageURL => hofImageURL;
 
   ///ändere Hofname
   void changeHofName(String val) {
@@ -29,12 +31,18 @@ class HofProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void changeHofImageURL(String val) {
+    hofImageURL = val;
+    notifyListeners();
+  }
+
   ///lade Hof
   loadValues(HofModel hof) {
     hofID = hof.hofID;
     besitzerID = hof.besitzerID;
     hofName = hof.hofName;
     standort = hof.standort;
+    hofImageURL = hof.hofImageURL;
   }
 
   ///Lösche Hof
@@ -52,6 +60,7 @@ class HofProvider with ChangeNotifier {
         besitzerID: getBesitzerID,
         hofName: getHofName,
         standort: getStandort,
+        hofImageURL: getHofImageURL,
       );
       service.saveHof(newHof);
     } else {
@@ -60,6 +69,7 @@ class HofProvider with ChangeNotifier {
         besitzerID: getBesitzerID,
         hofName: getHofName,
         standort: getStandort,
+        hofImageURL: getHofImageURL,
       );
       service.saveHof(updateJobanzeige);
     }

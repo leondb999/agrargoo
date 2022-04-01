@@ -1,16 +1,12 @@
-import 'package:agrargo/UI/pages/helfer/4_a_job_angebot.dart';
-import 'package:agrargo/UI/pages/landwirt/7_add_jobanzeige.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/widgets/firebase_widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
-
-import '../../../widgets/layout_widgets.dart';
 
 class JobangebotUebersichtPage extends ConsumerStatefulWidget {
   const JobangebotUebersichtPage({Key? key}) : super(key: key);
@@ -35,8 +31,10 @@ class _JobangebotUebersichtPageState
     });
     print("activeAnzeigeList: $activeAnzeigeList");
     return Scaffold(
-      appBar: AppBar(),
+      appBar: appBar(context: context, ref: ref, home: false),
       resizeToAvoidBottomInset: false,
+      bottomNavigationBar:
+          navigationBar(index: 0, context: context, ref: ref, home: true),
       body: Column(
         children: [
           Container(
@@ -71,13 +69,15 @@ class _JobangebotUebersichtPageState
                   height: MediaQuery.of(context).size.height,
                   child: jobAnzeigeList != null
                       ? ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
                           itemCount: jobAnzeigeList.length,
                           itemBuilder: (context, index) {
                             return jobAnzeigeCard(
                                 context, activeAnzeigeList[index], false);
                           },
                         )
-                      : Text("keine Jobanzeigen jetzt")),
+                      : Text("aktuell gibt es keine Jobanzeigen")),
             ),
           ),
         ],

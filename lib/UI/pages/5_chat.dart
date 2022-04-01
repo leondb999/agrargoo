@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../repositories/firebase_storage_repository.dart';
+
 class Chat extends StatefulWidget {
   const Chat({Key? key}) : super(key: key);
   static const routename = '/chat';

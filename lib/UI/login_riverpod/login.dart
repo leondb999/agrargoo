@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../pages/landwirt/6_b_landwirt_profil.dart';
+import '../pages/profil/6_b_landwirt_profil.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   static const routename = '/login';

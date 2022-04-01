@@ -1,5 +1,6 @@
 import 'package:agrargo/UI/login_riverpod/test_screen.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +14,7 @@ import 'package:flutterfire_ui/i10n.dart';
 
 import '../../main.dart';
 import '../../widgets/login_widgets.dart';
-import '../pages/landwirt/6_b_landwirt_profil.dart';
+import '../pages/profil/6_b_landwirt_profil.dart';
 
 ///https://www.geeksforgeeks.org/flutter-arguments-in-named-routes/
 ///TODO Vorname & Nachname
@@ -114,6 +115,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   ),
                 ),
               ),
+
+              ///File Picker https://camposha.info/flutter/flutter-filepicker/#gsc.tab=0
+
               Expanded(
                 flex: 2,
                 child: Container(
