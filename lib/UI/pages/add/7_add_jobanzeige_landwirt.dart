@@ -181,7 +181,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                           Text('Anzeigen Titel: ${nameController.text}'),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
