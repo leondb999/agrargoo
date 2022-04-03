@@ -29,7 +29,9 @@ class HelferProfil extends ConsumerStatefulWidget {
 
 class _HelferProfilState extends ConsumerState<HelferProfil> {
   double progress = 0.0;
-  List<Qualifikation>? selectedQualifikationList = [];
+  List<Qualifikation>? selectedQualifikationList = [
+    Qualifikation(name: "Stallarbeit", avatar: "user.png"),
+  ];
   List<Qualifikation> qualifikationList = [
     Qualifikation(name: "Stallarbeit", avatar: "user.png"),
     Qualifikation(name: "Traktor fahren", avatar: "user.png"),
@@ -342,28 +344,33 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                         */
                               child: Container(
                                 height: 200,
-                                child: SingleChildScrollView(
-                                  child: GridView.count(
-                                    crossAxisCount: 7,
-                                    childAspectRatio: 3,
-                                    children: selectedQualifikationList!.map(
-                                      (qualifikation) {
-                                        return Container(
-                                          margin: EdgeInsets.all(10),
-                                          child: Text(
-                                            "${qualifikation.name}",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.black)),
-                                        );
-                                      },
-                                    ).toList(),
-                                  ),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: GridView.count(
+                                        crossAxisCount: 7,
+                                        childAspectRatio: 3,
+                                        children:
+                                            selectedQualifikationList!.map(
+                                          (qualifikation) {
+                                            return Container(
+                                              margin: EdgeInsets.all(10),
+                                              child: Text(
+                                                "${qualifikation.name}",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20,
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.black)),
+                                            );
+                                          },
+                                        ).toList(),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
