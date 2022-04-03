@@ -44,6 +44,12 @@ class FirestoreJobanzeigeModelController
     _read(fireJobanzeigeModelRepositoryProvider).getJobanzeigeModels();
   }
 
+  void getJobanzeigeByID(
+      List<JobanzeigeModel> jobanzeigeModelList, String jobanzeigeID) async {
+    _read(fireJobanzeigeModelRepositoryProvider)
+        .getJobanzeigeByID(jobanzeigeModelList, jobanzeigeID);
+  }
+
   ///Speichern
   void saveJobanzeige(JobanzeigeModel anzeige) {
     if (anzeige.jobanzeigeID == null) {

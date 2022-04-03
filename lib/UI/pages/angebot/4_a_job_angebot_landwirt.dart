@@ -1,4 +1,6 @@
 import 'package:agrargo/UI/login_riverpod/login.dart';
+import 'package:agrargo/controllers/jobanzeige_controller.dart';
+import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../controllers/auth_controller.dart';
+import '../../../controllers/hof_controller.dart';
+import '../../../repositories/firestore_hof_model_riverpod_repository.dart';
+import '../../../repositories/firestore_jobanzeige_model_riverpod_repository.dart';
 import '../../../widgets/layout_widgets.dart';
 
 class Jobangebot extends ConsumerStatefulWidget {
@@ -20,97 +25,106 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
   final usersCollection = FirebaseFirestore.instance.collection('users');
   String _jobanzeigeID = "";
 
+  var routeData;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration(microseconds: 10), () {
+      ///Get jobanzeigeID form Route
+      routeData =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+      setState(() {
+        _jobanzeigeID = routeData['jobanzeige_ID'];
+      });
+      print("routeData: $routeData");
+      String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    ///Get LoggedIn User
     User? authControllerState = ref.watch(authControllerProvider);
-    final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
 
-    String jobanzeigeID = arguments['jobanzeige_ID'];
-    setState(() {
-      _jobanzeigeID = jobanzeigeID;
-      print("setState _jobanzeigeID");
-    });
-    print("jobanzeigeID: $jobanzeigeID");
+    ///Get all Jobanzeigen
+    final jobanzeigeModelList =
+        ref.watch(jobanzeigeModelFirestoreControllerProvider);
+
+    ///Filtere JobanzeigenListe nach ID
+    final jobanzeige = ref
+        .watch(fireJobanzeigeModelRepositoryProvider)
+        .getJobanzeigeByID(jobanzeigeModelList!, _jobanzeigeID)
+        .first;
+
+    ///Get all HofModels
+    var hofModelList = ref.watch(hofModelFirestoreControllerProvider);
+
+    ///Get Hof by ID
+    final hof = ref
+        .watch(fireHofModelRepositoryProvider)
+        .getHofModelByID(hofModelList!, jobanzeige.hofID!)
+        .first;
+    if (jobanzeige.titel != null) {
+      print(
+          "jobanzeige: titel: ${jobanzeige.titel}, hofName: ${hof.hofName} standort: ${hof.standort}");
+    }
     return Scaffold(
       appBar: AppBar(),
       resizeToAvoidBottomInset: false,
       body: Column(children: [
-        FutureBuilder<DocumentSnapshot>(
-          future: FirebaseFirestore.instance
-              .collection('jobAnzeigen')
-              .doc(_jobanzeigeID)
-              .get(),
-          builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return Text("Something went wrong");
-            }
-            if (snapshot.hasData && !snapshot.data!.exists) {
-              return Text("Document does not exist");
-            }
-            if (snapshot.connectionState == ConnectionState.done) {
-              Map<String, dynamic> data =
-                  snapshot.data!.data() as Map<String, dynamic>;
-              return Column(children: [
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.17,
-                    color: Color(0xFF1f623c),
-                    child: Center(
-                        child: Text("${data['titel']}",
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontFamily: 'Open Sans',
-                                fontSize: 50.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFFffffff))))),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(children: [
-                      Icon(
-                        Icons.place,
-                        color: Colors.black,
-                        size: 25.0,
-                      ),
-                      SizedBox(width: 3),
-                      Text("Hockenheim",
-                          style: TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontFamily: 'Open Sans',
-                              fontSize: 25.0,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF000000))),
-                    ]),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.date_range,
-                          color: Colors.black,
-                          size: 25.0,
-                        ),
-                        SizedBox(width: 3),
-                        Text("01.04.2022 - 07.05.2022",
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontFamily: 'Open Sans',
-                                fontSize: 25.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF000000)))
-                      ],
-                    )
-                  ],
+        Column(children: [
+          Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.17,
+              color: Color(0xFF1f623c),
+              child: Center(
+                  child: Text("${jobanzeige.titel}",
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontFamily: 'Open Sans',
+                          fontSize: 50.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFffffff))))),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(children: [
+                Icon(
+                  Icons.place,
+                  color: Colors.black,
+                  size: 25.0,
                 ),
-              ]);
-            }
-            return Column(
-              children: [
-                CircularProgressIndicator(),
-              ],
-            );
-          },
-        ),
+                SizedBox(width: 3),
+                Text("${hof.standort}",
+                    style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontFamily: 'Open Sans',
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF000000))),
+              ]),
+              Row(
+                children: [
+                  Icon(
+                    Icons.date_range,
+                    color: Colors.black,
+                    size: 25.0,
+                  ),
+                  SizedBox(width: 3),
+                  Text("01.04.2022 - 07.05.2022",
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontFamily: 'Open Sans',
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF000000)))
+                ],
+              )
+            ],
+          ),
+        ]),
         SizedBox(height: MediaQuery.of(context).size.height * 0.015),
         Expanded(
           child: SingleChildScrollView(
@@ -257,9 +271,8 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                   Expanded(
                     flex: 4,
                     child: Column(children: [
-                      const Image(
-                        image: NetworkImage(
-                            'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+                      Image.network(
+                        '${hof.hofImageURL}',
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.015),

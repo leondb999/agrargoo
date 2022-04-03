@@ -15,6 +15,8 @@ abstract class BaseFirestoreJobanzeigeModelRepository {
   Stream<List<JobanzeigeModel>> getJobanzeigeModels();
   Future<void> saveJobanzeige(JobanzeigeModel anzeige);
   Future<void> removeJobanzeige(String jobanzeigeID);
+  List<JobanzeigeModel> getJobanzeigeByID(
+      List<JobanzeigeModel> jobanzeigeModelList, String id);
 }
 
 ///Riverpod Provider
@@ -54,5 +56,22 @@ class FireJobanzeigeModelRepository
         .collection('jobAnzeigen')
         .doc(jobanzeigeID)
         .delete();
+  }
+
+  @override
+  List<JobanzeigeModel> getJobanzeigeByID(
+      List<JobanzeigeModel> jobanzeigeModelList, String id) {
+    List<JobanzeigeModel> filteredList = [];
+
+    if (jobanzeigeModelList.isNotEmpty) {
+      jobanzeigeModelList.forEach((jobanzeige) {
+        if (jobanzeige.jobanzeigeID == id) {
+          filteredList.add(jobanzeige);
+        }
+      });
+    }
+
+    return filteredList;
+    throw UnimplementedError();
   }
 }

@@ -15,6 +15,7 @@ abstract class BaseFirestoreHofModelRepository {
   Stream<List<HofModel>> getHofModels();
   Future<void> saveHof(HofModel hof);
   Future<void> removeHof(String hofID);
+  List<HofModel> getHofModelByID(List<HofModel> hofModelList, String id);
 }
 
 ///Riverpod Provider
@@ -48,5 +49,19 @@ class FireHofModelRepository implements BaseFirestoreHofModelRepository {
   @override
   Future<void> removeHof(String hofID) {
     return _read(firestoreProvider).collection('höfe').doc(hofID).delete();
+  }
+
+  @override
+  List<HofModel> getHofModelByID(List<HofModel> hofModelList, String id) {
+    List<HofModel> filteredList = [];
+    if (hofModelList.isNotEmpty) {
+      hofModelList.forEach((hof) {
+        if (hof.hofID == id) {
+          filteredList.add(hof);
+        }
+      });
+    }
+    return filteredList;
+    throw UnimplementedError();
   }
 }
