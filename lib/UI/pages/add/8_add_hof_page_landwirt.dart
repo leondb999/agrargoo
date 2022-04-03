@@ -12,7 +12,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
 import 'package:flutter/material.dart';
-
+import 'package:google_fonts/google_fonts.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import '../../../controllers/auth_controller.dart';
 import '../../../widgets/layout_widgets.dart';
 
@@ -91,6 +92,7 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
     standortController.dispose();
   }
 
+  double progress = 0.0;
   @override
   Widget build(BuildContext context) {
     final hofProvider = p.Provider.of<HofProvider>(context);
@@ -101,6 +103,7 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
     print(
         "hof Name: ${hofModel.hofName}, standort: ${hofModel.standort}, besitzerID: ${hofModel.besitzerID}, hofID: ${hofModel.hofID}");
 
+    print("progress: ${progress.toString()}");
     return Scaffold(
       appBar: AppBar(title: Text('Add Hof ')),
       body: SafeArea(
@@ -151,7 +154,8 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                     ElevatedButton(
                       child: Text('UPLOAD FILE'),
                       onPressed: () async {
-                        var picked = await FilePicker.platform.pickFiles();
+                        FilePickerResult? picked =
+                            await FilePicker.platform.pickFiles();
 
                         if (picked != null) {
                           String fileExtension =
@@ -161,9 +165,18 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                           FirebaseStorage storage = FirebaseStorage.instance;
                           Reference reference =
                               storage.ref("${hofProvider.hofID}$fileExtension");
-                          await FirebaseStorage.instance
+                          UploadTask task = FirebaseStorage.instance
                               .ref("${hofProvider.hofID}$fileExtension")
                               .putData(fileBytes);
+
+                          task.snapshotEvents.listen((event) {
+                            var x = ((event.bytesTransferred.toDouble() /
+                                    event.totalBytes.toDouble()) *
+                                100);
+                            setState(() {
+                              progress = x;
+                            });
+                          });
                           String url = await reference.getDownloadURL();
 
                           setState(() {
@@ -210,10 +223,39 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                         Navigator.of(context).pop();
                       },
                     ),
+                    SizedBox(height: 100),
 
                     ///Show Uploaded File
                     uploadedImageURL!.isNotEmpty
-                        ? Image.network(uploadedImageURL!)
+                        ? Image.network(
+                            uploadedImageURL!,
+                            fit: BoxFit.fill,
+                            loadingBuilder: (BuildContext context, Widget child,
+                                ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null) return child;
+
+                              return Center(
+                                // child: CircularProgressIndicator(),
+                                child: Container(
+                                  height: 100.0,
+                                  width: 100.0,
+                                  child: LiquidCircularProgressIndicator(
+                                    value: progress / 100,
+                                    valueColor:
+                                        AlwaysStoppedAnimation(Colors.green),
+                                    backgroundColor: Colors.white,
+                                    direction: Axis.vertical,
+                                    center: Text(
+                                      "${progress.toInt()}%",
+                                      style: GoogleFonts.poppins(
+                                          color: Colors.black87,
+                                          fontSize: 25.0),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          )
                         : Text("No Image Uploaded Yet"),
                   ],
                 ),

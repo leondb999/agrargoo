@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:agrargo/controllers/hof_controller.dart';
 import 'package:agrargo/repositories/firestore_user_model_riverpod_repository.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:path/path.dart' as path;
 import 'package:agrargo/UI/pages/add/7_add_jobanzeige_landwirt.dart';
 import 'package:agrargo/UI/pages/add/8_add_hof_page_landwirt.dart';
@@ -48,6 +50,9 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
   ///Hof Collection
   final hofCollection =
       FirebaseFirestore.instance.collection('höfe').snapshots();
+
+  /// Loading Process
+  double progress = 0.0;
 
   checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
@@ -153,7 +158,36 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                 ? Image.network(
                                     'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
                                   )
-                                : Image.network(userLoggedIn.profilImageURL!),
+                                : Image.network(
+                                    userLoggedIn.profilImageURL!,
+                                    width: 300,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        // child: CircularProgressIndicator(),
+                                        child: Container(
+                                          height: 100.0,
+                                          width: 100.0,
+                                          child:
+                                              LiquidCircularProgressIndicator(
+                                            value: progress / 100,
+                                            valueColor: AlwaysStoppedAnimation(
+                                                Colors.green),
+                                            backgroundColor: Colors.white,
+                                            direction: Axis.vertical,
+                                            center: Text(
+                                              "${progress.toInt()}%",
+                                              style: GoogleFonts.poppins(
+                                                  color: Colors.black87,
+                                                  fontSize: 25.0),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
                             ElevatedButton(
                               child: Text("Upload Picture"),
                               style: ElevatedButton.styleFrom(
@@ -178,10 +212,18 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                       FirebaseStorage.instance;
                                   Reference reference =
                                       storage.ref("${userID}$fileExtension");
-                                  await FirebaseStorage.instance
+                                  UploadTask task = FirebaseStorage.instance
                                       .ref("$userID$fileExtension")
                                       .putData(fileBytes);
-
+                                  task.snapshotEvents.listen((event) {
+                                    var x =
+                                        ((event.bytesTransferred.toDouble() /
+                                                event.totalBytes.toDouble()) *
+                                            100);
+                                    setState(() {
+                                      progress = x;
+                                    });
+                                  });
                                   String urlString =
                                       await reference.getDownloadURL();
                                   print("getDownloadURL(): $urlString");
