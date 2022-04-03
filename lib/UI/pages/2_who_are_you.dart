@@ -1,4 +1,4 @@
-import 'package:agrargo/UI/pages/profil/6_b_landwirt_profil.dart';
+import 'package:agrargo/UI/pages/profil/landwirt_profil.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';

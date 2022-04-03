@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/firebase.dart';
 
 class UserModel {
@@ -6,6 +7,7 @@ class UserModel {
   String? email;
   bool? landwirt;
   String? profilImageURL;
+  DateTime? birthDate;
 
   UserModel({
     this.userID,
@@ -13,6 +15,7 @@ class UserModel {
     this.email,
     this.landwirt,
     this.profilImageURL,
+    this.birthDate,
   });
 
   Map<String, dynamic> createMap() {
@@ -22,6 +25,7 @@ class UserModel {
       'email': email,
       'landwirt': landwirt,
       'profilImageURL': profilImageURL,
+      'birthDate': birthDate,
     };
   }
 
@@ -30,5 +34,7 @@ class UserModel {
         name = firestoreMap['name'],
         email = firestoreMap['email'],
         landwirt = firestoreMap['landwirt'],
-        profilImageURL = firestoreMap['profilImageURL'];
+        profilImageURL = firestoreMap['profilImageURL'],
+        birthDate = DateTime.parse(
+            (firestoreMap['birthDate'] as Timestamp).toDate().toString());
 }

@@ -49,6 +49,8 @@ dependencies:
   file_picker: ^4.5.1
   liquid_progress_indicator: ^0.4.0
   google_fonts: ^2.3.1
+  numberpicker: ^2.1.1
+  age_calculator: ^1.0.0
 #dependency_overrides:
  # firebase_auth_platform_interface: 6.1.11
 dev_dependencies:

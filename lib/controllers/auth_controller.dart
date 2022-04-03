@@ -42,9 +42,9 @@ class AuthController extends StateNotifier<User?> {
   }
 
   void register(BuildContext context, String name, String email,
-      String password, bool landwirt) async {
-    await _read(authRepositoryProvider)
-        .registerUserEmailAndPW(context, name, email, password, landwirt);
+      String password, bool landwirt, DateTime birthDate) async {
+    await _read(authRepositoryProvider).registerUserEmailAndPW(
+        context, name, email, password, landwirt, birthDate);
   }
 
   void signOut(BuildContext context) async {

@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../UI/pages/profil/6_a_helfer_profil.dart';
-import '../UI/pages/profil/6_b_landwirt_profil.dart';
+import '../UI/pages/profil/landwirt_profil.dart';
 
 abstract class BaseFirestoreHofModelRepository {
   Stream<List<HofModel>> getHofModels();

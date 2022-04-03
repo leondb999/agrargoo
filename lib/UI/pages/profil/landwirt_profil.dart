@@ -34,26 +34,14 @@ import '../../../repositories/firestore_hof_model_riverpod_repository.dart';
 class LandwirtProfil extends ConsumerStatefulWidget {
   const LandwirtProfil({Key? key}) : super(key: key);
   static const routename = '/landwirt-profil';
-
   @override
   _LandwirtProfilState createState() => _LandwirtProfilState();
 }
 
 class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  ///User Collection
-  final usersCollection = FirebaseFirestore.instance.collection('users');
-  final jobAnzeigenCollection =
-      FirebaseFirestore.instance.collection('jobAnzeigen');
-
-  ///Hof Collection
-  final hofCollection =
-      FirebaseFirestore.instance.collection('höfe').snapshots();
-
   /// Loading Process
   double progress = 0.0;
-
+  /*
   checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
       if (user != null) {
@@ -63,7 +51,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
       }
     });
   }
-
+*/
   @override
   void initState() {
     // TODO: implement initState
@@ -95,7 +83,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     String? userID = ref.read(authControllerProvider.notifier).state!.uid;
     final userLoggedIn =
         UserProvider().getUserNameByUserID(userID, userList!).first;
-    //print("userLoggedIn: $userLoggedIn");
+    print("userLoggedIn: $userLoggedIn");
     //print(
     //    "userLoggedIn: ${userLoggedIn.name} profilImageURL: ${userLoggedIn.profilImageURL}");
 
@@ -111,7 +99,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     // print("jobanzeigeModelList: ${jobanzeigeModelList}");
     List<JobanzeigeModel> jobanzeigenListUser =
         JobanzeigeProvider().getAnzeigeByUserID(userID, jobanzeigeModelList!);
-    // print("jobanzeigenListUser: ${jobanzeigenListUser}");
+    print("jobanzeigenListUser: ${jobanzeigenListUser}");
 
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
@@ -188,6 +176,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                       );
                                     },
                                   ),
+
                             ElevatedButton(
                               child: Text("Upload Picture"),
                               style: ElevatedButton.styleFrom(

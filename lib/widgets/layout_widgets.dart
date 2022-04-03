@@ -4,8 +4,9 @@ import 'package:agrargo/UI/login_riverpod/login.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/UI/pages/chat/5_chat.dart';
 import 'package:agrargo/UI/pages/profil/6_a_helfer_profil.dart';
-import 'package:agrargo/UI/pages/profil/6_b_landwirt_profil.dart';
+import 'package:agrargo/UI/pages/profil/landwirt_profil.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
+import 'package:agrargo/controllers/user_controller.dart';
 import 'package:agrargo/main.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/provider/user_provider.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
 import 'package:agrargo/controllers/auth_controller.dart';
+import 'package:agrargo/UI/pages/profil/landwirt_profil.dart' as l;
 
 BottomNavigationBar navigationBar(
     {required int index,
@@ -23,10 +25,16 @@ BottomNavigationBar navigationBar(
     required WidgetRef ref,
     required bool home}) {
   User? user = ref.read(authControllerProvider);
+
+  /// ALle User
+  final userList = ref.watch(userModelFirestoreControllerProvider);
+
+  ///Logged In User
   String? userID = ref.read(authControllerProvider.notifier).state?.uid;
-  final userModel = UserProvider()
-      .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
-//  print("user: $user");
+
+  final userModel = UserProvider().getUserNameByUserID(userID, userList!);
+  print("userModel: $userModel");
+
   return BottomNavigationBar(
     items: home
         ? [
@@ -51,9 +59,19 @@ BottomNavigationBar navigationBar(
 
           ///Profil Page
           case 1:
+            /*
+            if (user != null) {
+              Navigator.of(context).pushNamed(HomeScreen.routename);
+            } else {
+              Navigator.of(context).pushNamed(WhoAreYou.routename);
+            }
+            */
+
             if (user != null) {
               ///User LoggedIn
               if (userModel.first.landwirt == true) {
+                print("profil Index ");
+
                 /// User ist ein Landwirt
                 Navigator.of(context).pushNamed(LandwirtProfil.routename);
               } else {

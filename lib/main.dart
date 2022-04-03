@@ -6,6 +6,7 @@ import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/UI/pages/add/7_add_jobanzeige_landwirt.dart';
 import 'package:agrargo/UI/pages/add/8_add_hof_page_landwirt.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
+import 'package:agrargo/controllers/user_controller.dart';
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/models/user_model.dart';
@@ -28,7 +29,7 @@ import 'UI/pages/uebersichten/3_a_jobangebote_uebersicht_helfer.dart';
 import 'UI/pages/uebersichten/3_b_helfer_übersicht_landwirt.dart';
 import 'UI/pages/angebot/4_a_job_angebot_landwirt.dart';
 import 'UI/pages/profil/6_a_helfer_profil.dart';
-import 'UI/pages/profil/6_b_landwirt_profil.dart';
+import 'UI/pages/profil/landwirt_profil.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -220,8 +221,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     authControllerState?.reload();
     User? authControllerStateRead = ref.read(authControllerProvider);
     String? userID = ref.read(authControllerProvider.notifier).state?.uid;
-    final userLoggedIn = UserProvider()
-        .getUserNameByUserID(userID, p.Provider.of<List<UserModel>>(context));
+
+    /// ALle User
+    final userList = ref.watch(userModelFirestoreControllerProvider);
+    final userLoggedIn = UserProvider().getUserNameByUserID(userID, userList!);
+    //  print("userLoggedIN: $userLoggedIn");
     final String? documentID =
         ref.read(authControllerProvider.notifier).state?.uid;
 
@@ -440,8 +444,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     margin: EdgeInsets.only(top: 35.0, bottom: 30),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => WhoAreYou()));
+                        //Navigator.of(context).push(MaterialPageRoute(
+                        //     builder: (context) => WhoAreYou()));
+                        Navigator.of(context).pushNamed(WhoAreYou.routename);
                       },
                       child: Text('Los gehts!'),
                       style: ElevatedButton.styleFrom(

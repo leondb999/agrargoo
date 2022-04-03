@@ -11,10 +11,10 @@ import 'package:flutterfire_ui/auth.dart';
 import 'package:flutterfire_ui/database.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:flutterfire_ui/i10n.dart';
-
+import 'package:age_calculator/age_calculator.dart';
 import '../../main.dart';
 import '../../widgets/login_widgets.dart';
-import '../pages/profil/6_b_landwirt_profil.dart';
+import '../pages/profil/landwirt_profil.dart';
 
 ///https://www.geeksforgeeks.org/flutter-arguments-in-named-routes/
 ///TODO Vorname & Nachname
@@ -36,6 +36,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _password = TextEditingController();
   bool? _landwirt;
   var routeData;
+  DateTime selectedDate = DateTime(1800);
+  DateDuration ageYears = DateDuration();
   @override
   void initState() {
     // TODO: implement initState
@@ -50,10 +52,26 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     });
   }
 
+  _selectDate(BuildContext context) async {
+    final DateTime? selected = await showDatePicker(
+      context: context,
+      firstDate: DateTime(1970),
+      lastDate: DateTime(2025),
+      initialDate: DateTime(2010),
+    );
+    if (selected != null && selected != selectedDate)
+      setState(() {
+        ageYears = AgeCalculator.age(selected);
+        selectedDate = selected;
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     User? authControllerState = ref.watch(authControllerProvider);
     print("landwirt: $_landwirt");
+    print("selected Date: $selectedDate");
+    print("ageYears: $ageYears");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -115,7 +133,32 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         autocorrect: true,
                         enableSuggestions: true,
                       ),
-                      const Spacer()
+
+                      ///Birth Date Container
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 4),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(25)),
+                        child: selectedDate != DateTime(1800)
+                            ? Text(
+                                "Birth Date: ${selectedDate.day}.${selectedDate.month}.${selectedDate.year}")
+                            : Text("No Birth Date selected Yet"),
+                        //Text(
+                        //      "Birth Date: ${selectedDate.day}.${selectedDate.month}.${selectedDate.year}"),
+                      ),
+                      ageYears.years != 0
+                          ? Text("You Are ${ageYears.years} old")
+                          : Spacer(),
+                      ElevatedButton(
+                          onPressed: () {
+                            _selectDate(context);
+                          },
+                          child: Text("Choose Birth Date")),
+                      const Spacer(),
                     ],
                   ),
                 ),
@@ -143,6 +186,22 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             if (!_formKey.currentState!.validate()) {
                               return;
                             }
+                            if (ageYears.years < 18) {
+                              showDialog(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                          title: const Text('Error Occured'),
+                                          content: Text(
+                                              "You have to be 18 to register"),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(ctx).pop();
+                                                },
+                                                child: const Text("OK"))
+                                          ]));
+                              return;
+                            }
 
                             print(
                                 "authControllerState Sign Out: $authControllerState");
@@ -154,6 +213,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                   _email.text,
                                   _password.text,
                                   _landwirt!,
+                                  selectedDate,
                                 );
 
                             ///Login User in Firebase

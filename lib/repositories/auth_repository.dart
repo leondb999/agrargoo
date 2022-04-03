@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../UI/pages/profil/6_a_helfer_profil.dart';
-import '../UI/pages/profil/6_b_landwirt_profil.dart';
+import '../UI/pages/profil/landwirt_profil.dart';
 
 abstract class BaseAuthRepository {
   Stream<User?> get authStateChanges;
@@ -15,7 +15,7 @@ abstract class BaseAuthRepository {
   Future<void> signInEmailAndPW(
       BuildContext context, String email, String password);
   Future<void> registerUserEmailAndPW(BuildContext context, String name,
-      String email, String password, bool landwirt);
+      String email, String password, bool landwirt, DateTime birthDate);
   Future<void> updateUserName(String name);
   User? getCurrentUser();
   Future<void> signOut(BuildContext context);
@@ -88,7 +88,7 @@ class AuthRepository implements BaseAuthRepository {
 
   @override
   Future<void> registerUserEmailAndPW(BuildContext context, String name,
-      String email, String password, bool landwirt) async {
+      String email, String password, bool landwirt, DateTime birthDate) async {
     // TODO: implement registerUserEmailAndPW
     try {
       await _read(firebaseAuthProvider)
@@ -98,8 +98,16 @@ class AuthRepository implements BaseAuthRepository {
         //userCredential.user!.reload();
 
         User? user = userCredential.user;
-        await FirebaseFirestore.instance.collection('users').doc(user?.uid).set(
-            {'name': name, 'email': email, 'landwirt': landwirt}).then((value) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user?.uid)
+            .set({
+          'userID': user?.uid,
+          'name': name,
+          'email': email,
+          'landwirt': landwirt,
+          'birthDate': birthDate
+        }).then((value) {
           ///Landwirt Profil Page
           if (landwirt == true) {
             Navigator.pushNamed(
