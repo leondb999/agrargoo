@@ -342,26 +342,28 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                         */
                               child: Container(
                                 height: 200,
-                                child: GridView.count(
-                                  crossAxisCount: 7,
-                                  childAspectRatio: 3,
-                                  children: selectedQualifikationList!.map(
-                                    (qualifikation) {
-                                      return Container(
-                                        margin: EdgeInsets.all(10),
-                                        child: Text(
-                                          "${qualifikation.name}",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
+                                child: SingleChildScrollView(
+                                  child: GridView.count(
+                                    crossAxisCount: 7,
+                                    childAspectRatio: 3,
+                                    children: selectedQualifikationList!.map(
+                                      (qualifikation) {
+                                        return Container(
+                                          margin: EdgeInsets.all(10),
+                                          child: Text(
+                                            "${qualifikation.name}",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 20,
+                                            ),
                                           ),
-                                        ),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.black)),
-                                      );
-                                    },
-                                  ).toList(),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.black)),
+                                        );
+                                      },
+                                    ).toList(),
+                                  ),
                                 ),
                               ),
                             ),
