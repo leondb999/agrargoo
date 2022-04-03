@@ -3,8 +3,10 @@ import 'dart:typed_data';
 import 'package:age_calculator/age_calculator.dart';
 import 'package:agrargo/UI/pages/add/edit_helfer_profil.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
+import 'package:agrargo/controllers/qualifikation_controller.dart';
 import 'package:agrargo/controllers/user_controller.dart';
 import 'package:agrargo/models/qualifikation_model.dart';
+import 'package:agrargo/repositories/firestore_qualifikation_model_riverpod_repository.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:filter_list/filter_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,39 +31,33 @@ class HelferProfil extends ConsumerStatefulWidget {
 
 class _HelferProfilState extends ConsumerState<HelferProfil> {
   double progress = 0.0;
-  List<Qualifikation>? selectedQualifikationList = [
-    Qualifikation(name: "Stallarbeit", avatar: "user.png"),
+  List<QualifikationModel>? selectedQualifikationList = [
+    //  Qualifikation(name: "Stallarbeit", avatar: "user.png"),
   ];
-  List<Qualifikation> qualifikationList = [
-    Qualifikation(name: "Stallarbeit", avatar: "user.png"),
-    Qualifikation(name: "Traktor fahren", avatar: "user.png"),
-    Qualifikation(name: "Feldarbeit", avatar: "user.png"),
-    Qualifikation(name: "Ernte", avatar: "user.png"),
-    Qualifikation(name: "Bernadette", avatar: "user.png"),
-    Qualifikation(name: "Carol", avatar: "user.png"),
-    Qualifikation(name: "Claire", avatar: "user.png"),
-    Qualifikation(name: "Traktor fahren", avatar: "user.png"),
-    Qualifikation(name: "Feldarbeit", avatar: "user.png"),
-    Qualifikation(name: "Ernte", avatar: "user.png"),
-    Qualifikation(name: "Bernadette", avatar: "user.png"),
-    Qualifikation(name: "Carol", avatar: "user.png"),
-    Qualifikation(name: "Claire", avatar: "user.png"),
-    Qualifikation(name: "Stallarbeit", avatar: "user.png"),
-    Qualifikation(name: "Traktor fahren", avatar: "user.png"),
-    Qualifikation(name: "Feldarbeit", avatar: "user.png"),
-    Qualifikation(name: "Ernte", avatar: "user.png"),
-    Qualifikation(name: "Bernadette", avatar: "user.png"),
-    Qualifikation(name: "Carol", avatar: "user.png"),
-    Qualifikation(name: "Claire", avatar: "user.png"),
-    Qualifikation(name: "Traktor fahren", avatar: "user.png"),
-    Qualifikation(name: "Feldarbeit", avatar: "user.png"),
-    Qualifikation(name: "Ernte", avatar: "user.png"),
-    Qualifikation(name: "Bernadette", avatar: "user.png"),
-    Qualifikation(name: "Carol", avatar: "user.png"),
-    Qualifikation(name: "Claire", avatar: "user.png"),
+  List<QualifikationModel> qualifikationList = [
+    QualifikationModel(qualifikationName: "Stallarbeit"),
+    QualifikationModel(qualifikationName: "Traktor fahren"),
+    QualifikationModel(qualifikationName: "Feldarbeit"),
+    QualifikationModel(qualifikationName: "Ernte"),
+    QualifikationModel(qualifikationName: "Stallarbeit"),
+    QualifikationModel(qualifikationName: "Traktor fahren"),
+    QualifikationModel(qualifikationName: "Feldarbeit"),
+    QualifikationModel(qualifikationName: "Ernte"),
+    QualifikationModel(qualifikationName: "Stallarbeit"),
+    QualifikationModel(qualifikationName: "Traktor fahren"),
+    QualifikationModel(qualifikationName: "Feldarbeit"),
+    QualifikationModel(qualifikationName: "Ernte"),
+    QualifikationModel(qualifikationName: "Stallarbeit"),
+    QualifikationModel(qualifikationName: "Traktor fahren"),
+    QualifikationModel(qualifikationName: "Feldarbeit"),
+    QualifikationModel(qualifikationName: "Ernte"),
+    QualifikationModel(qualifikationName: "Stallarbeit"),
+    QualifikationModel(qualifikationName: "Traktor fahren"),
+    QualifikationModel(qualifikationName: "Feldarbeit"),
+    QualifikationModel(qualifikationName: "Ernte"),
   ];
   void _openFilterDialog() async {
-    await FilterListDialog.display<Qualifikation>(
+    await FilterListDialog.display<QualifikationModel>(
       context,
       hideSelectedTextCount: true,
       themeData: FilterListThemeData(context),
@@ -69,14 +65,16 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
       height: 500,
       listData: qualifikationList,
       selectedListData: selectedQualifikationList,
-      choiceChipLabel: (item) => item!.name,
+      choiceChipLabel: (item) => item!.qualifikationName,
       validateSelectedItem: (list, val) => list!.contains(val),
       controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
       onItemSearch: (user, query) {
         /// When search query change in search bar then this method will be called
         ///
         /// Check if items contains query
-        return user.name!.toLowerCase().contains(query.toLowerCase());
+        return user.qualifikationName!
+            .toLowerCase()
+            .contains(query.toLowerCase());
       },
       onApplyButtonClick: (list) {
         setState(() {
@@ -90,6 +88,8 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
   @override
   Widget build(BuildContext context) {
     User? authControllerState = ref.watch(authControllerProvider);
+    final qualiList = ref.watch(qualifikationModelFirestoreControllerProvider);
+    print("qualiList: ${qualiList}");
 
     ///Alle gespeicherten User in der Firestore Collection
     final userList = ref.watch(userModelFirestoreControllerProvider);
@@ -228,8 +228,8 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                           child: ElevatedButton(
                             child: Text('Bearbeiten'),
                             onPressed: () {
-                              Navigator.pushNamed(
-                                  context, EditHelfer.routename);
+                              // Navigator.pushNamed(
+                              // context, EditHelfer.routename);
                             },
                             style: ElevatedButton.styleFrom(
                               primary: Color(0xFF9FB98B),
@@ -316,32 +316,6 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                           ? Text("No Qualifikation selected yet")
                           : Align(
                               alignment: Alignment.centerLeft,
-                              /*child: SingleChildScrollView(
-                                child: Expanded(
-                                  child: Container(
-                                    height: 100,
-                                    //width: 300,
-                                    child: GridView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      itemCount: 5,
-                                      itemBuilder: (context, index) {
-                                        Qualifikation qualifikation =
-                                            selectedQualifikationList![index];
-                                        return Container(
-                                          child: Text("${qualifikation.name}"),
-                                        );
-                                      },
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 10,
-                                        crossAxisSpacing: 5.0,
-                                        mainAxisSpacing: 5.0,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                        */
                               child: Container(
                                 height: 200,
                                 child: SingleChildScrollView(
@@ -354,7 +328,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                         return Container(
                                           margin: EdgeInsets.all(10),
                                           child: Text(
-                                            "${qualifikation.name}",
+                                            "${qualifikation.qualifikationName}",
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 20,

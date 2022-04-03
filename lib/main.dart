@@ -179,7 +179,7 @@ class MyApp extends StatelessWidget {
           '/add-edit-jobanzeige': (context) => AddEditJobanzeige(),
           '/add-hof': (context) => AddHofPage(),
           '/chat': (context) => Chat(),
-          '/edit-helfer-page': (context) => EditHelfer(),
+          //  '/edit-helfer-page': (context) => EditHelfer(),
         },
       ),
     );

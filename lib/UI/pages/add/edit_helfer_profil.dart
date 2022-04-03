@@ -12,7 +12,7 @@ import 'package:textfield_tags/textfield_tags.dart';
 import 'package:filter_list/filter_list.dart';
 import '../../../controllers/auth_controller.dart';
 import 'package:agrargo/widgets/add-update-widgets.dart';
-
+/*
 ///https://github.com/Mashood97/flutter_firestore/blob/master/lib/screens/edit_add_product.dart
 class EditHelfer extends ConsumerStatefulWidget {
   const EditHelfer({Key? key}) : super(key: key);
@@ -30,15 +30,15 @@ class _EditHelferState extends ConsumerState<EditHelfer> {
   var routeData;
   var distanceToField;
   List<String> qualifikationsSelectedList = [];
-  List<Qualifikation>? selectedQualifikationList = [];
-  List<Qualifikation> qualifikationList = [
-    Qualifikation(name: "Landarbeit", avatar: "user.png"),
-    Qualifikation(name: "Traktor fahren", avatar: "user.png"),
-    Qualifikation(name: "Ava", avatar: "user.png"),
-    Qualifikation(name: "Bella", avatar: "user.png"),
-    Qualifikation(name: "Bernadette", avatar: "user.png"),
-    Qualifikation(name: "Carol", avatar: "user.png"),
-    Qualifikation(name: "Claire", avatar: "user.png"),
+  List<QualifikationModel>? selectedQualifikationList = [];
+  List<QualifikationModel> qualifikationList = [
+    QualifikationModel(qualifikationName: "Landarbeit", avatar: "user.png"),
+    QualifikationModel(qualifikationName: "Traktor fahren", avatar: "user.png"),
+    QualifikationModel(qualifikationName: "Ava", avatar: "user.png"),
+    QualifikationModel(qualifikationName: "Bella", avatar: "user.png"),
+    QualifikationModel(qualifikationName: "Bernadette", avatar: "user.png"),
+    QualifikationModel(qualifikationName: "Carol", avatar: "user.png"),
+    QualifikationModel(qualifikationName: "Claire", avatar: "user.png"),
   ];
   void clearData() {
     nameController.text = '';
@@ -66,7 +66,7 @@ class _EditHelferState extends ConsumerState<EditHelfer> {
   }
 
   void _openFilterDialog() async {
-    await FilterListDialog.display<Qualifikation>(
+    await FilterListDialog.display<QualifikationModel>(
       context,
       hideSelectedTextCount: true,
       themeData: FilterListThemeData(context),
@@ -74,14 +74,16 @@ class _EditHelferState extends ConsumerState<EditHelfer> {
       height: 500,
       listData: qualifikationList,
       selectedListData: selectedQualifikationList,
-      choiceChipLabel: (item) => item!.name,
+      choiceChipLabel: (item) => item!.qualifikationName,
       validateSelectedItem: (list, val) => list!.contains(val),
       controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
       onItemSearch: (user, query) {
         /// When search query change in search bar then this method will be called
         ///
         /// Check if items contains query
-        return user.name!.toLowerCase().contains(query.toLowerCase());
+        return user.qualifikationName!
+            .toLowerCase()
+            .contains(query.toLowerCase());
       },
       onApplyButtonClick: (list) {
         setState(() {
@@ -205,3 +207,4 @@ class _EditHelferState extends ConsumerState<EditHelfer> {
     );
   }
 }
+*/
