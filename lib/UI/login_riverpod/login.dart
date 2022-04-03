@@ -1,4 +1,5 @@
 import 'package:agrargo/UI/login_riverpod/register.dart';
+import 'package:agrargo/UI/pages/profil/6_a_helfer_profil.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/widgets/login_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,6 +22,9 @@ class _LoginState extends ConsumerState<LoginPage> {
 
   final _email = TextEditingController();
   final _password = TextEditingController();
+  bool? _landwirt;
+  var routeData;
+
 /*
   checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
@@ -35,21 +39,26 @@ class _LoginState extends ConsumerState<LoginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    Future.delayed(Duration(microseconds: 10), () {
+      routeData =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      print("routeData: $routeData");
+      setState(() {
+        _landwirt = routeData['landwirt'];
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     User? authControllerState = ref.watch(authControllerProvider);
-    final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
-
-    bool _landwirt = arguments['landwirt'];
     print("landwirt: $_landwirt");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Center(
-          child: Text("Login"),
+          child: Text(
+              "Login als ${_landwirt! ? 'Landwirt' : 'Helfer'} : $_landwirt"),
         ),
       ),
       body: SafeArea(
@@ -129,20 +138,13 @@ class _LoginState extends ConsumerState<LoginPage> {
                                     context, _email.text, _password.text);
                             print("_landwirt login: $_landwirt");
                             if (_landwirt == true) {
+                              ///Landwirt
+
+                            } else {
                               Navigator.pushNamed(
                                 context,
-                                LandwirtProfil.routename,
+                                HelferProfil.routename,
                               );
-
-                              ///TODO Navigation to Helferübersichtseite
-                              /*
-                              Navigator.pushNamed(
-                                context,
-                                HelferUebersichtPage.routename,
-                                arguments: {'landwirt': _landwirt},
-                              );
-
-                              */
                             }
 
                             ///Login User in Firebase

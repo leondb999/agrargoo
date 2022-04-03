@@ -160,6 +160,7 @@ AppBar appBar({
                 onPressed: () {
                   //  print("authControllerState Sign Out: $user");
                   ref.read(authControllerProvider.notifier).signOut(context);
+                  Navigator.pushNamed(context, HomeScreen.routename);
                 },
                 child: Text("Sign Out"),
               )

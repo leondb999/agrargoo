@@ -34,27 +34,32 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _name = TextEditingController();
   final _email = TextEditingController();
   final _password = TextEditingController();
-
+  bool? _landwirt;
+  var routeData;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Future.delayed(Duration(microseconds: 10), () {
+      routeData =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      print("routeData: $routeData");
+      setState(() {
+        _landwirt = routeData['landwirt'];
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     User? authControllerState = ref.watch(authControllerProvider);
-    final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
-
-    bool _landwirt = arguments['landwirt'];
     print("landwirt: $_landwirt");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Center(
           child: Text(
-              "Register als ${_landwirt ? 'Landwirt' : 'Helfer'} : $_landwirt"),
+              "Register als ${_landwirt! ? 'Landwirt' : 'Helfer'} : $_landwirt"),
         ),
       ),
       body: SafeArea(
@@ -148,7 +153,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                   _name.text,
                                   _email.text,
                                   _password.text,
-                                  _landwirt,
+                                  _landwirt!,
                                 );
 
                             ///Login User in Firebase
