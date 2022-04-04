@@ -84,21 +84,6 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
             ? Text("Nothing to See")
             : Column(
                 children: [
-                  Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.17,
-                      color: Color(0xFF1f623c),
-                      child: Center(
-                          child: userLoggedIn.isEmpty
-                              ? Text("No User found")
-                              : Text("${userLoggedIn.first.name}`s Profil",
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 50.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFFffffff))))),
-
                   SizedBox(height: 30),
 
                   ///Höfe with User ID from Firestore

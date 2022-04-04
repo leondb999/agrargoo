@@ -34,27 +34,37 @@ class _JobangebotUebersichtPageState
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.17,
-              color: Color(0xFF1f623c),
-              child: Center(
-                  child: Text("Aktuelle Stellenangebote",
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontFamily: 'Open Sans',
-                          fontSize: 50.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFFffffff))))),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.1,
             child: Row(
               children: [
-                SizedBox(width: MediaQuery.of(context).size.width * 0.89),
-                Icon(Icons.filter_alt_sharp, color: Colors.black, size: 30.0),
-                SizedBox(width: 7),
-                Icon(Icons.sort, color: Colors.black, size: 30.0),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.90),
+                Icon(Icons.filter_alt_sharp, color: Colors.black87, size: 30.0),
+                SizedBox(width: 25),
+                Icon(Icons.sort, color: Colors.black87, size: 30.0),
               ],
+            ),
+          ),
+          Container(
+            child: Padding(
+              padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Suche...",
+                  hintStyle: TextStyle(color: Colors.grey.shade600),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.grey.shade600,
+                    size: 20,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey.shade100,
+                  contentPadding: EdgeInsets.all(8),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.grey.shade100)),
+                ),
+              ),
             ),
           ),
           Container(
@@ -81,14 +91,4 @@ class _JobangebotUebersichtPageState
       ),
     );
   }
-}
-
-Widget _activeAnzeige(bool status) {
-  Widget x = Text("Hello");
-  if (status == true) {
-    x = Text('Active', style: TextStyle(color: Colors.green));
-  } else {
-    x = Text('inactive', style: TextStyle(color: Colors.red));
-  }
-  return x;
 }

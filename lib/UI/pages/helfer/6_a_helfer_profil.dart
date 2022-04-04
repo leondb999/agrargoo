@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../widgets/layout_widgets.dart';
+import '3_a_jobangebote_uebersicht.dart';
 import '4_a_job_angebot.dart';
 
-class HelferProfil extends StatefulWidget {
+class HelferProfil extends ConsumerStatefulWidget {
   const HelferProfil({Key? key}) : super(key: key);
   static const routename = '/helfer-profil';
 
@@ -12,25 +14,13 @@ class HelferProfil extends StatefulWidget {
   _HelferProfilState createState() => _HelferProfilState();
 }
 
-class _HelferProfilState extends State<HelferProfil> {
+class _HelferProfilState extends ConsumerState<HelferProfil> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //appBar: appBar(),
+        appBar: appBar(context: context, ref: ref, home: false),
         resizeToAvoidBottomInset: false,
         body: Column(children: [
-          Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.17,
-              color: Color(0xFF1f623c),
-              child: Center(
-                  child: Text("Mein Profil",
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontFamily: 'Open Sans',
-                          fontSize: 50.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFFffffff))))),
           SizedBox(height: MediaQuery.of(context).size.height * 0.015),
           Expanded(
               child: SingleChildScrollView(
@@ -59,7 +49,8 @@ class _HelferProfilState extends State<HelferProfil> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => Jobangebot()));
+                                      builder: (context) =>
+                                          JobangebotUebersichtPage()));
                                 },
                                 child: Text('Bearbeiten'),
                                 style: ElevatedButton.styleFrom(
@@ -86,9 +77,15 @@ class _HelferProfilState extends State<HelferProfil> {
                           children: <Widget>[
                             Container(
                               margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(3.0),
+                              padding: const EdgeInsets.all(7.0),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border: Border.all(color: Colors.grey),
+                              ),
                               child: Text('Max Mustermann, 19 Jahre',
                                   style: TextStyle(
                                       fontStyle: FontStyle.normal,
@@ -118,9 +115,15 @@ class _HelferProfilState extends State<HelferProfil> {
                           children: <Widget>[
                             Container(
                               margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(3.0),
+                              padding: const EdgeInsets.all(7.0),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border: Border.all(color: Colors.grey),
+                              ),
                               child: Text('Ernte',
                                   style: TextStyle(
                                       fontStyle: FontStyle.normal,
@@ -131,9 +134,15 @@ class _HelferProfilState extends State<HelferProfil> {
                             ),
                             Container(
                               margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(3.0),
+                              padding: const EdgeInsets.all(7.0),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border: Border.all(color: Colors.grey),
+                              ),
                               child: Text('Bewässerung',
                                   style: TextStyle(
                                       fontStyle: FontStyle.normal,
@@ -144,9 +153,15 @@ class _HelferProfilState extends State<HelferProfil> {
                             ),
                             Container(
                               margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(3.0),
+                              padding: const EdgeInsets.all(7.0),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border: Border.all(color: Colors.grey),
+                              ),
                               child: Text('Düngung',
                                   style: TextStyle(
                                       fontStyle: FontStyle.normal,
@@ -171,14 +186,26 @@ class _HelferProfilState extends State<HelferProfil> {
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF1f623c))),
                           )),
-                      Text(
-                          "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.",
-                          style: TextStyle(
-                              fontStyle: FontStyle.normal,
-                              fontFamily: 'Open Sans',
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.normal,
-                              color: Color(0xFF000000))),
+                      Container(
+                        margin: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(7.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          // border: Border.all(color: Colors.grey),
+                        ),
+                        child: Text(
+                            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.",
+                            style: TextStyle(
+                                fontStyle: FontStyle.normal,
+                                fontFamily: 'Open Sans',
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.normal,
+                                color: Color(0xFF000000))),
+                      ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.04),
                       Align(
@@ -197,9 +224,15 @@ class _HelferProfilState extends State<HelferProfil> {
                           children: <Widget>[
                             Container(
                               margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(3.0),
+                              padding: const EdgeInsets.all(7.0),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border: Border.all(color: Colors.grey),
+                              ),
                               child: Text('14.05.2022',
                                   style: TextStyle(
                                       fontStyle: FontStyle.normal,
@@ -208,11 +241,24 @@ class _HelferProfilState extends State<HelferProfil> {
                                       fontWeight: FontWeight.normal,
                                       color: Color(0xFF000000))),
                             ),
+                            Text('-',
+                                style: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    fontFamily: 'Open Sans',
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Color(0xFF000000))),
                             Container(
                               margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(3.0),
+                              padding: const EdgeInsets.all(7.0),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border: Border.all(color: Colors.grey),
+                              ),
                               child: Text('29.06.2022',
                                   style: TextStyle(
                                       fontStyle: FontStyle.normal,
@@ -228,16 +274,54 @@ class _HelferProfilState extends State<HelferProfil> {
                           height: MediaQuery.of(context).size.height * 0.05),
                     ]),
                   ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.015),
                 ],
               ),
               Divider(
                 indent: 16,
                 endIndent: 16,
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  child: Column(children: <Widget>[
+                    ExpansionTile(
+                        title: Text(
+                          "Ausstehende Jobs",
+                          style: TextStyle(
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'Open Sans',
+                              fontSize: 23.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1f623c)),
+                        ),
+                        children: <Widget>[
+                          ListTile(
+                            title: Text("data"),
+                          ),
+                        ])
+                  ])),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.015),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  child: Column(children: <Widget>[
+                    ExpansionTile(
+                        title: Text(
+                          "Vergangene Jobs",
+                          style: TextStyle(
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'Open Sans',
+                              fontSize: 23.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1f623c)),
+                        ),
+                        children: <Widget>[
+                          ListTile(
+                            title: Text("data"),
+                          ),
+                        ])
+                  ])),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.025),
             ]),
-          ))
+          )),
         ]));
   }
 }

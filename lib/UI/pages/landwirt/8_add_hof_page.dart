@@ -93,12 +93,13 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                     TextFormField(
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Please Enter Hof Name ';
+                          return 'Gib den Namen deines Hofes an  ';
                         }
                         return null;
                       },
                       controller: nameController,
-                      decoration: InputDecoration(hintText: 'Enter Hof Name '),
+                      decoration: InputDecoration(
+                          hintText: 'Gib den Namen deines Hofes an '),
                       onChanged: (val) => hofProvider.changeHofName(val),
                     ),
                     SizedBox(height: 20),
@@ -107,19 +108,26 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                     TextFormField(
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Please Enter Standort';
+                          return 'Gib den Standort an';
                         }
                         return null;
                       },
                       controller: standortController,
-                      decoration: InputDecoration(hintText: 'Enter Standort'),
+                      decoration:
+                          InputDecoration(hintText: 'Gib den Standort an'),
                       onChanged: (val) => hofProvider.changeStandort(val),
                     ),
                     SizedBox(height: 20),
 
                     /// Add Buttn
                     ElevatedButton(
-                      child: Text('Save'),
+                      child: Text("Speichern"),
+                      style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF9FB98B),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20),
+                          textStyle: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           hofProvider.besitzerID = userID;
@@ -128,11 +136,17 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                         }
                       },
                     ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
                     ///Delete Button
                     ElevatedButton(
-                      child: Text('Delete'),
-                      style: ElevatedButton.styleFrom(primary: Colors.red),
+                      child: Text("Löschen"),
+                      style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF9FB98B),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20),
+                          textStyle: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
                       onPressed: () {
                         hofProvider.removeData();
                         Navigator.of(context).pop();

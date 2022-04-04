@@ -106,41 +106,36 @@ Card jobAnzeigeCard(
                     "Auftraggeber: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort: ${hof.first.standort}")
           ],
         ),
-        trailing: Column(
-          children: [
-            landwirtMode
-                ? Column(children: [
-                    _activeAnzeige(jobanzeige.status!),
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.005),
-                    ElevatedButton(
-                      child: Text("Edit"),
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed(AddEditJobanzeige.routename, arguments: {
-                          'hofID': jobanzeige.hofID,
-                          'auftraggeberID': jobanzeige.auftraggeberID,
-                          'status': jobanzeige.status,
-                          'titel': jobanzeige.titel,
-                          'jobanzeigeID': jobanzeige.jobanzeigeID,
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.black45,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          textStyle: TextStyle(color: Colors.white54)),
-                    ),
-                  ])
-                : Text(
-                    "9,25 €/h",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 25),
-                  ),
-          ],
-        ),
+        trailing: landwirtMode
+            ? Column(children: [
+                _activeAnzeige(jobanzeige.status!),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.005),
+                ElevatedButton(
+                  child: Text("Edit"),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(AddEditJobanzeige.routename, arguments: {
+                      'hofID': jobanzeige.hofID,
+                      'auftraggeberID': jobanzeige.auftraggeberID,
+                      'status': jobanzeige.status,
+                      'titel': jobanzeige.titel,
+                      'jobanzeigeID': jobanzeige.jobanzeigeID,
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.black45,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      textStyle: TextStyle(color: Colors.white54)),
+                ),
+              ])
+            : Text(
+                "9,25 €/h",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 25),
+              ),
         onTap: () {
           Navigator.pushNamed(
             context,

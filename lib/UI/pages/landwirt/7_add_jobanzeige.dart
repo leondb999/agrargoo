@@ -106,13 +106,13 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                     TextFormField(
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Please Enter Titel';
+                          return 'Gib den Titel des Jobs ein';
                         }
                         return null;
                       },
                       controller: nameController,
-                      decoration:
-                          InputDecoration(hintText: 'Enter Jobangebot Titel'),
+                      decoration: InputDecoration(
+                          hintText: 'Gib den Titel des Jobs ein'),
                       onChanged: (val) =>
                           jobanzeigeProvider.changeJobanzeigeTitel(val),
                     ),
@@ -140,7 +140,13 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
 
                     /// Add Buttn
                     ElevatedButton(
-                      child: Text('Save'),
+                      child: Text("Speichern"),
+                      style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF9FB98B),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20),
+                          textStyle: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           jobanzeigeProvider.status = jobanzeigeProvider.status;
@@ -152,11 +158,17 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                         }
                       },
                     ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
                     ///Delete Button
                     ElevatedButton(
-                      child: Text('Delete'),
-                      style: ElevatedButton.styleFrom(primary: Colors.red),
+                      child: Text("Löschen"),
+                      style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF9FB98B),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20),
+                          textStyle: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
                       onPressed: () {
                         jobanzeigeProvider.removeData();
                         Navigator.of(context).pop();

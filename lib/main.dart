@@ -154,7 +154,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: "/home",
+        initialRoute: "/landwirt-profil",
         routes: {
           '/login': (context) => LoginPage(),
           '/home': (context) => HomeScreen(),
