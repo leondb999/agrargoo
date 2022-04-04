@@ -40,17 +40,22 @@ class _JobangebotUebersichtPageState
       body: Column(
         children: [
           Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.17,
-              color: Color(0xFF1f623c),
-              child: Center(
-                  child: Text("Aktuelle Stellenangebote",
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontFamily: 'Open Sans',
-                          fontSize: 50.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFFffffff))))),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.17,
+            color: Color(0xFF1f623c),
+            child: Center(
+              child: Text(
+                "Aktuelle Stellenangebote",
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontFamily: 'Open Sans',
+                  fontSize: 50.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFffffff),
+                ),
+              ),
+            ),
+          ),
           Container(
             height: MediaQuery.of(context).size.height * 0.1,
             child: Row(

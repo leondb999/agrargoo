@@ -110,7 +110,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
     String? userID = ref.read(authControllerProvider.notifier).state!.uid;
     final userLoggedIn =
         UserProvider().getUserNameByUserID(userID, userList!).first;
-    print("userLoggedIn: ${userLoggedIn.birthDate}");
+    print("userLoggedIn2: ${userLoggedIn.birthDate}");
 
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
