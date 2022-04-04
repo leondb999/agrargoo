@@ -1,4 +1,5 @@
 import 'package:agrargo/UI/login_riverpod/login.dart';
+import 'package:agrargo/UI/pages/chat/5_chat.dart';
 import 'package:agrargo/controllers/jobanzeige_controller.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -68,25 +69,16 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
         .first;
     if (jobanzeige.titel != null) {
       print(
-          "jobanzeige: :D titel: ${jobanzeige.titel}, hofName: ${hof.hofName} standort: ${hof.standort}");
+          "jobanzeige: titel: ${jobanzeige.titel}, hofName: ${hof.hofName} standort: ${hof.standort}");
     }
     return Scaffold(
-      appBar: AppBar(),
+      appBar: appBar(context: context, ref: ref, home: false),
       resizeToAvoidBottomInset: false,
+      bottomNavigationBar:
+          navigationBar(index: 0, context: context, ref: ref, home: false),
       body: Column(children: [
         Column(children: [
-          Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.17,
-              color: Color(0xFF1f623c),
-              child: Center(
-                  child: Text("${jobanzeige.titel}",
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontFamily: 'Open Sans',
-                          fontSize: 50.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFFffffff))))),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.015),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -94,14 +86,13 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                 Icon(
                   Icons.place,
                   color: Colors.black,
-                  size: 25.0,
+                  size: 20.0,
                 ),
                 SizedBox(width: 3),
                 Text("${hof.standort}",
                     style: TextStyle(
                         fontStyle: FontStyle.italic,
-                        fontFamily: 'Open Sans',
-                        fontSize: 25.0,
+                        fontSize: 20.0,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF000000))),
               ]),
@@ -110,14 +101,13 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                   Icon(
                     Icons.date_range,
                     color: Colors.black,
-                    size: 25.0,
+                    size: 20.0,
                   ),
                   SizedBox(width: 3),
                   Text("01.04.2022 - 07.05.2022",
                       style: TextStyle(
                           fontStyle: FontStyle.italic,
-                          fontFamily: 'Open Sans',
-                          fontSize: 25.0,
+                          fontSize: 20.0,
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF000000)))
                 ],
@@ -135,20 +125,12 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                   Expanded(
                     flex: 6,
                     child: Column(children: [
-                      Text(
-                          "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-                          style: TextStyle(
-                              fontStyle: FontStyle.normal,
-                              fontFamily: 'Open Sans',
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.normal,
-                              color: Color(0xFF000000))),
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.07),
+                          height: MediaQuery.of(context).size.height * 0.015),
                       Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            child: Text("Aufgaben",
+                            child: Text("jobanzeigeID.titel",
                                 style: TextStyle(
                                     fontStyle: FontStyle.normal,
                                     fontFamily: 'Open Sans',
@@ -156,53 +138,29 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF1f623c))),
                           )),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.015),
                       Container(
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(3.0),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
-                              child: Text('Ernte',
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.normal,
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.normal,
-                                      color: Color(0xFF000000))),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(3.0),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
-                              child: Text('Bewässerung',
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.normal,
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.normal,
-                                      color: Color(0xFF000000))),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(3.0),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
-                              child: Text('Düngung',
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.normal,
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.normal,
-                                      color: Color(0xFF000000))),
-                            ),
-                          ],
+                        margin: const EdgeInsets.all(5.0),
+                        padding: const EdgeInsets.all(3.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
                         ),
+                        child: Text(
+                            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+                            style: TextStyle(
+                                fontStyle: FontStyle.normal,
+                                fontFamily: 'Open Sans',
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.normal,
+                                color: Color(0xFF000000))),
                       ),
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.05),
+                          height: MediaQuery.of(context).size.height * 0.07),
                       Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
@@ -219,9 +177,15 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                           children: <Widget>[
                             Container(
                               margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(3.0),
+                              padding: const EdgeInsets.all(7.0),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border: Border.all(color: Colors.grey),
+                              ),
                               child: Text('Traktor-Führerschein',
                                   style: TextStyle(
                                       fontStyle: FontStyle.normal,
@@ -252,9 +216,15 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                           children: <Widget>[
                             Container(
                               margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(3.0),
+                              padding: const EdgeInsets.all(7.0),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border: Border.all(color: Colors.grey),
+                              ),
                               child: Text('9,25 €/h',
                                   style: TextStyle(
                                       fontStyle: FontStyle.normal,
@@ -275,61 +245,39 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                         '${hof.hofImageURL}',
                       ),
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.015),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.message,
-                                color: Colors.black,
-                                size: 25.0,
-                              ),
-                              SizedBox(width: 3),
-                              Text("Noch Fragen??",
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.normal,
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 17.0,
-                                      fontWeight: FontWeight.normal,
-                                      color: Color(0xFF000000)))
-                            ],
-                          )
-                        ],
-                      ),
+                          height: MediaQuery.of(context).size.height * 0.15),
+                      Container(
+                          margin: const EdgeInsets.all(15.0),
+                          padding: const EdgeInsets.all(7.0),
+
+                          ///Bewerben Button
+                          child: ElevatedButton(
+                            child: Text('Bewerben'),
+                            onPressed: () {
+                              ///TODO Implement Navigation to Jobangebot
+                              ///User Logged In
+
+                              authControllerState != null
+                                  ? Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) => Chat()))
+                                  : Navigator.pushNamed(
+                                      context,
+                                      LoginPage.routename,
+                                      arguments: {'landwirt': false},
+                                    );
+                            },
+                            style: ElevatedButton.styleFrom(
+                                primary: Color(0xFF9FB98B),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 20),
+                                textStyle: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold)),
+                          )),
                     ]),
                   ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.015),
                 ],
               ),
-              Container(
-                  margin: EdgeInsets.only(top: 35.0),
-
-                  ///Bewerben Button
-                  child: ElevatedButton(
-                    child: Text('Bewerben'),
-                    onPressed: () {
-                      ///TODO Implement Navigation to Jobangebot
-                      ///User Logged In
-
-                      authControllerState != null
-                          ? Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => Jobangebot()))
-                          : Navigator.pushNamed(
-                              context,
-                              LoginPage.routename,
-                              arguments: {'landwirt': false},
-                            );
-                    },
-                    style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF9FB98B),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                        textStyle: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
-                  )),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             ]),
           ),
         ),
