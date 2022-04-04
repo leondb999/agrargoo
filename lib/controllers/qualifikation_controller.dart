@@ -41,9 +41,9 @@ class FirestoreQualifikationModelController
   }
 
   ///Get
-  void getQualifikationModelList() async {
-    final x = _read(fireQualifikationModelRepositoryProvider)
+  void getQualifikationModelList() {
+    _read(fireQualifikationModelRepositoryProvider)
         .getQualifikationModelsList();
-    print("x: ${x.first}");
+    //print("x: ${x.first}");
   }
 }
