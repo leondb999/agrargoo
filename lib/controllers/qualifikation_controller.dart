@@ -13,7 +13,7 @@ import 'package:uuid/uuid.dart';
 
 import '../repositories/auth_repository.dart';
 import '../repositories/firestore_jobanzeige_model_riverpod_repository.dart';
-
+/*
 final qualifikationModelFirestoreControllerProvider = StateNotifierProvider<
     FirestoreQualifikationModelController, List<QualifikationModel>?>(
   (ref) => FirestoreQualifikationModelController(ref.read)
@@ -44,6 +44,8 @@ class FirestoreQualifikationModelController
   void getQualifikationModelList() {
     _read(fireQualifikationModelRepositoryProvider)
         .getQualifikationModelsList();
+    // print("qualifikationsliste get: ${qualifikationsListe.first}");
     //print("x: ${x.first}");
   }
 }
+*/

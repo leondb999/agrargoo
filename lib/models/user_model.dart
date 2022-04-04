@@ -8,6 +8,7 @@ class UserModel {
   bool? landwirt;
   String? profilImageURL;
   DateTime? birthDate;
+  List<dynamic>? qualifikationList;
 
   UserModel({
     this.userID,
@@ -16,6 +17,7 @@ class UserModel {
     this.landwirt,
     this.profilImageURL,
     this.birthDate,
+    this.qualifikationList,
   });
 
   Map<String, dynamic> createMap() {
@@ -36,5 +38,6 @@ class UserModel {
         landwirt = firestoreMap['landwirt'],
         profilImageURL = firestoreMap['profilImageURL'],
         birthDate = DateTime.parse(
-            (firestoreMap['birthDate'] as Timestamp).toDate().toString());
+            (firestoreMap['birthDate'] as Timestamp).toDate().toString()),
+        qualifikationList = firestoreMap['qualifikationList'];
 }

@@ -7,6 +7,7 @@ import 'package:agrargo/controllers/qualifikation_controller.dart';
 import 'package:agrargo/controllers/user_controller.dart';
 import 'package:agrargo/models/qualifikation_model.dart';
 import 'package:agrargo/repositories/firestore_qualifikation_model_riverpod_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:filter_list/filter_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,9 +18,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 
+import '../../../models/user_model.dart';
+import '../../../provider/general_providers.dart';
 import '../../../provider/user_provider.dart';
 import '../../../widgets/layout_widgets.dart';
 import '../angebot/4_a_job_angebot_landwirt.dart';
+import 'package:agrargo/enums/qualifikation_enums.dart';
 
 class HelferProfil extends ConsumerStatefulWidget {
   const HelferProfil({Key? key}) : super(key: key);
@@ -31,34 +35,14 @@ class HelferProfil extends ConsumerStatefulWidget {
 
 class _HelferProfilState extends ConsumerState<HelferProfil> {
   double progress = 0.0;
-  List<QualifikationModel>? selectedQualifikationList = [
-    //  Qualifikation(name: "Stallarbeit", avatar: "user.png"),
-  ];
-  List<QualifikationModel> qualifikationList = [
-    QualifikationModel(qualifikationName: "Stallarbeit"),
-    QualifikationModel(qualifikationName: "Traktor fahren"),
-    QualifikationModel(qualifikationName: "Feldarbeit"),
-    QualifikationModel(qualifikationName: "Ernte"),
-    QualifikationModel(qualifikationName: "Stallarbeit"),
-    QualifikationModel(qualifikationName: "Traktor fahren"),
-    QualifikationModel(qualifikationName: "Feldarbeit"),
-    QualifikationModel(qualifikationName: "Ernte"),
-    QualifikationModel(qualifikationName: "Stallarbeit"),
-    QualifikationModel(qualifikationName: "Traktor fahren"),
-    QualifikationModel(qualifikationName: "Feldarbeit"),
-    QualifikationModel(qualifikationName: "Ernte"),
-    QualifikationModel(qualifikationName: "Stallarbeit"),
-    QualifikationModel(qualifikationName: "Traktor fahren"),
-    QualifikationModel(qualifikationName: "Feldarbeit"),
-    QualifikationModel(qualifikationName: "Ernte"),
-    QualifikationModel(qualifikationName: "Stallarbeit"),
-    QualifikationModel(qualifikationName: "Traktor fahren"),
-    QualifikationModel(qualifikationName: "Feldarbeit"),
-    QualifikationModel(qualifikationName: "Ernte"),
-  ];
+  List<QualifikationModel>? selectedQualifikationList = [];
+  List<QualifikationModel> qualifikationList = [];
 //  List<QualifikationModel> qualiList = [];
+  List<QualifikationModel>? qualifList = [];
+  UserModel _loggedInUser = UserModel();
 
-  void _openFilterDialog() async {
+  ///Select Qualifikationen
+  void openFilterDialog() async {
     await FilterListDialog.display<QualifikationModel>(
       context,
       hideSelectedTextCount: true,
@@ -70,17 +54,25 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
       choiceChipLabel: (item) => item!.qualifikationName,
       validateSelectedItem: (list, val) => list!.contains(val),
       controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
-      onItemSearch: (user, query) {
+      onItemSearch: (qualifikation, query) {
         /// When search query change in search bar then this method will be called
         ///
         /// Check if items contains query
-        return user.qualifikationName!
+        return qualifikation.qualifikationName!
             .toLowerCase()
             .contains(query.toLowerCase());
       },
       onApplyButtonClick: (list) {
         setState(() {
           selectedQualifikationList = List.from(list!);
+          print("selectedQualifikationList2: $selectedQualifikationList");
+          List<String> qualifikationIDList = [];
+          selectedQualifikationList!.forEach((qualifikation) {
+            qualifikationIDList.add(qualifikation.qualifikationID!);
+          });
+          ref
+              .watch(userModelFirestoreControllerProvider.notifier)
+              .updateQualifikationen(_loggedInUser, qualifikationIDList);
         });
         Navigator.pop(context);
       },
@@ -91,26 +83,70 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(microseconds: 10), () {
-      final qualiList =
-          ref.read(qualifikationModelFirestoreControllerProvider.notifier);
+
+    Future.delayed(Duration(microseconds: 10), () async {
+      //var qualiList = ref.read(qualifikationModelFirestoreControllerProvider);
+      //print("qualifikationsListe: ${qualiList!}");
+      FirebaseFirestore.instance
+          .collection('qualifikationen')
+          .get()
+          .then((value) {
+        value.docs.forEach((doc) {
+          // print("doc: ${doc['name']}");
+          QualifikationModel quali = QualifikationModel(
+              qualifikationID: doc.id, qualifikationName: doc['name']);
+          qualifikationList.add(quali);
+          //   print("qualifikationList: ${quali.qualifikationName}");
+        });
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
     User? authControllerState = ref.watch(authControllerProvider);
-    print("hi");
+    // print("hi");
+    //print("qualifikationList: $qualifikationList");
+    /*  List<QualifikationModel> qualiList = ref
+        .watch(fireQualifikationModelRepositoryProvider)
+        .getQualifikationModelsList();
+    print("qualiList: ${qualiList}"); */
     // print("qualiList: ${qualiList}");
+    ///Qualifikationen
+//    final qualiList = ref.watch(qualifikationModelFirestoreControllerProvider);
+    //  if (qualiList != null) {
+    //  print("qualiList: ${qualiList.first.qualifikationName}");
+    //}
 
     ///Alle gespeicherten User in der Firestore Collection
     final userList = ref.watch(userModelFirestoreControllerProvider);
 
     ///LoggedIn User
     String? userID = ref.read(authControllerProvider.notifier).state!.uid;
-    final userLoggedIn =
+    // print("userID: $userID");
+    UserModel userLoggedIn =
         UserProvider().getUserNameByUserID(userID, userList!).first;
-    print("userLoggedIn2: ${userLoggedIn.birthDate}");
+    setState(() {
+      _loggedInUser = userLoggedIn;
+    });
+    // print("userLoggedIn2: ${userLoggedIn.birthDate}");
+    // print("userLoggedIn2: ${userLoggedIn.qualifikationList!.first}");
+    userLoggedIn.qualifikationList!.forEach((qualifikationID) {
+      //    print("userLoggedIn2 qualifikationID: $qualifikationID");
+      qualifikationList.forEach((qualifikation) {
+        // print(qualifikation.qualifikationName);
+        if (qualifikationID == qualifikation.qualifikationID &&
+            selectedQualifikationList!.contains(qualifikation) == false) {
+          //  print("-------------");
+          //print("add: ${qualifikation.qualifikationName}");
+          // setState(() {
+          selectedQualifikationList!.add(qualifikation);
+          //});
+          //  print("-------------");
+        }
+      });
+      //   print("selectedQualifikationList: $selectedQualifikationList");
+    });
 
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
@@ -119,17 +155,22 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
       resizeToAvoidBottomInset: false,
       body: Column(children: [
         Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.17,
-            color: Color(0xFF1f623c),
-            child: Center(
-                child: Text("${userLoggedIn.name}",
-                    style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontFamily: 'Open Sans',
-                        fontSize: 50.0,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFffffff))))),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.17,
+          color: Color(0xFF1f623c),
+          child: Center(
+            child: Text(
+              "${userLoggedIn.name}",
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontFamily: 'Open Sans',
+                fontSize: 50.0,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFffffff),
+              ),
+            ),
+          ),
+        ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.015),
         Expanded(
             child: SingleChildScrollView(
@@ -308,7 +349,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                           ),
                           SizedBox(width: 40),
                           TextButton(
-                            onPressed: _openFilterDialog,
+                            onPressed: openFilterDialog,
                             child: Text(
                               "Add",
                               style: TextStyle(color: Colors.white),

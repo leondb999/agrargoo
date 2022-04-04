@@ -47,4 +47,10 @@ class FirestoreUserModelController extends StateNotifier<List<UserModel>?> {
     bool success = await _read(fireUserModelRepositoryProvider)
         .updateProfilPicture(userModel, url);
   }
+
+  void updateQualifikationen(
+      UserModel userModel, List<String> qualifikationList) async {
+    bool success = await _read(fireUserModelRepositoryProvider)
+        .updateQualifikationList(userModel, qualifikationList);
+  }
 }

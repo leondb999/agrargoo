@@ -13,7 +13,7 @@ import '../UI/pages/profil/6_a_helfer_profil.dart';
 import '../UI/pages/profil/landwirt_profil.dart';
 
 abstract class BaseFirestoreQualifikationModelRepository {
-  Stream<List<QualifikationModel>> getQualifikationModelsList();
+  List<QualifikationModel> getQualifikationModelsList();
 }
 
 ///Riverpod Provider
@@ -27,24 +27,32 @@ class FireQualifikationModelRepository
   const FireQualifikationModelRepository(this._read);
 
   @override
-  Stream<List<QualifikationModel>> getQualifikationModelsList() {
-    List x = [];
-    FirebaseFirestore.instance
-        .collection('qualifikationen')
-        .get()
-        .then((value) {
+  List<QualifikationModel> getQualifikationModelsList() {
+    List<QualifikationModel> qualifikationsList = [];
+    _read(firestoreProvider).collection('qualifikationen').get().then((value) {
       value.docs.forEach((doc) {
-        print("name: ${doc['name']}");
+        QualifikationModel qualifikationModel = QualifikationModel(
+            qualifikationName: doc['name'], qualifikationID: doc.id);
+        qualifikationsList.add(qualifikationModel);
+        //  print("qualifikationsList: ${qualifikationsList}");
       });
     });
+    return qualifikationsList;
+    /*  print("qualifikationsList: ${qualifikationsList.length}");
+    try {
+      return _read(firestoreProvider)
+          .collection('qualifikationen')
+          .snapshots()
+          .map(
+            (snapshot) => snapshot.docs
+                .map((doc) =>
+                    QualifikationModel.fromFirestore(doc.data(), doc.id))
+                .toList(),
+          );
+    } on FirebaseAuthException catch (e) {
+      throw CustomException(message: e.message);
+    }*/
 
-    return _read(firestoreProvider)
-        .collection('qualifikationen')
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => QualifikationModel.fromFirestore(doc.data(), doc.id))
-            .toList()
-            .toList());
     throw UnimplementedError();
   }
 }

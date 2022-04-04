@@ -47,4 +47,21 @@ class FireUserModelRepository implements BaseFirestoreUserModelRepository {
     }
     throw UnimplementedError();
   }
+
+  Future<bool> updateQualifikationList(
+      UserModel userModel, List<String> qualifikationList) async {
+    try {
+      _read(firestoreProvider)
+          .collection('users')
+          .doc(userModel.userID)
+          .update({
+        'qualifikationList': qualifikationList,
+      });
+      return true;
+    } catch (e) {
+      print(e);
+      return Future.error(e);
+    }
+    throw UnimplementedError();
+  }
 }
