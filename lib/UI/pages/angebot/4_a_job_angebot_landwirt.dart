@@ -68,7 +68,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
         .first;
     if (jobanzeige.titel != null) {
       print(
-          "jobanzeige: titel: ${jobanzeige.titel}, hofName: ${hof.hofName} standort: ${hof.standort}");
+          "jobanzeige: :D titel: ${jobanzeige.titel}, hofName: ${hof.hofName} standort: ${hof.standort}");
     }
     return Scaffold(
       appBar: AppBar(),
