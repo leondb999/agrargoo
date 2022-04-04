@@ -25,7 +25,9 @@ class _JobangebotUebersichtPageState
     final jobAnzeigeList = p.Provider.of<List<JobanzeigeModel>>(context);
     var activeAnzeigeList = [];
     jobAnzeigeList.forEach((anzeige) {
+      print("anzeige123: $anzeige");
       if (anzeige.status == true) {
+        print("anzeige123 true: $anzeige");
         activeAnzeigeList.add(anzeige);
       }
     });
@@ -67,11 +69,11 @@ class _JobangebotUebersichtPageState
             child: SingleChildScrollView(
               child: Container(
                   height: MediaQuery.of(context).size.height,
-                  child: jobAnzeigeList != null
+                  child: jobAnzeigeList.isNotEmpty
                       ? ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          itemCount: jobAnzeigeList.length,
+                          itemCount: jobAnzeigeList.length - 1,
                           itemBuilder: (context, index) {
                             return jobAnzeigeCard(
                                 context, activeAnzeigeList[index], false);
