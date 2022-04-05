@@ -13,6 +13,7 @@ import '../UI/pages/profil/landwirt_profil.dart';
 abstract class BaseFirestoreUserModelRepository {
   Stream<List<UserModel>> getUserModels();
   Future<bool> updateProfilPicture(UserModel userModel, String url);
+  Stream<List<UserModel>> getUserByID(String id);
 }
 
 ///Riverpod Provider
@@ -31,6 +32,35 @@ class FireUserModelRepository implements BaseFirestoreUserModelRepository {
               .map((doc) => UserModel.fromFirestore(doc.data(), doc.id))
               .toList(),
         );
+  }
+
+  Stream<List<UserModel>> getUserByID(String id) {
+    return _read(firestoreProvider)
+        .collection('users')
+        .where('userID', isEqualTo: id)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => UserModel.fromFirestore(doc.data(), doc.id))
+              .toList(),
+        );
+    /*
+    List<UserModel> userModelList = [];
+    await _read(firestoreProvider)
+        .collection('users')
+        .snapshots()
+        .map((snapshot) {
+      print("snapshot: $snapshot");
+      snapshot.docs.map((doc) {
+        UserModel user = UserModel.fromFirestore(doc.data(), doc.id);
+        userModelList.add(user);
+        // return UserModel.fromFirestore(doc.data(), doc.id);
+      }).toList();
+    });
+    print("userModelList: $userModelList");
+    return userModelList;
+
+     */
   }
 
   @override
