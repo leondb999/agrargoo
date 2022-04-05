@@ -39,16 +39,89 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
   List<QualifikationModel> qualifikationList = [];
   UserModel _loggedInUser = UserModel();
 
+  ///Get all Qualifikationen
+  Future<List<QualifikationModel>> getAllQualifikationen() async {
+    ///Alle Qualifikationen
+    List<QualifikationModel> alleQualifikationenList = [];
+
+    ///1. Hole alle Qualifikationen aus Firestore
+    await FirebaseFirestore.instance
+        .collection('qualifikationen')
+        .get()
+        .then((value) {
+      value.docs.forEach((doc) {
+        QualifikationModel quali = QualifikationModel(
+            qualifikationID: doc.id, qualifikationName: doc['name']);
+        alleQualifikationenList.add(quali);
+      });
+    });
+    print("all qualifikationModelList: $alleQualifikationenList");
+    return alleQualifikationenList;
+  }
+
+  ///getSelectedQualifikation
+  Future<List<QualifikationModel>> getSelectedQualifikation(
+      UserModel userModel) async {
+    ///Alle Qualifikationen
+    List<QualifikationModel> alleQualifikationenList = [];
+
+    ///Selected Qualifikationen
+    List<QualifikationModel> selectedQualifikationenList = [];
+
+    ///1. Hole alle Qualifikationen aus Firestore
+    await FirebaseFirestore.instance
+        .collection('qualifikationen')
+        .get()
+        .then((value) {
+      value.docs.forEach((doc) {
+        QualifikationModel quali = QualifikationModel(
+            qualifikationID: doc.id, qualifikationName: doc['name']);
+        alleQualifikationenList.add(quali);
+      });
+    });
+    print("all qualifikationModelList: $alleQualifikationenList");
+
+    ///2. Hole vom User selected qualifikationsIDs aus Firestore
+    List<dynamic> userQualifikationIDList = [];
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userModel.userID)
+        .get()
+        .then((value) {
+      userQualifikationIDList = (value['qualifikationList']);
+    });
+    print("qualifikationIDSelectedList: ${userQualifikationIDList}");
+
+    ///3. Filtere Liste aller Qualifikationen nach IDs
+    if (userQualifikationIDList.isNotEmpty) {
+      userQualifikationIDList.forEach((qualifikationID) {
+        alleQualifikationenList.forEach((qualifikation) {
+          if (qualifikationID == qualifikation.qualifikationID &&
+              selectedQualifikationenList.contains(qualifikation) == false) {
+            print("------------ add Qualifikation --------------- ");
+            print(" -> qualifikation:${qualifikation.qualifikationName}");
+            selectedQualifikationenList.add(qualifikation);
+          }
+        });
+      });
+    }
+
+    ///4. Return Selected Qualifikation aus Firestore
+    print(
+        "return: -> selectedQualifikationenList: ${selectedQualifikationenList}");
+    return selectedQualifikationenList;
+  }
+
   ///Select Qualifikationen
-  void openFilterDialog() async {
+  void openFilterDialog(UserModel userLoggedIn) async {
     await FilterListDialog.display<QualifikationModel>(
       context,
       hideSelectedTextCount: true,
       themeData: FilterListThemeData(context),
       headlineText: 'Wähle Qualifikationen aus',
       height: 500,
-      listData: qualifikationList,
-      selectedListData: selectedQualifikationList,
+      listData: await getAllQualifikationen(),
+      selectedListData: await getSelectedQualifikation(userLoggedIn),
       choiceChipLabel: (item) => item!.qualifikationName,
       validateSelectedItem: (list, val) => list!.contains(val),
       controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
@@ -63,14 +136,13 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
       onApplyButtonClick: (list) {
         setState(() {
           selectedQualifikationList = List.from(list!);
-          print("selectedQualifikationList2: $selectedQualifikationList");
           List<String> qualifikationIDList = [];
           selectedQualifikationList!.forEach((qualifikation) {
             qualifikationIDList.add(qualifikation.qualifikationID!);
           });
           ref
               .watch(userModelFirestoreControllerProvider.notifier)
-              .updateQualifikationen(_loggedInUser, qualifikationIDList);
+              .updateQualifikationen(userLoggedIn, qualifikationIDList);
         });
         Navigator.pop(context);
       },
@@ -88,19 +160,21 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
       ///Alle gespeicherten User in der Firestore Collection
       var userList =
           ref.read(userModelFirestoreControllerProvider.notifier).state;
-      print("userList: $userList");
+      print("userList123: $userList");
 
       ///LoggedIn User
       String? userID = ref.watch(authControllerProvider.notifier).state!.uid;
-      print("userID: $userID");
+
+      /*
       UserModel userLoggedIn = await ref
           .watch(userModelFirestoreControllerProvider.notifier)
           .getUserByID(userID);
       print(
           "userLoggedIn:ID ${userLoggedIn.userID} userLoggedIn Name: ${userLoggedIn.name}");
-      //  UserModel userLoggedIn =
-      //    UserProvider().getUserNameByUserID(userID, userList!).first;
-      print("userLoggedIn: $userLoggedIn");
+      */
+      UserModel? userLoggedIn =
+          UserProvider().getUserNameByUserID(userID, userList!).first;
+      print("userLoggedIn name: ${userLoggedIn.name}");
       setState(() {
         _loggedInUser = userLoggedIn;
       });
@@ -131,75 +205,40 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
 
   @override
   Widget build(BuildContext context) {
-    print("---------------build new --------------------");
     User? authControllerState = ref.watch(authControllerProvider);
+    authControllerState?.reload();
+    User? authControllerStateRead = ref.read(authControllerProvider);
+    String? userID = ref.read(authControllerProvider.notifier).state?.uid;
 
-    ///Alle gespeicherten User in der Firestore Collection
+    /// ALle User
     final userList = ref.watch(userModelFirestoreControllerProvider);
-
-    ///LoggedIn User
-    String? userID = ref.watch(authControllerProvider.notifier).state!.uid;
+    print("userList: $userList");
     print("userID: $userID");
-    UserModel userLoggedIn;
-    Future.delayed(Duration(microseconds: 10), () async {
-      setState(() async {
-        userLoggedIn = await ref
-            .watch(userModelFirestoreControllerProvider.notifier)
-            .getUserByID(userID);
-      });
-    });
-    setState(() {
-      _loggedInUser = userLoggedIn;
-    });
-    /*
     UserModel userLoggedIn =
         UserProvider().getUserNameByUserID(userID, userList!).first;
+    print("userLoggedIn: $userLoggedIn");
+    // getSelectedQualifikation(userLoggedIn);
+    getAllQualifikationen();
     setState(() {
       _loggedInUser = userLoggedIn;
     });
-    */
-    /*
-    FirebaseFirestore.instance
-        .collection('qualifikationen')
-        .get()
-        .then((value) {
-      value.docs.forEach((doc) {
-        QualifikationModel quali = QualifikationModel(
-            qualifikationID: doc.id, qualifikationName: doc['name']);
-        List<String?> idList = [];
-        if (qualifikationList.isNotEmpty) {
-          idList.add(quali.qualifikationID);
-          if (idList.contains(quali.qualifikationID) == false) {
-            setState(() {
-              qualifikationList.add(quali);
-            });
-          } else {
-            setState(() {
-              qualifikationList.add(quali);
-            });
-            idList.add(quali.qualifikationID);
-          }
-        }
-      });
-    });
-     */
 
-    print("userLoggedIn.qualifikationList: ${_loggedInUser.qualifikationList}");
+    print("userLoggedIn.qualifikationList: ${userLoggedIn.qualifikationList}");
 
-    if (_loggedInUser.qualifikationList != null) {
-      _loggedInUser.qualifikationList!.forEach((qualifikationID) {
+    if (userLoggedIn.qualifikationList != null) {
+      userLoggedIn.qualifikationList!.forEach((qualifikationID) {
         qualifikationList.forEach((qualifikation) {
           if (qualifikationID == qualifikation.qualifikationID &&
               selectedQualifikationList!.contains(qualifikation) == false) {
             print("hi");
-            // setState(() {
-            selectedQualifikationList!.add(qualifikation);
-            //  });
+            setState(() {
+              selectedQualifikationList!.add(qualifikation);
+            });
           }
         });
       });
     }
-
+    print("selectedQualifikationList: ${selectedQualifikationList}");
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
       bottomNavigationBar:
@@ -216,7 +255,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                     color: Color(0xFF1f623c),
                     child: Center(
                       child: Text(
-                        "${_loggedInUser.name}",
+                        "${userLoggedIn.name}",
                         style: TextStyle(
                           fontStyle: FontStyle.italic,
                           fontFamily: 'Open Sans',
@@ -239,12 +278,12 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                             flex: 4,
                             child: Column(
                               children: [
-                                _loggedInUser.profilImageURL == null
+                                userLoggedIn.profilImageURL == null
                                     ? Image.network(
                                         'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
                                       )
                                     : Image.network(
-                                        _loggedInUser.profilImageURL!,
+                                        userLoggedIn.profilImageURL!,
                                         width: 300,
                                         loadingBuilder: (BuildContext context,
                                             Widget child,
@@ -323,8 +362,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                             .watch(
                                                 userModelFirestoreControllerProvider
                                                     .notifier)
-                                            .updateURL(
-                                                _loggedInUser, urlString);
+                                            .updateURL(userLoggedIn, urlString);
                                       }
                                     },
                                     child: Text('Upload Profil Picture'),
@@ -387,7 +425,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                           border:
                                               Border.all(color: Colors.black)),
                                       child: Text(
-                                        '${_loggedInUser.name}, ${AgeCalculator.age(_loggedInUser.birthDate!).years} Jahre',
+                                        '${userLoggedIn.name}, ${AgeCalculator.age(userLoggedIn.birthDate!).years} Jahre',
                                         style: TextStyle(
                                           fontStyle: FontStyle.normal,
                                           fontFamily: 'Open Sans',
@@ -421,7 +459,9 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                     ),
                                     SizedBox(width: 40),
                                     TextButton(
-                                      onPressed: openFilterDialog,
+                                      onPressed: () {
+                                        openFilterDialog(userLoggedIn);
+                                      },
                                       child: Text(
                                         "Add",
                                         style: TextStyle(color: Colors.white),
@@ -436,45 +476,107 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                   ],
                                 ),
                               ),
-                              selectedQualifikationList!.isEmpty
+                              /*        selectedQualifikationList!.isEmpty
                                   ? Text("No Qualifikation selected yet")
-                                  : Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Container(
-                                        height: 200,
-                                        child: SingleChildScrollView(
-                                          child: StreamBuilder<List<UserModel>>(
-                                            stream: ,
+                                  : */
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  height: 200,
+                                  child: SingleChildScrollView(
+                                    child: StreamBuilder(
+                                        stream: FirebaseFirestore.instance
+                                            .collection('users')
+                                            .where('userID', isEqualTo: userID)
+                                            .snapshots(),
+                                        builder: (context,
+                                            AsyncSnapshot<QuerySnapshot>
+                                                snapshot) {
+                                          final user =
+                                              snapshot.data?.docs.first;
+                                          print(
+                                              "userStream : ${user!['name']}");
 
-                                            builder:(context, snapshot){
-                                              return GridView.count(
-                                              shrinkWrap: true,
-                                              crossAxisCount: 7,
-                                              childAspectRatio: 3,
-                                              children:
-                                                  selectedQualifikationList!.map(
-                                                (qualifikation) {
-                                                  return Container(
-                                                    margin: EdgeInsets.all(10),
-                                                    child: Text(
-                                                      "${qualifikation.qualifikationName}",
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 20,
-                                                      ),
+                                          if (userLoggedIn.qualifikationList !=
+                                              null) {
+                                            userLoggedIn.qualifikationList!
+                                                .forEach((qualifikationID) {
+                                              qualifikationList
+                                                  .forEach((qualifikation) {
+                                                if (qualifikationID ==
+                                                        qualifikation
+                                                            .qualifikationID &&
+                                                    selectedQualifikationList!
+                                                            .contains(
+                                                                qualifikation) ==
+                                                        false) {
+                                                  print("hi");
+                                                  // setState(() {
+                                                  selectedQualifikationList!
+                                                      .add(qualifikation);
+                                                  //  });
+                                                }
+                                              });
+                                            });
+                                          }
+
+                                          return GridView.count(
+                                            shrinkWrap: true,
+                                            crossAxisCount: 7,
+                                            childAspectRatio: 3,
+                                            children:
+                                                //[
+                                                //   Text("${user.first['name']}"),
+                                                selectedQualifikationList!.map(
+                                              (qualifikation) {
+                                                return Container(
+                                                  margin: EdgeInsets.all(10),
+                                                  child: Text(
+                                                    "${qualifikation.qualifikationName}",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 20,
                                                     ),
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            color: Colors.black)),
-                                                  );
-                                                },
-                                              ).toList(),
-                                            );
-    }
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: Colors.black)),
+                                                );
+                                              },
+                                            ).toList(),
+                                            //  ],
+                                          );
+
+                                          /*                           return GridView.count(
+                                                  shrinkWrap: true,
+                                                  crossAxisCount: 7,
+                                                  childAspectRatio: 3,
+                                                  children:
+                                                      selectedQualifikationList!
+                                                          .map(
+                                                    (qualifikation) {
+                                                      return Container(
+                                                        margin:
+                                                            EdgeInsets.all(10),
+                                                        child: Text(
+                                                          "${qualifikation.qualifikationName}",
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 20,
+                                                          ),
+                                                        ),
+                                                        decoration: BoxDecoration(
+                                                            border: Border.all(
+                                                                color: Colors
+                                                                    .black)),
+                                                      );
+                                                    },
+                                                  ).toList(),
+                                                );*/
+                                        }),
+                                  ),
+                                ),
+                              ),
                               SizedBox(
                                   height: MediaQuery.of(context).size.height *
                                       0.04),

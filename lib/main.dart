@@ -226,8 +226,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     /// ALle User
     final userList = ref.watch(userModelFirestoreControllerProvider);
+    print("userList: $userList");
     final userLoggedIn = UserProvider().getUserNameByUserID(userID, userList!);
-    //  print("userLoggedIN: $userLoggedIn");
+    print("userLoggedIN: $userLoggedIn");
     final String? documentID =
         ref.read(authControllerProvider.notifier).state?.uid;
 

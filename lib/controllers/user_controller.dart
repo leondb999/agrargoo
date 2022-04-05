@@ -34,12 +34,17 @@ class FirestoreUserModelController extends StateNotifier<List<UserModel>?> {
     super.dispose();
   }
 
+/*
   Future<UserModel> getUserByID(String id) async {
     List<UserModel> list =
         await _read(fireUserModelRepositoryProvider).getUserByID(id).first;
+
     return list.first;
     // print("getUserByID: ${x.first.userID}");
     //return _read(fireUserModelRepositoryProvider).getUserByID(id);
+  }*/
+  Stream<List<UserModel>> getUserByID(String id) {
+    return _read(fireUserModelRepositoryProvider).getUserByID(id);
   }
 
   void getUserModelList() async {
