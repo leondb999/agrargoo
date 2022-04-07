@@ -174,11 +174,13 @@ class _LoginState extends ConsumerState<LoginPage> {
                         child: RichText(
                           text: TextSpan(
                             text: 'Du hast noch keinen Account? ',
-                            style: const TextStyle(color: Colors.black),
+                            style: const TextStyle(
+                                fontSize: 15, color: Colors.black),
                             children: [
                               TextSpan(
                                 text: 'Jetzt registieren',
-                                style: TextStyle(color: Color(0xFF2E6C49)),
+                                style: TextStyle(
+                                    fontSize: 15, color: Color(0xFF2E6C49)),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     Navigator.pushNamed(
