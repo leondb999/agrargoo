@@ -23,6 +23,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
+import 'UI/pages/1_landing_page_christina.dart';
 import 'UI/pages/chat/5_chat.dart';
 import 'widgets/layout_widgets.dart';
 import 'UI/login_riverpod/login.dart';
@@ -72,7 +73,7 @@ class MyApp extends StatelessWidget {
                   );
                 default:
                   return ListView.builder(itemBuilder: (context, index) {
-                    return Text("Her könnten ihre Jobanzeigen stehen");
+                    return Text("Hier könnten ihre Jobanzeigen stehen");
                   });
               }
             } else {
@@ -163,7 +164,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: "/home",
+        initialRoute: '/landingpage',
         routes: {
           '/login': (context) => LoginPage(),
           '/home': (context) => HomeScreen(),
@@ -179,6 +180,7 @@ class MyApp extends StatelessWidget {
           '/add-edit-jobanzeige': (context) => AddEditJobanzeige(),
           '/add-hof': (context) => AddHofPage(),
           '/chat': (context) => Chat(),
+          '/landingpage': (context) => LandingPageCh(),
           //  '/edit-helfer-page': (context) => EditHelfer(),
         },
       ),
@@ -213,7 +215,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     // TODO: implement initState
     checkAuthentification();
-
     super.initState();
   }
 
@@ -294,174 +295,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             );
                           },
                         ),
-                        /*
-                  Container(
-                      height: 300,
-                      child: StreamBuilder<QuerySnapshot>(
-                        stream: usersCollection.snapshots(),
-                        builder: (context,
-                            AsyncSnapshot<QuerySnapshot> snapshot) {
-                          if (snapshot.hasError) {
-                            return Text('Something went wrong');
-                          }
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Container(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          final data = snapshot.requireData;
-
-                          return Column(
-                            children: [
-                              Text("Hello"),
-                              ListView.builder(
-                                itemCount: data.size,
-                                itemBuilder: (context, index) {
-                                  return Text(
-                                      'My Name is ${data.docs[index]['name']} and i am a ${data.docs[index]['landwirt'] ? 'Landwirt' : 'Arbeiter'}');
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ))
-                  */
                       ],
                     ),
-            ),
-            Expanded(
-              flex: 7,
-              child: Column(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Center(
-                      child: Text(
-                        "In 3 Schritten zum Erfolg",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontFamily: 'Open Sans',
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                            width: 35.0,
-                            height: 35.0,
-                            decoration: new BoxDecoration(
-                              color: Color(0xFF2E6C49),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                                child: Text(
-                              "1.",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.0,
-                              ),
-                            ))),
-                        SizedBox(width: 10),
-                        Container(
-                          child: Center(
-                            child: Text(
-                              "Deine Wünsche",
-                              style: TextStyle(
-                                fontFamily: 'Open Sans',
-                                fontSize: 25.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 30),
-                        Container(
-                          width: 35.0,
-                          height: 35.0,
-                          decoration: new BoxDecoration(
-                            color: Color(0xFF2E6C49),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "2.",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Container(
-                          child: Center(
-                            child: Text(
-                              "Match finden",
-                              style: TextStyle(
-                                fontSize: 25.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 30),
-                        Container(
-                            width: 35.0,
-                            height: 35.0,
-                            decoration: new BoxDecoration(
-                              color: Color(0xFF2E6C49),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                                child: Text(
-                              "3.",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.0,
-                              ),
-                            ))),
-                        SizedBox(width: 10),
-                        Container(
-                          child: Center(
-                            child: Text(
-                              "Durchstarten",
-                              style: TextStyle(
-                                fontSize: 25.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 35.0, bottom: 30),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        //Navigator.of(context).push(MaterialPageRoute(
-                        //     builder: (context) => WhoAreYou()));
-                        Navigator.of(context).pushNamed(WhoAreYou.routename);
-                      },
-                      child: Text('Los gehts!'),
-                      style: ElevatedButton.styleFrom(
-                          primary: Color(0xFF9FB98B),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 20),
-                          textStyle: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ],
-              ),
             ),
           ],
         ),

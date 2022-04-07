@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:agrargo/UI/login_riverpod/login.dart';
+import 'package:agrargo/UI/pages/1_landing_page_christina.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/UI/pages/chat/5_chat.dart';
 import 'package:agrargo/UI/pages/profil/6_a_helfer_profil.dart';
@@ -57,7 +58,7 @@ BottomNavigationBar navigationBar(
 
           ///Home Page
           case 0:
-            Navigator.of(context).pushNamed(HomeScreen.routename);
+            Navigator.of(context).pushNamed(LandingPageCh.routename);
             break;
 
           ///Profil Page
@@ -104,7 +105,8 @@ BottomNavigationBar navigationBar(
               }
             } else {
               ///User ist ausgeloggt
-              Navigator.of(context).pushNamed(WhoAreYou.routename);
+              Navigator.of(context)
+                  .pushNamed(JobangebotUebersichtPage.routename);
             }
             break;
 
@@ -180,7 +182,7 @@ AppBar appBar({
               }
             } else {
               ///User ist ausgeloggt
-              Navigator.of(context).pushNamed(HomeScreen.routename);
+              Navigator.of(context).pushNamed(LandingPageCh.routename);
             }
           },
         ),
@@ -197,7 +199,7 @@ AppBar appBar({
                 onPressed: () {
                   //  print("authControllerState Sign Out: $user");
                   ref.read(authControllerProvider.notifier).signOut(context);
-                  Navigator.pushNamed(context, HomeScreen.routename);
+                  Navigator.pushNamed(context, LandingPageCh.routename);
                 },
                 child: Text("Ausloggen",
                     style: TextStyle(

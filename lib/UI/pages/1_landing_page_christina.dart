@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LandingPageCh extends ConsumerStatefulWidget {
   const LandingPageCh({Key? key}) : super(key: key);
-  static const routename = '/landingpagech';
+  static const routename = '/landingpage';
 
   @override
   _LandingPageChState createState() => _LandingPageChState();
