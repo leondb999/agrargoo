@@ -39,23 +39,7 @@ class _JobangebotUebersichtPageState
           navigationBar(index: 0, context: context, ref: ref, home: true),
       body: Column(
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.17,
-            color: Color(0xFF1f623c),
-            child: Center(
-              child: Text(
-                "Aktuelle Stellenangebote",
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontFamily: 'Open Sans',
-                  fontSize: 50.0,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFffffff),
-                ),
-              ),
-            ),
-          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.017),
           Container(
             height: MediaQuery.of(context).size.height * 0.1,
             child: Row(
@@ -72,6 +56,7 @@ class _JobangebotUebersichtPageState
               height: MediaQuery.of(context).size.height * 0.015),
           Expanded(
             child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               child: Container(
                   height: MediaQuery.of(context).size.height,
                   child: jobAnzeigeList.isNotEmpty
@@ -91,14 +76,4 @@ class _JobangebotUebersichtPageState
       ),
     );
   }
-}
-
-Widget _activeAnzeige(bool status) {
-  Widget x = Text("Hello");
-  if (status == true) {
-    x = Text('Active', style: TextStyle(color: Colors.green));
-  } else {
-    x = Text('inactive', style: TextStyle(color: Colors.red));
-  }
-  return x;
 }
