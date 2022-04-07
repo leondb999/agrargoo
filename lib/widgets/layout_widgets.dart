@@ -58,7 +58,7 @@ BottomNavigationBar navigationBar(
 
           ///Home Page
           case 0:
-            Navigator.of(context).pushNamed(LandingPageCh.routename);
+            Navigator.of(context).pushNamed(JobangebotUebersichtPage.routename);
             break;
 
           ///Profil Page
