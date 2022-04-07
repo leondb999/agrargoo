@@ -84,7 +84,14 @@ BottomNavigationBar navigationBar(
               }
             } else {
               ///User ist ausgeloggt
-              Navigator.of(context).pushNamed(WhoAreYou.routename);
+
+              Navigator.pushNamed(
+                context,
+                LoginPage.routename,
+                arguments: {'landwirt': false},
+              );
+
+              //Navigator.of(context).pushNamed(WhoAreYou.routename);
             }
             break;
         }
