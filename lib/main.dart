@@ -160,7 +160,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'AgrarGo Riverpod',
+        title: 'AgrarGo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),

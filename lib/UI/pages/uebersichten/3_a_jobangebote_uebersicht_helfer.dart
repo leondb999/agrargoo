@@ -36,7 +36,7 @@ class _JobangebotUebersichtPageState
       appBar: appBar(context: context, ref: ref, home: false),
       resizeToAvoidBottomInset: false,
       bottomNavigationBar:
-          navigationBar(index: 0, context: context, ref: ref, home: true),
+          navigationBar(index: 0, context: context, ref: ref, home: false),
       body: Column(
         children: [
           SizedBox(height: MediaQuery.of(context).size.height * 0.017),
