@@ -69,375 +69,313 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            CircleAvatar(),
             Center(
-                child: CircleAvatar(
-              child: Row(children: [
-                ///Todo implement function with Error handling for Error:   Error: [firebase_storage/object-not-found] No object exists at the desired reference. ||ALso, um zu prüfen, ob die URL eine valide URL ist
-                userLoggedIn.profilImageURL == null
-                    ? Image.network(
-                        'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
-                      )
-                    : Image.network(
-                        userLoggedIn.profilImageURL!,
-                        width: 300,
-                        loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            // child: CircularProgressIndicator(),
-                            child: Container(
-                              height: 100.0,
-                              width: 100.0,
-                              child: LiquidCircularProgressIndicator(
-                                value: progress / 100,
-                                valueColor:
-                                    AlwaysStoppedAnimation(Colors.green),
-                                backgroundColor: Colors.white,
-                                direction: Axis.vertical,
-                                center: Text(
-                                  "${progress.toInt()}%",
-                                  style: GoogleFonts.poppins(
-                                      color: Colors.black87, fontSize: 25.0),
-                                ),
+                child: Column(children: [
+              ///Todo implement function with Error handling for Error:   Error: [firebase_storage/object-not-found] No object exists at the desired reference. ||ALso, um zu prüfen, ob die URL eine valide URL ist
+              userLoggedIn.profilImageURL == null
+                  ? Image.network(
+                      'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
+                    )
+                  : Image.network(
+                      userLoggedIn.profilImageURL!,
+                      width: 300,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          // child: CircularProgressIndicator(),
+                          child: Container(
+                            height: 100.0,
+                            width: 100.0,
+                            child: LiquidCircularProgressIndicator(
+                              value: progress / 100,
+                              valueColor: AlwaysStoppedAnimation(Colors.green),
+                              backgroundColor: Colors.white,
+                              direction: Axis.vertical,
+                              center: Text(
+                                "${progress.toInt()}%",
+                                style: GoogleFonts.poppins(
+                                    color: Colors.black87, fontSize: 25.0),
                               ),
                             ),
-                          );
-                        },
-                      ),
-              ]),
-            )),
+                          ),
+                        );
+                      },
+                    ),
+            ])),
+            Center(
+              child: ElevatedButton(
+                child: Text("Bild hochladen"),
+                style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF9FB98B),
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    textStyle:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
 
-            // Row(
-            //   children: [
-            //     ///Todo implement function with Error handling for Error:   Error: [firebase_storage/object-not-found] No object exists at the desired reference. ||ALso, um zu prüfen, ob die URL eine valide URL ist
-            //     userLoggedIn.profilImageURL == null
-            //         ? Image.network(
-            //             'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
-            //           )
-            //         : Image.network(
-            //             userLoggedIn.profilImageURL!,
-            //             width: 300,
-            //             loadingBuilder: (BuildContext context, Widget child,
-            //                 ImageChunkEvent? loadingProgress) {
-            //               if (loadingProgress == null) return child;
-            //               return Center(
-            //                 // child: CircularProgressIndicator(),
-            //                 child: Container(
-            //                   height: 100.0,
-            //                   width: 100.0,
-            //                   child: LiquidCircularProgressIndicator(
-            //                     value: progress / 100,
-            //                     valueColor:
-            //                         AlwaysStoppedAnimation(Colors.green),
-            //                     backgroundColor: Colors.white,
-            //                     direction: Axis.vertical,
-            //                     center: Text(
-            //                       "${progress.toInt()}%",
-            //                       style: GoogleFonts.poppins(
-            //                           color: Colors.black87,
-            //                           fontSize: 25.0),
-            //                     ),
-            //                   ),
-            //                 ),
-            //               );
-            //             },
-            //           ),
-            //
-            // ),
-            //     ElevatedButton(
-            //       child: Text("Upload Picture"),
-            //       style: ElevatedButton.styleFrom(
-            //           primary: Color(0xFF9FB98B),
-            //           padding:
-            //               EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-            //           textStyle:
-            //               TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            //
-            //       ///Todo implement CircularProgressindicator um dem Nutzer zu zeigen, dass das Profilbild grade am hochladen ist
-            //       onPressed: () async {
-            //         var picked = await FilePicker.platform.pickFiles();
-            //         if (picked != null) {
-            //           String fileExtension =
-            //               getFileExtension(picked.files.first.name);
-            //
-            //           Uint8List fileBytes = picked.files.first.bytes!;
-            //           FirebaseStorage storage = FirebaseStorage.instance;
-            //           Reference reference =
-            //               storage.ref("${userID}$fileExtension");
-            //           UploadTask task = FirebaseStorage.instance
-            //               .ref("$userID$fileExtension")
-            //               .putData(fileBytes);
-            //           task.snapshotEvents.listen((event) {
-            //             var x = ((event.bytesTransferred.toDouble() /
-            //                     event.totalBytes.toDouble()) *
-            //                 100);
-            //             setState(() {
-            //               progress = x;
-            //             });
-            //           });
-            //           String urlString = await reference.getDownloadURL();
-            //           print("getDownloadURL(): $urlString");
-            //           ref
-            //               .watch(userModelFirestoreControllerProvider.notifier)
-            //               .updateURL(userLoggedIn, urlString);
-            //         }
-            //       },
-            //     ),
-            //   ],
-            // ),
-            ElevatedButton(
-              child: Text("Upload Picture"),
-              style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF9FB98B),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                  textStyle:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                ///Todo implement CircularProgressindicator um dem Nutzer zu zeigen, dass das Profilbild grade am hochladen ist
+                onPressed: () async {
+                  var picked = await FilePicker.platform.pickFiles();
+                  if (picked != null) {
+                    String fileExtension =
+                        getFileExtension(picked.files.first.name);
 
-              ///Todo implement CircularProgressindicator um dem Nutzer zu zeigen, dass das Profilbild grade am hochladen ist
-              onPressed: () async {
-                var picked = await FilePicker.platform.pickFiles();
-                if (picked != null) {
-                  String fileExtension =
-                      getFileExtension(picked.files.first.name);
-
-                  Uint8List fileBytes = picked.files.first.bytes!;
-                  FirebaseStorage storage = FirebaseStorage.instance;
-                  Reference reference = storage.ref("${userID}$fileExtension");
-                  UploadTask task = FirebaseStorage.instance
-                      .ref("$userID$fileExtension")
-                      .putData(fileBytes);
-                  task.snapshotEvents.listen((event) {
-                    var x = ((event.bytesTransferred.toDouble() /
-                            event.totalBytes.toDouble()) *
-                        100);
-                    setState(() {
-                      progress = x;
+                    Uint8List fileBytes = picked.files.first.bytes!;
+                    FirebaseStorage storage = FirebaseStorage.instance;
+                    Reference reference =
+                        storage.ref("${userID}$fileExtension");
+                    UploadTask task = FirebaseStorage.instance
+                        .ref("$userID$fileExtension")
+                        .putData(fileBytes);
+                    task.snapshotEvents.listen((event) {
+                      var x = ((event.bytesTransferred.toDouble() /
+                              event.totalBytes.toDouble()) *
+                          100);
+                      setState(() {
+                        progress = x;
+                      });
                     });
-                  });
-                  String urlString = await reference.getDownloadURL();
-                  print("getDownloadURL(): $urlString");
-                  ref
-                      .watch(userModelFirestoreControllerProvider.notifier)
-                      .updateURL(userLoggedIn, urlString);
-                }
-              },
+                    String urlString = await reference.getDownloadURL();
+                    print("getDownloadURL(): $urlString");
+                    ref
+                        .watch(userModelFirestoreControllerProvider.notifier)
+                        .updateURL(userLoggedIn, urlString);
+                  }
+                },
+              ),
             ),
-            Row(
-              children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height * 0.015),
-                Expanded(
-                  flex: 1,
-                  child: Text(""),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Text(
-                    "Name",
-                    style: TextStyle(
-                      fontStyle: FontStyle.normal,
-                      fontFamily: 'Open Sans',
-                      fontSize: 23.0,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1f623c),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 25, 20, 4),
+                      child: Container(
+                        height: 60,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Name',
+                              style: TextStyle(color: Colors.white70),
+                            ),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            border:
+                                Border.all(width: 1.0, color: Colors.white70)),
+                      ),
                     ),
-                  ),
-                ),
-                Expanded(
-                  flex: 10,
-                  child: Text(
-                    '${userLoggedIn.name}',
-                    style: TextStyle(
-                      fontStyle: FontStyle.normal,
-                      fontFamily: 'Open Sans',
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFF000000),
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.015),
+                        Expanded(
+                          flex: 1,
+                          child: Text(""),
+                        ),
+                        Expanded(
+                          flex: 5,
+                          child: Text(
+                            "Name",
+                            style: TextStyle(
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'Open Sans',
+                              fontSize: 23.0,
+                              color: Color(0xFF1f623c),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 10,
+                          child: Text(
+                            '${userLoggedIn.name}',
+                            style: TextStyle(
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.normal,
+                              color: Color(0xFF000000),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              "Bearbeiten",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Color(0xFF9FB98B)),
+                            ),
+                            // color: Colors.blue,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(""),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Bearbeiten",
-                      style: TextStyle(color: Colors.white),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.015),
+                        Expanded(
+                          flex: 1,
+                          child: Text(""),
+                        ),
+                        Expanded(
+                          flex: 5,
+                          child: Text(
+                            "E-Mail",
+                            style: TextStyle(
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'Open Sans',
+                              fontSize: 23.0,
+                              color: Color(0xFF1f623c),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 10,
+                          child: Text(
+                            '${userLoggedIn.email}',
+                            style: TextStyle(
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.normal,
+                              color: Color(0xFF000000),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: Text(""),
+                        ),
+                      ],
                     ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.blue),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.015),
+                        Expanded(
+                          flex: 1,
+                          child: Text(""),
+                        ),
+                        Expanded(
+                          flex: 5,
+                          child: Text(
+                            "Geburtsdatum",
+                            style: TextStyle(
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'Open Sans',
+                              fontSize: 23.0,
+                              color: Color(0xFF1f623c),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 10,
+                          child: Text(
+                            '${userLoggedIn.birthDate}',
+                            style: TextStyle(
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.normal,
+                              color: Color(0xFF000000),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              "Bearbeiten",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Color(0xFF9FB98B)),
+                            ),
+                            // color: Colors.blue,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(""),
+                        ),
+                      ],
                     ),
-                    // color: Colors.blue,
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(""),
-                ),
-              ],
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            Row(
-              children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height * 0.015),
-                Expanded(
-                  flex: 1,
-                  child: Text(""),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Text(
-                    "E-Mail",
-                    style: TextStyle(
-                      fontStyle: FontStyle.normal,
-                      fontFamily: 'Open Sans',
-                      fontSize: 23.0,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1f623c),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.015),
+                        Expanded(
+                          flex: 1,
+                          child: Text(""),
+                        ),
+                        Expanded(
+                          flex: 5,
+                          child: Text(
+                            "Rechnungsadresse",
+                            style: TextStyle(
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'Open Sans',
+                              fontSize: 23.0,
+                              color: Color(0xFF1f623c),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 10,
+                          child: Text(
+                            '${userLoggedIn.name}',
+                            style: TextStyle(
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.normal,
+                              color: Color(0xFF000000),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              "Bearbeiten",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Color(0xFF9FB98B)),
+                            ),
+                            // color: Colors.blue,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(""),
+                        ),
+                      ],
                     ),
-                  ),
+                  ],
                 ),
-                Expanded(
-                  flex: 10,
-                  child: Text(
-                    '${userLoggedIn.email}',
-                    style: TextStyle(
-                      fontStyle: FontStyle.normal,
-                      fontFamily: 'Open Sans',
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFF000000),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Bearbeiten",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.blue),
-                    ),
-                    // color: Colors.blue,
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(""),
-                ),
-              ],
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            Row(
-              children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height * 0.015),
-                Expanded(
-                  flex: 1,
-                  child: Text(""),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Text(
-                    "Geburtsdatum",
-                    style: TextStyle(
-                      fontStyle: FontStyle.normal,
-                      fontFamily: 'Open Sans',
-                      fontSize: 23.0,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1f623c),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 10,
-                  child: Text(
-                    '${userLoggedIn.birthDate}',
-                    style: TextStyle(
-                      fontStyle: FontStyle.normal,
-                      fontFamily: 'Open Sans',
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFF000000),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Bearbeiten",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.blue),
-                    ),
-                    // color: Colors.blue,
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(""),
-                ),
-              ],
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            Row(
-              children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height * 0.015),
-                Expanded(
-                  flex: 1,
-                  child: Text(""),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Text(
-                    "Rechnungsadresse",
-                    style: TextStyle(
-                      fontStyle: FontStyle.normal,
-                      fontFamily: 'Open Sans',
-                      fontSize: 23.0,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1f623c),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 10,
-                  child: Text(
-                    '${userLoggedIn.name}',
-                    style: TextStyle(
-                      fontStyle: FontStyle.normal,
-                      fontFamily: 'Open Sans',
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFF000000),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Bearbeiten",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.blue),
-                    ),
-                    // color: Colors.blue,
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(""),
-                ),
-              ],
-            ),
+              ),
+            )
           ]),
       actions: <Widget>[
         new FlatButton(
@@ -445,7 +383,10 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
             Navigator.of(context).pop();
           },
           textColor: Theme.of(context).primaryColor,
-          child: const Text('Abbrechen'),
+          child: const Text(
+            'Abbrechen',
+            style: TextStyle(color: Colors.black),
+          ),
         ),
       ],
     );
@@ -579,6 +520,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                           child: Text("Alle Anzeigen",
                               style: TextStyle(fontSize: 30)),
                         )),
+                    Expanded(flex: 1, child: Text("")),
                   ]),
 
                   /// Zeige Anzeigen des Users
