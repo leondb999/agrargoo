@@ -52,6 +52,405 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     });
   }
 */
+  Widget _buildPopupDialog(
+      BuildContext context, String userID, UserModel userLoggedIn) {
+    return new AlertDialog(
+      title: const Text(
+        "Einstellungen",
+        style: TextStyle(
+          fontStyle: FontStyle.normal,
+          fontFamily: 'Open Sans',
+          fontSize: 23.0,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF1f623c),
+        ),
+      ),
+      content: new Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            CircleAvatar(),
+            Center(
+                child: CircleAvatar(
+              child: Row(children: [
+                ///Todo implement function with Error handling for Error:   Error: [firebase_storage/object-not-found] No object exists at the desired reference. ||ALso, um zu prüfen, ob die URL eine valide URL ist
+                userLoggedIn.profilImageURL == null
+                    ? Image.network(
+                        'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
+                      )
+                    : Image.network(
+                        userLoggedIn.profilImageURL!,
+                        width: 300,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            // child: CircularProgressIndicator(),
+                            child: Container(
+                              height: 100.0,
+                              width: 100.0,
+                              child: LiquidCircularProgressIndicator(
+                                value: progress / 100,
+                                valueColor:
+                                    AlwaysStoppedAnimation(Colors.green),
+                                backgroundColor: Colors.white,
+                                direction: Axis.vertical,
+                                center: Text(
+                                  "${progress.toInt()}%",
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.black87, fontSize: 25.0),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+              ]),
+            )),
+
+            // Row(
+            //   children: [
+            //     ///Todo implement function with Error handling for Error:   Error: [firebase_storage/object-not-found] No object exists at the desired reference. ||ALso, um zu prüfen, ob die URL eine valide URL ist
+            //     userLoggedIn.profilImageURL == null
+            //         ? Image.network(
+            //             'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
+            //           )
+            //         : Image.network(
+            //             userLoggedIn.profilImageURL!,
+            //             width: 300,
+            //             loadingBuilder: (BuildContext context, Widget child,
+            //                 ImageChunkEvent? loadingProgress) {
+            //               if (loadingProgress == null) return child;
+            //               return Center(
+            //                 // child: CircularProgressIndicator(),
+            //                 child: Container(
+            //                   height: 100.0,
+            //                   width: 100.0,
+            //                   child: LiquidCircularProgressIndicator(
+            //                     value: progress / 100,
+            //                     valueColor:
+            //                         AlwaysStoppedAnimation(Colors.green),
+            //                     backgroundColor: Colors.white,
+            //                     direction: Axis.vertical,
+            //                     center: Text(
+            //                       "${progress.toInt()}%",
+            //                       style: GoogleFonts.poppins(
+            //                           color: Colors.black87,
+            //                           fontSize: 25.0),
+            //                     ),
+            //                   ),
+            //                 ),
+            //               );
+            //             },
+            //           ),
+            //
+            // ),
+            //     ElevatedButton(
+            //       child: Text("Upload Picture"),
+            //       style: ElevatedButton.styleFrom(
+            //           primary: Color(0xFF9FB98B),
+            //           padding:
+            //               EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+            //           textStyle:
+            //               TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            //
+            //       ///Todo implement CircularProgressindicator um dem Nutzer zu zeigen, dass das Profilbild grade am hochladen ist
+            //       onPressed: () async {
+            //         var picked = await FilePicker.platform.pickFiles();
+            //         if (picked != null) {
+            //           String fileExtension =
+            //               getFileExtension(picked.files.first.name);
+            //
+            //           Uint8List fileBytes = picked.files.first.bytes!;
+            //           FirebaseStorage storage = FirebaseStorage.instance;
+            //           Reference reference =
+            //               storage.ref("${userID}$fileExtension");
+            //           UploadTask task = FirebaseStorage.instance
+            //               .ref("$userID$fileExtension")
+            //               .putData(fileBytes);
+            //           task.snapshotEvents.listen((event) {
+            //             var x = ((event.bytesTransferred.toDouble() /
+            //                     event.totalBytes.toDouble()) *
+            //                 100);
+            //             setState(() {
+            //               progress = x;
+            //             });
+            //           });
+            //           String urlString = await reference.getDownloadURL();
+            //           print("getDownloadURL(): $urlString");
+            //           ref
+            //               .watch(userModelFirestoreControllerProvider.notifier)
+            //               .updateURL(userLoggedIn, urlString);
+            //         }
+            //       },
+            //     ),
+            //   ],
+            // ),
+            ElevatedButton(
+              child: Text("Upload Picture"),
+              style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF9FB98B),
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                  textStyle:
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+
+              ///Todo implement CircularProgressindicator um dem Nutzer zu zeigen, dass das Profilbild grade am hochladen ist
+              onPressed: () async {
+                var picked = await FilePicker.platform.pickFiles();
+                if (picked != null) {
+                  String fileExtension =
+                      getFileExtension(picked.files.first.name);
+
+                  Uint8List fileBytes = picked.files.first.bytes!;
+                  FirebaseStorage storage = FirebaseStorage.instance;
+                  Reference reference = storage.ref("${userID}$fileExtension");
+                  UploadTask task = FirebaseStorage.instance
+                      .ref("$userID$fileExtension")
+                      .putData(fileBytes);
+                  task.snapshotEvents.listen((event) {
+                    var x = ((event.bytesTransferred.toDouble() /
+                            event.totalBytes.toDouble()) *
+                        100);
+                    setState(() {
+                      progress = x;
+                    });
+                  });
+                  String urlString = await reference.getDownloadURL();
+                  print("getDownloadURL(): $urlString");
+                  ref
+                      .watch(userModelFirestoreControllerProvider.notifier)
+                      .updateURL(userLoggedIn, urlString);
+                }
+              },
+            ),
+            Row(
+              children: <Widget>[
+                SizedBox(height: MediaQuery.of(context).size.height * 0.015),
+                Expanded(
+                  flex: 1,
+                  child: Text(""),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Text(
+                    "Name",
+                    style: TextStyle(
+                      fontStyle: FontStyle.normal,
+                      fontFamily: 'Open Sans',
+                      fontSize: 23.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1f623c),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 10,
+                  child: Text(
+                    '${userLoggedIn.name}',
+                    style: TextStyle(
+                      fontStyle: FontStyle.normal,
+                      fontFamily: 'Open Sans',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF000000),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Bearbeiten",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.blue),
+                    ),
+                    // color: Colors.blue,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(""),
+                ),
+              ],
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            Row(
+              children: <Widget>[
+                SizedBox(height: MediaQuery.of(context).size.height * 0.015),
+                Expanded(
+                  flex: 1,
+                  child: Text(""),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Text(
+                    "E-Mail",
+                    style: TextStyle(
+                      fontStyle: FontStyle.normal,
+                      fontFamily: 'Open Sans',
+                      fontSize: 23.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1f623c),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 10,
+                  child: Text(
+                    '${userLoggedIn.email}',
+                    style: TextStyle(
+                      fontStyle: FontStyle.normal,
+                      fontFamily: 'Open Sans',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF000000),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Bearbeiten",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.blue),
+                    ),
+                    // color: Colors.blue,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(""),
+                ),
+              ],
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            Row(
+              children: <Widget>[
+                SizedBox(height: MediaQuery.of(context).size.height * 0.015),
+                Expanded(
+                  flex: 1,
+                  child: Text(""),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Text(
+                    "Geburtsdatum",
+                    style: TextStyle(
+                      fontStyle: FontStyle.normal,
+                      fontFamily: 'Open Sans',
+                      fontSize: 23.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1f623c),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 10,
+                  child: Text(
+                    '${userLoggedIn.birthDate}',
+                    style: TextStyle(
+                      fontStyle: FontStyle.normal,
+                      fontFamily: 'Open Sans',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF000000),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Bearbeiten",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.blue),
+                    ),
+                    // color: Colors.blue,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(""),
+                ),
+              ],
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            Row(
+              children: <Widget>[
+                SizedBox(height: MediaQuery.of(context).size.height * 0.015),
+                Expanded(
+                  flex: 1,
+                  child: Text(""),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Text(
+                    "Rechnungsadresse",
+                    style: TextStyle(
+                      fontStyle: FontStyle.normal,
+                      fontFamily: 'Open Sans',
+                      fontSize: 23.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1f623c),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 10,
+                  child: Text(
+                    '${userLoggedIn.name}',
+                    style: TextStyle(
+                      fontStyle: FontStyle.normal,
+                      fontFamily: 'Open Sans',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF000000),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Bearbeiten",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.blue),
+                    ),
+                    // color: Colors.blue,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(""),
+                ),
+              ],
+            ),
+          ]),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Abbrechen'),
+        ),
+      ],
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -111,129 +510,25 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
             ? Text("Nothing to See")
             : Column(
                 children: [
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+
                   Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.17,
-                    color: Color(0xFF1f623c),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            color: Colors.yellow,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: Container(
-                            color: Colors.blue,
-                            child: Center(
-                                child: userLoggedIn == null
-                                    ? Text("No User found")
-                                    : Text("${userLoggedIn.name}`s Profil",
-                                        style: TextStyle(
-                                            fontStyle: FontStyle.italic,
-                                            fontFamily: 'Open Sans',
-                                            fontSize: 50.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xFFffffff)))),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            ///Todo implement function with Error handling for Error:   Error: [firebase_storage/object-not-found] No object exists at the desired reference. ||ALso, um zu prüfen, ob die URL eine valide URL ist
-                            userLoggedIn.profilImageURL == null
-                                ? Image.network(
-                                    'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
-                                  )
-                                : Image.network(
-                                    userLoggedIn.profilImageURL!,
-                                    width: 300,
-                                    loadingBuilder: (BuildContext context,
-                                        Widget child,
-                                        ImageChunkEvent? loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                        // child: CircularProgressIndicator(),
-                                        child: Container(
-                                          height: 100.0,
-                                          width: 100.0,
-                                          child:
-                                              LiquidCircularProgressIndicator(
-                                            value: progress / 100,
-                                            valueColor: AlwaysStoppedAnimation(
-                                                Colors.green),
-                                            backgroundColor: Colors.white,
-                                            direction: Axis.vertical,
-                                            center: Text(
-                                              "${progress.toInt()}%",
-                                              style: GoogleFonts.poppins(
-                                                  color: Colors.black87,
-                                                  fontSize: 25.0),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-
-                            ElevatedButton(
-                              child: Text("Upload Picture"),
-                              style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFF9FB98B),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 50, vertical: 20),
-                                  textStyle: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-
-                              ///Todo implement CircularProgressindicator um dem Nutzer zu zeigen, dass das Profilbild grade am hochladen ist
-                              onPressed: () async {
-                                var picked =
-                                    await FilePicker.platform.pickFiles();
-                                if (picked != null) {
-                                  String fileExtension =
-                                      getFileExtension(picked.files.first.name);
-
-                                  Uint8List fileBytes =
-                                      picked.files.first.bytes!;
-                                  FirebaseStorage storage =
-                                      FirebaseStorage.instance;
-                                  Reference reference =
-                                      storage.ref("${userID}$fileExtension");
-                                  UploadTask task = FirebaseStorage.instance
-                                      .ref("$userID$fileExtension")
-                                      .putData(fileBytes);
-                                  task.snapshotEvents.listen((event) {
-                                    var x =
-                                        ((event.bytesTransferred.toDouble() /
-                                                event.totalBytes.toDouble()) *
-                                            100);
-                                    setState(() {
-                                      progress = x;
-                                    });
-                                  });
-                                  String urlString =
-                                      await reference.getDownloadURL();
-                                  print("getDownloadURL(): $urlString");
-                                  ref
-                                      .watch(
-                                          userModelFirestoreControllerProvider
-                                              .notifier)
-                                      .updateURL(userLoggedIn, urlString);
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-
-                        //     profilPictureExpanded(
-                        //       'V8JgI2LTiJXYCWkhSvEg3lBXugv1.jpg'),
-                      ],
+                    width: MediaQuery.of(context).size.width * 20,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        icon: const Icon(Icons.settings),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                _buildPopupDialog(
+                                    context, userID, userLoggedIn),
+                          );
+                        },
+                      ),
                     ),
                   ),
-
-                  SizedBox(height: 30),
 
                   ///File Picker https://camposha.info/flutter/flutter-filepicker/#gsc.tab=0
 
