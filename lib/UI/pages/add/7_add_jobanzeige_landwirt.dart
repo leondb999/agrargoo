@@ -7,6 +7,7 @@ import 'package:provider/provider.dart' as p;
 import 'package:flutter/material.dart';
 
 import '../../../controllers/auth_controller.dart';
+import '../../../widgets/layout_widgets.dart';
 
 ///https://github.com/Mashood97/flutter_firestore/blob/master/lib/screens/edit_add_product.dart
 class AddEditJobanzeige extends ConsumerStatefulWidget {
@@ -89,9 +90,10 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
     print("hello");
 
     return Scaffold(
-      appBar: AppBar(title: Text('Add / Edit Jobangebot Screen')),
+      appBar: appBar(context: context, ref: ref, home: true),
       body: SafeArea(
         child: Container(
+          margin: const EdgeInsets.only(top: 60),
           child: Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -99,16 +101,25 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
+                    const Center(
+                        child: Text("Eine neue Anzeige hinzufügen",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 35.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF2E6C49)))),
+                    SizedBox(height: 80),
+
                     TextFormField(
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please Enter Titel';
+                            return 'Titel der Anzeige';
                           }
                           return null;
                         },
                         controller: nameController,
-                        decoration:
-                            InputDecoration(hintText: 'Enter Jobangebot Titel'),
+                        decoration: InputDecoration(
+                            hintText: 'Bitte gib einen Titel ein'),
                         onChanged: (val) {
                           // jobanzeigeProvider.changeJobanzeigeTitel(val),
                           setState(() {
@@ -121,14 +132,15 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
 
                     isSwitched!
                         ? Text(
-                            "Anzeige wird veröffentlicht, Status: Active | isSwitched = $isSwitched",
+                            "Anzeige wird veröffentlicht",
                             style: TextStyle(color: Colors.green),
                           )
                         : Text(
-                            'Anzeige nicht veröffentlicht, Status: Deactivated | isSwitched = $isSwitched',
-                            style: TextStyle(color: Colors.red),
+                            'Anzeige nicht veröffentlicht',
+                            style: TextStyle(color: Colors.redAccent),
                           ),
                     Switch(
+                        activeColor: Color(0xFF9FB98B),
                         value: isSwitched!,
                         onChanged: (value) {
                           setState(() {
@@ -138,9 +150,11 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                           //jobanzeigeProvider.changeStatus(isSwitched!);
                         }),
 
+                    SizedBox(height: 30),
+
                     /// Add Buttn
                     ElevatedButton(
-                      child: Text('Save'),
+                      child: Text('Speichern'),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           ref
@@ -151,12 +165,21 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                           Navigator.of(context).pop();
                         }
                       },
+                      style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF9FB98B),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20)),
                     ),
+
+                    SizedBox(height: 20),
 
                     ///Delete Button
                     ElevatedButton(
                       child: Text('Delete'),
-                      style: ElevatedButton.styleFrom(primary: Colors.red),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.redAccent,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20)),
                       onPressed: () {
                         if (anzeige.jobanzeigeID != null) {
                           ref
@@ -169,6 +192,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                       },
                     ),
 
+                    /*
                     Container(
                       height: 200,
                       child: Column(
@@ -181,7 +205,8 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                           Text('Anzeigen Titel: ${nameController.text}'),
                         ],
                       ),
-                    ),
+                      ),
+                     */
                   ],
                 ),
               ),

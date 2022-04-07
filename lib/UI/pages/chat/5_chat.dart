@@ -61,7 +61,12 @@ class _ChatPageState extends ConsumerState<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: appBar(context: context, ref: ref, home: true),
-        resizeToAvoidBottomInset: false, // set it to false
+        resizeToAvoidBottomInset: false,
+        bottomNavigationBar: navigationBar(
+            index: 1,
+            context: context,
+            ref: ref,
+            home: false), // set it to false
         body: SingleChildScrollView(
             child: Column(children: [
           Container(

@@ -33,7 +33,7 @@ class _WhoAreYouState extends ConsumerState<WhoAreYou> {
             Container(
                 margin: EdgeInsets.only(top: 300.0),
                 child: Center(
-                    child: Text("Wer bist du neu2?",
+                    child: Text("Wer bist du?",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontStyle: FontStyle.italic,
