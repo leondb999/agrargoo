@@ -200,6 +200,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                       },
                     ),
             ])),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             Center(
               child: ElevatedButton(
                 child: Text("Bild hochladen"),
@@ -666,83 +667,6 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                           Expanded(
                             flex: 6,
                             child: Column(children: [
-                              ///Upload Profil Picture Button
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Container(
-                                  margin: EdgeInsets.only(top: 35.0),
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      var picked =
-                                          await FilePicker.platform.pickFiles();
-                                      if (picked != null) {
-                                        String fileExtension = getFileExtension(
-                                            picked.files.first.name);
-
-                                        Uint8List fileBytes =
-                                            picked.files.first.bytes!;
-                                        FirebaseStorage storage =
-                                            FirebaseStorage.instance;
-                                        Reference reference = storage
-                                            .ref("${userID}$fileExtension");
-                                        UploadTask task = FirebaseStorage
-                                            .instance
-                                            .ref("$userID$fileExtension")
-                                            .putData(fileBytes);
-                                        task.snapshotEvents.listen((event) {
-                                          var x = ((event.bytesTransferred
-                                                      .toDouble() /
-                                                  event.totalBytes.toDouble()) *
-                                              100);
-                                          setState(() {
-                                            progress = x;
-                                          });
-                                        });
-                                        String urlString =
-                                            await reference.getDownloadURL();
-                                        print("getDownloadURL(): $urlString");
-                                        ref
-                                            .watch(
-                                                userModelFirestoreControllerProvider
-                                                    .notifier)
-                                            .updateURL(userLoggedIn, urlString);
-                                      }
-                                    },
-                                    child: Text('Upload Profil Picture'),
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Color(0xFF9FB98B),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 50, vertical: 20),
-                                      textStyle: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              ///Bearbeiten Button
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Container(
-                                  margin: EdgeInsets.only(top: 35.0),
-                                  child: ElevatedButton(
-                                    child: Text('Bearbeiten'),
-                                    onPressed: () {
-                                      // Navigator.pushNamed(
-                                      // context, EditHelfer.routename);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Color(0xFF9FB98B),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 50, vertical: 20),
-                                      textStyle: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                              ),
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Container(
@@ -765,8 +689,13 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                       margin: const EdgeInsets.all(15.0),
                                       padding: const EdgeInsets.all(3.0),
                                       decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                        border: Border.all(color: Colors.grey),
+                                      ),
                                       child: Text(
                                         '${userLoggedIn.name}, ${AgeCalculator.age(userLoggedIn.birthDate!).years} Jahre',
                                         style: TextStyle(
@@ -806,13 +735,13 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                         openFilterDialog(userLoggedIn);
                                       },
                                       child: Text(
-                                        "Add",
+                                        "Hinzufügen",
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStateProperty.all(
-                                                Colors.blue),
+                                                Color(0xFF9FB98B)),
                                       ),
                                       // color: Colors.blue,
                                     ),
@@ -1067,46 +996,93 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                   height: MediaQuery.of(context).size.height *
                                       0.04),
                               Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Container(
-                                    child: Text(
-                                      "Erfahrungen",
-                                      style: TextStyle(
-                                        fontStyle: FontStyle.normal,
-                                        fontFamily: 'Open Sans',
-                                        fontSize: 23.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF1f623c),
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        "Erfahrungen",
+                                        style: TextStyle(
+                                          fontStyle: FontStyle.normal,
+                                          fontFamily: 'Open Sans',
+                                          fontSize: 23.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF1f623c),
+                                        ),
                                       ),
                                     ),
-                                  )),
-                              Text(
-                                "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.",
-                                style: TextStyle(
-                                  fontStyle: FontStyle.normal,
-                                  fontFamily: 'Open Sans',
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.normal,
-                                  color: Color(0xFF000000),
+                                    SizedBox(width: 40),
+                                    TextButton(
+                                      onPressed: () {},
+                                      child: Text(
+                                        "Bearbeiten",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Color(0xFF9FB98B)),
+                                      ),
+                                      // color: Colors.blue,
+                                    ),
+                                  ],
                                 ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.all(5.0),
+                                padding: const EdgeInsets.all(3.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                ),
+                                child: Text(
+                                    "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+                                    style: TextStyle(
+                                        fontStyle: FontStyle.normal,
+                                        fontFamily: 'Open Sans',
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.normal,
+                                        color: Color(0xFF000000))),
                               ),
                               SizedBox(
                                   height: MediaQuery.of(context).size.height *
                                       0.04),
                               Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Container(
-                                    child: Text(
-                                      "Verfügbarer Zeitraum",
-                                      style: TextStyle(
-                                        fontStyle: FontStyle.normal,
-                                        fontFamily: 'Open Sans',
-                                        fontSize: 23.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF1f623c),
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        "Verfügbarer Zeitraum",
+                                        style: TextStyle(
+                                          fontStyle: FontStyle.normal,
+                                          fontFamily: 'Open Sans',
+                                          fontSize: 23.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF1f623c),
+                                        ),
                                       ),
                                     ),
-                                  )),
+                                    SizedBox(width: 40),
+                                    TextButton(
+                                      onPressed: () {},
+                                      child: Text(
+                                        "Bearbeiten",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Color(0xFF9FB98B)),
+                                      ),
+                                      // color: Colors.blue,
+                                    ),
+                                  ],
+                                ),
+                              ),
                               Container(
                                 child: Row(
                                   children: <Widget>[
@@ -1114,8 +1090,13 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                       margin: const EdgeInsets.all(15.0),
                                       padding: const EdgeInsets.all(3.0),
                                       decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                        border: Border.all(color: Colors.grey),
+                                      ),
                                       child: Text('14.05.2022',
                                           style: TextStyle(
                                               fontStyle: FontStyle.normal,
@@ -1124,12 +1105,18 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                               fontWeight: FontWeight.normal,
                                               color: Color(0xFF000000))),
                                     ),
+                                    Text("-"),
                                     Container(
                                       margin: const EdgeInsets.all(15.0),
                                       padding: const EdgeInsets.all(3.0),
                                       decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                        border: Border.all(color: Colors.grey),
+                                      ),
                                       child: Text('29.06.2022',
                                           style: TextStyle(
                                               fontStyle: FontStyle.normal,
@@ -1150,12 +1137,6 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                               width: MediaQuery.of(context).size.width * 0.015),
                         ],
                       ),
-                      Divider(
-                        indent: 16,
-                        endIndent: 16,
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.05),
                     ]),
                   ))
                 ],
