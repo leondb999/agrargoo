@@ -3,6 +3,7 @@ import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../widgets/conversationList.dart';
+import '../1_landing_page_christina.dart';
 import 'chatUsersModel.dart';
 
 import '../../../repositories/firebase_storage_repository.dart';
@@ -91,6 +92,19 @@ class _ChatPageState extends ConsumerState<Chat> {
               ),
             ),
           ),
+          Container(
+              child: ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => LandingPageCh()));
+            },
+            child: Text('Los gehts!'),
+            style: ElevatedButton.styleFrom(
+                primary: Color(0xFF9FB98B),
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                textStyle:
+                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          )),
           Container(
             child: ListView.builder(
               itemCount: chatUsers.length,

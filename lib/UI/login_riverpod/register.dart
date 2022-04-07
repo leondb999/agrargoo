@@ -256,11 +256,13 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         child: RichText(
                           text: TextSpan(
                             text: 'Du hast schon einen Account?  ',
-                            style: const TextStyle(color: Colors.black),
+                            style: const TextStyle(
+                                fontSize: 15, color: Colors.black),
                             children: [
                               TextSpan(
                                   text: 'Login',
-                                  style: TextStyle(color: Color(0xFF2E6C49)),
+                                  style: TextStyle(
+                                      fontSize: 15, color: Color(0xFF2E6C49)),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
                                       Navigator.pushReplacementNamed(

@@ -193,13 +193,17 @@ AppBar appBar({
             ///Sign Out Button
             ? ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(100, 5), primary: Color(0xFF9FB98B)),
+                    fixedSize: const Size(95, 5), primary: Colors.white),
                 onPressed: () {
                   //  print("authControllerState Sign Out: $user");
                   ref.read(authControllerProvider.notifier).signOut(context);
                   Navigator.pushNamed(context, HomeScreen.routename);
                 },
-                child: Text("Sign Out"),
+                child: Text("Ausloggen",
+                    style: TextStyle(
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amber[800])),
               )
             : SizedBox(),
       ]);
