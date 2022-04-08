@@ -151,7 +151,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
           selectedQualifikationList = List.from(list!);
           print(
               "---------------------------------------------------------------------------------------------------");
-          print("selectedQualifikationList: $selectedQualifikationList");
+          print("selectedQualifikationLisast: $selectedQualifikationList");
           print(
               "---------------------------------------------------------------------------------------------------");
           List<String> qualifikationIDList = [];
