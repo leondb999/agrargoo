@@ -105,9 +105,10 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
 
     print("progress: ${progress.toString()}");
     return Scaffold(
-      appBar: AppBar(title: Text('Add Hof ')),
+      appBar: appBar(context: context, ref: ref, home: true),
       body: SafeArea(
         child: Container(
+          margin: const EdgeInsets.only(top: 60),
           child: Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -115,115 +116,14 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    ///Name Input Field
-                    TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please Enter Hof Name ';
-                          }
-                          return null;
-                        },
-                        controller: nameController,
-                        decoration:
-                            InputDecoration(hintText: 'Enter Hof Name '),
-                        onChanged: (val) {
-                          setState(() {
-                            hofModel.hofName = val;
-                          });
-                        }),
-                    SizedBox(height: 20),
-
-                    ///Standort Input Field
-                    TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please Enter Standort';
-                          }
-                          return null;
-                        },
-                        controller: standortController,
-                        decoration: InputDecoration(hintText: 'Enter Standort'),
-                        onChanged: (val) {
-                          setState(() {
-                            hofModel.standort = val;
-                          });
-                        }),
-                    SizedBox(height: 20),
-
-                    ///Upload Button
-                    ElevatedButton(
-                      child: Text('UPLOAD FILE'),
-                      onPressed: () async {
-                        FilePickerResult? picked =
-                            await FilePicker.platform.pickFiles();
-
-                        if (picked != null) {
-                          String fileExtension =
-                              getFileExtension(picked.files.first.name);
-
-                          Uint8List fileBytes = picked.files.first.bytes!;
-                          FirebaseStorage storage = FirebaseStorage.instance;
-                          Reference reference =
-                              storage.ref("${hofProvider.hofID}$fileExtension");
-                          UploadTask task = FirebaseStorage.instance
-                              .ref("${hofProvider.hofID}$fileExtension")
-                              .putData(fileBytes);
-
-                          task.snapshotEvents.listen((event) {
-                            var x = ((event.bytesTransferred.toDouble() /
-                                    event.totalBytes.toDouble()) *
-                                100);
-                            setState(() {
-                              progress = x;
-                            });
-                          });
-                          String url = await reference.getDownloadURL();
-
-                          setState(() {
-                            uploadedImageURL = url;
-                            hofModel.hofImageURL = url;
-                          });
-                        }
-                      },
-                    ),
-
-                    /// Add Buttn
-                    ElevatedButton(
-                      child: Text('Save'),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          print(
-                              "hofmodel: hofID: ${hofModel.hofID}, besitzerID: ${hofModel.besitzerID}, hofName: ${hofModel.hofName}, standort: ${hofModel.standort}");
-                          if (hofModel.hofImageURL == null) {
-                            setState(() {
-                              ///Default Image als Hof Bild
-                              hofModel.hofImageURL =
-                                  'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none';
-                            });
-                          }
-                          ref
-                              .read(
-                                  hofModelFirestoreControllerProvider.notifier)
-                              .saveHof(hofModel);
-
-                          Navigator.of(context).pop();
-                        }
-                      },
-                    ),
-
-                    ///Delete Button
-                    ElevatedButton(
-                      child: Text('Delete'),
-                      style: ElevatedButton.styleFrom(primary: Colors.red),
-                      onPressed: () {
-                        ref
-                            .read(hofModelFirestoreControllerProvider.notifier)
-                            .removeHof(hofModel.hofID!);
-
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    SizedBox(height: 100),
+                    const Center(
+                        child: Text("Einen neuen Hof hinzufügen",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 35.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF2E6C49)))),
+                    SizedBox(height: 50),
 
                     ///Show Uploaded File
                     uploadedImageURL!.isNotEmpty
@@ -257,6 +157,131 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                             },
                           )
                         : Text("No Image Uploaded Yet"),
+
+                    SizedBox(height: 30),
+
+                    ///Name Input Field
+                    TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Bitte einen Hofnamen angeben';
+                          }
+                          return null;
+                        },
+                        controller: nameController,
+                        decoration: InputDecoration(hintText: 'Hofname'),
+                        onChanged: (val) {
+                          setState(() {
+                            hofModel.hofName = val;
+                          });
+                        }),
+                    SizedBox(height: 20),
+
+                    ///Standort Input Field
+                    TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Bitte einen Standort angeben';
+                          }
+                          return null;
+                        },
+                        controller: standortController,
+                        decoration: InputDecoration(hintText: 'Standort'),
+                        onChanged: (val) {
+                          setState(() {
+                            hofModel.standort = val;
+                          });
+                        }),
+                    SizedBox(height: 50),
+
+                    ///Upload Button
+                    ElevatedButton(
+                      child: Text('Bild hochladen'),
+                      onPressed: () async {
+                        FilePickerResult? picked =
+                            await FilePicker.platform.pickFiles();
+
+                        if (picked != null) {
+                          String fileExtension =
+                              getFileExtension(picked.files.first.name);
+
+                          Uint8List fileBytes = picked.files.first.bytes!;
+                          FirebaseStorage storage = FirebaseStorage.instance;
+                          Reference reference =
+                              storage.ref("${hofProvider.hofID}$fileExtension");
+                          UploadTask task = FirebaseStorage.instance
+                              .ref("${hofProvider.hofID}$fileExtension")
+                              .putData(fileBytes);
+
+                          task.snapshotEvents.listen((event) {
+                            var x = ((event.bytesTransferred.toDouble() /
+                                    event.totalBytes.toDouble()) *
+                                100);
+                            setState(() {
+                              progress = x;
+                            });
+                          });
+                          String url = await reference.getDownloadURL();
+
+                          setState(() {
+                            uploadedImageURL = url;
+                            hofModel.hofImageURL = url;
+                          });
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF9FB98B),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20)),
+                    ),
+
+                    SizedBox(height: 40),
+
+                    /// Add Buttn
+                    ElevatedButton(
+                        child: Text('Speichern'),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            print(
+                                "hofmodel: hofID: ${hofModel.hofID}, besitzerID: ${hofModel.besitzerID}, hofName: ${hofModel.hofName}, standort: ${hofModel.standort}");
+                            if (hofModel.hofImageURL == null) {
+                              setState(() {
+                                ///Default Image als Hof Bild
+                                hofModel.hofImageURL =
+                                    'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none';
+                              });
+                            }
+                            ref
+                                .read(hofModelFirestoreControllerProvider
+                                    .notifier)
+                                .saveHof(hofModel);
+
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF9FB98B),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20),
+                        )),
+                    SizedBox(height: 20),
+
+                    ///Delete Button
+                    ElevatedButton(
+                      child: Text('Löschen'),
+                      onPressed: () {
+                        ref
+                            .read(hofModelFirestoreControllerProvider.notifier)
+                            .removeHof(hofModel.hofID!);
+
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.redAccent,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20)),
+                    ),
+                    SizedBox(height: 100),
                   ],
                 ),
               ),

@@ -13,7 +13,9 @@ import 'package:flutterfire_ui/firestore.dart';
 import 'package:flutterfire_ui/i10n.dart';
 import 'package:age_calculator/age_calculator.dart';
 import '../../main.dart';
+import '../../widgets/layout_widgets.dart';
 import '../../widgets/login_widgets.dart';
+import '../pages/profil/6_a_helfer_profil.dart';
 import '../pages/profil/landwirt_profil.dart';
 
 ///https://www.geeksforgeeks.org/flutter-arguments-in-named-routes/
@@ -74,26 +76,27 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     print("ageYears: $ageYears");
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-              "Register als ${_landwirt! ? 'Landwirt' : 'Helfer'} : $_landwirt"),
-        ),
-      ),
+      appBar: appBar(context: context, ref: ref, home: true),
       body: SafeArea(
         child: Form(
           key: _formKey,
           child: Column(
             children: [
               Expanded(
-                flex: 3,
+                flex: 4,
                 child: Container(
                   margin: const EdgeInsets.only(top: 48),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Center(child: FlutterLogo(size: 81)),
+                      const Center(
+                          child: Text("Registrierung",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 40.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF2E6C49)))),
                       const Spacer(flex: 1),
 
                       ///Name Input Field
@@ -102,7 +105,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         textInputType: TextInputType.name,
                         hintText: 'Name',
                         icon: Icon(Icons.person,
-                            color: Colors.blue.shade700, size: 24),
+                            color: Color(0xFF9FB98B), size: 24),
                         validateString: 'name',
                         obscureText: false,
                         autocorrect: true,
@@ -113,9 +116,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       customTextFormField(
                         controller: _email,
                         textInputType: TextInputType.emailAddress,
-                        hintText: 'Email address',
+                        hintText: 'Email Adresse',
                         icon: Icon(Icons.email_outlined,
-                            color: Colors.blue.shade700, size: 24),
+                            color: Color(0xFF9FB98B), size: 24),
                         validateString: 'email',
                         obscureText: false,
                         autocorrect: true,
@@ -125,9 +128,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       ///Password Input Field
                       customTextFormField(
                         controller: _password,
-                        hintText: 'Password',
+                        hintText: 'Passwort',
                         icon: Icon(CupertinoIcons.lock_circle,
-                            color: Colors.blue.shade700, size: 24),
+                            color: Color(0xFF9FB98B), size: 24),
                         validateString: 'password',
                         obscureText: true,
                         autocorrect: true,
@@ -145,19 +148,22 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             borderRadius: BorderRadius.circular(25)),
                         child: selectedDate != DateTime(1800)
                             ? Text(
-                                "Birth Date: ${selectedDate.day}.${selectedDate.month}.${selectedDate.year}")
-                            : Text("No Birth Date selected Yet"),
+                                "Geburtsdatum: ${selectedDate.day}.${selectedDate.month}.${selectedDate.year}")
+                            : Text("Es ist noch kein Geburtsdatum ausgewählt"),
                         //Text(
                         //      "Birth Date: ${selectedDate.day}.${selectedDate.month}.${selectedDate.year}"),
                       ),
-                      ageYears.years != 0
-                          ? Text("You Are ${ageYears.years} old")
-                          : Spacer(),
-                      ElevatedButton(
-                          onPressed: () {
-                            _selectDate(context);
-                          },
-                          child: Text("Choose Birth Date")),
+
+                      Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 8),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                _selectDate(context);
+                              },
+                              child: Text("Wähle ein Geburtsdatum aus"),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Color(0xFF9FB98B)))),
                       const Spacer(),
                     ],
                   ),
@@ -190,9 +196,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               showDialog(
                                   context: context,
                                   builder: (ctx) => AlertDialog(
-                                          title: const Text('Error Occured'),
+                                          title: const Text('Fehlermeldung'),
                                           content: Text(
-                                              "You have to be 18 to register"),
+                                              "Du musst mindestens 18 Jahre alt sein, um dich zu registrieren"),
                                           actions: [
                                             TextButton(
                                                 onPressed: () {
@@ -217,18 +223,30 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 );
 
                             ///Login User in Firebase
+                            ///
+                            if (_landwirt == true) {
+                              Navigator.pushNamed(
+                                context,
+                                LandwirtProfil.routename,
+                              );
+                            } else {
+                              Navigator.pushNamed(
+                                context,
+                                HelferProfil.routename,
+                              );
+                            }
                           },
                           child: Text(
-                            'Register',
+                            'Registrieren',
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
-                          textColor: Colors.blue.shade700,
+                          textColor: Color(0xFF2E6C49),
                           textTheme: ButtonTextTheme.primary,
                           minWidth: 100,
                           padding: const EdgeInsets.all(18),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
-                            side: BorderSide(color: Colors.blue.shade700),
+                            side: BorderSide(color: Color(0xFF2E6C49)),
                           ),
                         ),
                       ),
@@ -237,12 +255,14 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         padding: const EdgeInsets.only(bottom: 24.0),
                         child: RichText(
                           text: TextSpan(
-                            text: 'You already have an account?  ',
-                            style: const TextStyle(color: Colors.black),
+                            text: 'Du hast schon einen Account?  ',
+                            style: const TextStyle(
+                                fontSize: 15, color: Colors.black),
                             children: [
                               TextSpan(
-                                  text: 'Sign in',
-                                  style: TextStyle(color: Colors.blue.shade700),
+                                  text: 'Login',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Color(0xFF2E6C49)),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
                                       Navigator.pushReplacementNamed(

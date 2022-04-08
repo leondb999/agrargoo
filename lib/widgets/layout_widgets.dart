@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:agrargo/UI/login_riverpod/login.dart';
+import 'package:agrargo/UI/pages/1_landing_page_christina.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/UI/pages/chat/5_chat.dart';
 import 'package:agrargo/UI/pages/profil/6_a_helfer_profil.dart';
@@ -18,6 +19,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/UI/pages/profil/landwirt_profil.dart' as l;
+
+import '../UI/pages/uebersichten/3_a_jobangebote_uebersicht_helfer.dart';
+import '../UI/pages/uebersichten/3_b_helfer_übersicht_landwirt.dart';
 
 BottomNavigationBar navigationBar(
     {required int index,
@@ -54,7 +58,7 @@ BottomNavigationBar navigationBar(
 
           ///Home Page
           case 0:
-            Navigator.of(context).pushNamed(HomeScreen.routename);
+            Navigator.of(context).pushNamed(JobangebotUebersichtPage.routename);
             break;
 
           ///Profil Page
@@ -80,7 +84,14 @@ BottomNavigationBar navigationBar(
               }
             } else {
               ///User ist ausgeloggt
-              Navigator.of(context).pushNamed(WhoAreYou.routename);
+
+              Navigator.pushNamed(
+                context,
+                LoginPage.routename,
+                arguments: {'landwirt': false},
+              );
+
+              //Navigator.of(context).pushNamed(WhoAreYou.routename);
             }
             break;
         }
@@ -89,7 +100,21 @@ BottomNavigationBar navigationBar(
 
           ///Home Page
           case 0:
-            Navigator.of(context).pushNamed(HomeScreen.routename);
+            if (user != null) {
+              ///User LoggedIn
+              if (userModel.first.landwirt == true) {
+                /// User ist ein Landwirt
+                Navigator.of(context).pushNamed(HelferUebersichtPage.routename);
+              } else {
+                ///User ist kein Landwirt
+                Navigator.of(context)
+                    .pushNamed(JobangebotUebersichtPage.routename);
+              }
+            } else {
+              ///User ist ausgeloggt
+              Navigator.of(context)
+                  .pushNamed(JobangebotUebersichtPage.routename);
+            }
             break;
 
           ///Chat Page
@@ -149,23 +174,26 @@ AppBar appBar({
         child: IconButton(
           tooltip: 'Helfer Übersicht',
           icon: Image.asset('Images/agrargo_logo_large.png'),
-          /*
-          Image.network(
-              'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none'),
-
-           */
-          iconSize: MediaQuery.of(context).size.height * 0.05,
+          iconSize: MediaQuery.of(context).size.height * 0.08,
           color: Color(0xFF9FB98B),
-          padding: new EdgeInsets.only(right: 20.0),
           onPressed: () {
-            Navigator.of(context).pushNamed(HomeScreen.routename);
+            if (user != null) {
+              ///User LoggedIn
+              if (userModel.first.landwirt == true) {
+                /// User ist ein Landwirt
+                Navigator.of(context).pushNamed(HelferUebersichtPage.routename);
+              } else {
+                ///User ist kein Landwirt
+                Navigator.of(context)
+                    .pushNamed(JobangebotUebersichtPage.routename);
+              }
+            } else {
+              ///User ist ausgeloggt
+              Navigator.of(context).pushNamed(LandingPageCh.routename);
+            }
           },
         ),
       ),
-      /*SizedBox(
-          height: MediaQuery.of(context).size.height * 0.05,
-          child: Image.asset('Images/agrargo_logo_large.png')),
-      */
       actions: <Widget>[
         ///Home Button
 
@@ -174,13 +202,17 @@ AppBar appBar({
             ///Sign Out Button
             ? ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(100, 5), primary: Colors.green),
+                    fixedSize: const Size(95, 5), primary: Colors.white),
                 onPressed: () {
                   //  print("authControllerState Sign Out: $user");
                   ref.read(authControllerProvider.notifier).signOut(context);
-                  Navigator.pushNamed(context, HomeScreen.routename);
+                  Navigator.pushNamed(context, LandingPageCh.routename);
                 },
-                child: Text("Sign Out"),
+                child: Text("Ausloggen",
+                    style: TextStyle(
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amber[800])),
               )
             : SizedBox(),
       ]);

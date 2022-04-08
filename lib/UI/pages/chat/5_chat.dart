@@ -3,6 +3,7 @@ import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../widgets/conversationList.dart';
+import '../1_landing_page_christina.dart';
 import 'chatUsersModel.dart';
 
 import '../../../repositories/firebase_storage_repository.dart';
@@ -61,7 +62,12 @@ class _ChatPageState extends ConsumerState<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: appBar(context: context, ref: ref, home: true),
-        resizeToAvoidBottomInset: false, // set it to false
+        resizeToAvoidBottomInset: false,
+        bottomNavigationBar: navigationBar(
+            index: 1,
+            context: context,
+            ref: ref,
+            home: false), // set it to false
         body: SingleChildScrollView(
             child: Column(children: [
           Container(

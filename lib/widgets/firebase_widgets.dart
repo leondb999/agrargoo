@@ -40,8 +40,8 @@ Card hofCard({
                 SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                 Text("HofID: ${hof.hofID}"),
                 Text("Standort: ${hof.standort}"),
-                IconButton(
-                  icon: Icon(Icons.add),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                FlatButton(
                   onPressed: () {
                     Navigator.of(context)
                         .pushNamed(AddEditJobanzeige.routename, arguments: {
@@ -50,6 +50,14 @@ Card hofCard({
                       'standort': hof.standort,
                     });
                   },
+                  padding: EdgeInsets.all(15.0),
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Icon(Icons.add),
+                      Text("Anzeige hinzufügen")
+                    ],
+                  ),
                 ),
               ],
             ),

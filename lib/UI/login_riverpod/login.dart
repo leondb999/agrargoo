@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../widgets/layout_widgets.dart';
 import '../pages/profil/landwirt_profil.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -55,12 +56,7 @@ class _LoginState extends ConsumerState<LoginPage> {
     print("landwirt: $_landwirt");
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-              "Login als ${_landwirt! ? 'Landwirt' : 'Helfer'} : $_landwirt"),
-        ),
-      ),
+      appBar: appBar(context: context, ref: ref, home: true),
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -69,21 +65,27 @@ class _LoginState extends ConsumerState<LoginPage> {
               Expanded(
                 flex: 3,
                 child: Container(
-                  margin: const EdgeInsets.only(top: 48),
+                  margin: const EdgeInsets.only(top: 80),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Center(child: FlutterLogo(size: 81)),
+                      const Center(
+                          child: Text("Login",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 40.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF2E6C49)))),
                       const Spacer(flex: 1),
 
                       ///Email Input Field
                       customTextFormField(
                         controller: _email,
                         textInputType: TextInputType.emailAddress,
-                        hintText: 'Email address',
+                        hintText: 'Email Adresse',
                         icon: Icon(Icons.email_outlined,
-                            color: Colors.blue.shade700, size: 24),
+                            color: Color(0xFF9FB98B), size: 24),
                         validateString: 'email',
                         obscureText: false,
                         autocorrect: true,
@@ -95,7 +97,7 @@ class _LoginState extends ConsumerState<LoginPage> {
                         controller: _password,
                         hintText: 'Password',
                         icon: Icon(CupertinoIcons.lock_circle,
-                            color: Colors.blue.shade700, size: 24),
+                            color: Color(0xFF9FB98B), size: 24),
                         validateString: 'password',
                         obscureText: true,
                         autocorrect: true,
@@ -139,8 +141,10 @@ class _LoginState extends ConsumerState<LoginPage> {
                                     context, _email.text, _password.text);
                             print("_landwirt login: $_landwirt");
                             if (_landwirt == true) {
-                              ///Landwirt
-
+                              Navigator.pushNamed(
+                                context,
+                                LandwirtProfil.routename,
+                              );
                             } else {
                               Navigator.pushNamed(
                                 context,
@@ -154,13 +158,13 @@ class _LoginState extends ConsumerState<LoginPage> {
                             'Log in',
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
-                          textColor: Colors.blue.shade700,
+                          textColor: Color(0xFF2E6C49),
                           textTheme: ButtonTextTheme.primary,
                           minWidth: 100,
                           padding: const EdgeInsets.all(18),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
-                            side: BorderSide(color: Colors.blue.shade700),
+                            side: BorderSide(color: Color(0xFF2E6C49)),
                           ),
                         ),
                       ),
@@ -169,12 +173,14 @@ class _LoginState extends ConsumerState<LoginPage> {
                         padding: const EdgeInsets.only(bottom: 24.0),
                         child: RichText(
                           text: TextSpan(
-                            text: 'Don\'t have an account? ',
-                            style: const TextStyle(color: Colors.black),
+                            text: 'Du hast noch keinen Account? ',
+                            style: const TextStyle(
+                                fontSize: 15, color: Colors.black),
                             children: [
                               TextSpan(
-                                text: 'Register now',
-                                style: TextStyle(color: Colors.blue.shade700),
+                                text: 'Jetzt registieren',
+                                style: TextStyle(
+                                    fontSize: 15, color: Color(0xFF2E6C49)),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     Navigator.pushNamed(
