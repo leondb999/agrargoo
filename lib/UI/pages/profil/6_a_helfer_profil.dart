@@ -161,13 +161,16 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
               qualifikationIDList.add(qualifikation.qualifikationID!);
             }
           });
-
+          print("qualifikationIDList: $qualifikationIDList");
           ref
               .watch(userModelFirestoreControllerProvider.notifier)
               .updateQualifikationen(userLoggedIn, qualifikationIDList);
         });
 
         Navigator.pop(context);
+        setState(() {
+          selectedQualifikationList = [];
+        });
       },
     );
   }
