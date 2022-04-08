@@ -68,6 +68,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
   }
 
   ///getSelectedQualifikation
+
   Future<List<QualifikationModel>> getSelectedQualifikation(
       UserModel userModel) async {
     ///Alle Qualifikationen
@@ -130,8 +131,12 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
       height: 500,
       listData: fireQualifikationList!,
       selectedListData: selectedQualifikationList,
-      choiceChipLabel: (item) => item!.qualifikationName,
-      validateSelectedItem: (list, val) => list!.contains(val),
+      choiceChipLabel: (item) {
+        return item!.qualifikationName;
+      },
+      validateSelectedItem: (list, val) {
+        return list!.contains(val);
+      },
       controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
       onItemSearch: (qualifikation, query) {
         /// When search query change in search bar then this method will be called
@@ -143,20 +148,25 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
       },
       onApplyButtonClick: (list) {
         setState(() {
-          selectedQualifikationList = list;
-          List<QualifikationModel> list2 = List.from(list!);
-          list2.forEach((quali) {
-            print("quali: ${quali.qualifikationID}");
-          });
-          fireSelectedQualifikationList = List.from(list);
+          selectedQualifikationList = List.from(list!);
+          print(
+              "---------------------------------------------------------------------------------------------------");
+          print("selectedQualifikationList: $selectedQualifikationList");
+          print(
+              "---------------------------------------------------------------------------------------------------");
           List<String> qualifikationIDList = [];
-          fireSelectedQualifikationList!.forEach((qualifikation) {
-            qualifikationIDList.add(qualifikation.qualifikationID!);
+          list.forEach((qualifikation) {
+            if (qualifikationIDList.contains(qualifikation.qualifikationID) ==
+                false) {
+              qualifikationIDList.add(qualifikation.qualifikationID!);
+            }
           });
+
           ref
               .watch(userModelFirestoreControllerProvider.notifier)
               .updateQualifikationen(userLoggedIn, qualifikationIDList);
         });
+
         Navigator.pop(context);
       },
     );
@@ -514,28 +524,22 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
       ///Alle gespeicherten User in der Firestore Collection
       var userList =
           ref.read(userModelFirestoreControllerProvider.notifier).state;
-      print("userList123: $userList");
 
       ///LoggedIn User
       String? userID = ref.watch(authControllerProvider.notifier).state!.uid;
 
-      /*
-      UserModel userLoggedIn = await ref
-          .watch(userModelFirestoreControllerProvider.notifier)
-          .getUserByID(userID);
-      print(
-          "userLoggedIn:ID ${userLoggedIn.userID} userLoggedIn Name: ${userLoggedIn.name}");
-      */
       UserModel? userLoggedIn =
           UserProvider().getUserNameByUserID(userID, userList!).first;
       print("userLoggedIn name: ${userLoggedIn.name}");
-      Future.delayed(Duration(microseconds: 10), () async {
-        var listALl = await getAllQualifikationen();
-        var listSelected = await getSelectedQualifikation(userLoggedIn);
-        setState(() {
-          fireQualifikationList = listALl;
-          fireSelectedQualifikationList = listSelected;
 
+      var listSelected = await getSelectedQualifikation(userLoggedIn);
+      print("listSelected: $listSelected");
+      fireQualifikationList = await getAllQualifikationen();
+      print("fireQualifikationList: $fireQualifikationList");
+      // print("fireQualifikationList: $fireQualifikationList");
+
+      // fireSelectedQualifikationList = listSelected;
+      /*
           fireSelectedQualifikationList!.forEach((selectedQualifikation) {
             fireQualifikationList!.forEach((qualifikation) {
               if (selectedQualifikation.qualifikationID ==
@@ -543,10 +547,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                 selectedQualifikationList!.add(qualifikation);
             });
           });
-        });
-        print(
-            "userLoggedIn.qualifikationList: ${userLoggedIn.qualifikationList}");
-      });
+          */
 
       setState(() {
         _loggedInUser = userLoggedIn;
@@ -557,7 +558,6 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
             if (qualifikationID == qualifikation.qualifikationID &&
                 fireSelectedQualifikationList!.contains(qualifikation) ==
                     false) {
-              print("hi");
               fireSelectedQualifikationList!.add(qualifikation);
             }
           });
@@ -588,7 +588,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
 
     /// ALle User
     final userList = ref.watch(userModelFirestoreControllerProvider);
-    print("userList: $userList");
+    // print("userList: $userList");
     print("userID: $userID");
     UserModel userLoggedIn =
         UserProvider().getUserNameByUserID(userID, userList!).first;
@@ -598,7 +598,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
     setState(() {
       _loggedInUser = userLoggedIn;
     });
-
+/*
     Future.delayed(Duration(microseconds: 10), () async {
       var listALl = await getAllQualifikationen();
       var listSelected = await getSelectedQualifikation(userLoggedIn);
@@ -617,6 +617,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
       print(
           "userLoggedIn.qualifikationList: ${userLoggedIn.qualifikationList}");
     });
+    */
 
     /*
     if (userLoggedIn.qualifikationList != null) {
@@ -783,7 +784,50 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                     ),
                                     SizedBox(width: 40),
                                     TextButton(
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        /*
+                                        List<QualifikationModel> selectedList =
+                                            await getSelectedQualifikation(
+                                                _loggedInUser);
+                                        List<QualifikationModel> allList =
+                                            await getAllQualifikationen();
+                                        */
+                                        List<dynamic> userQualifikationIDList =
+                                            [];
+                                        await FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(userID)
+                                            .get()
+                                            .then((value) {
+                                          userQualifikationIDList =
+                                              value['qualifikationList'];
+                                        });
+                                        var allList =
+                                            await getAllQualifikationen();
+                                        setState(() {
+                                          fireQualifikationList = allList;
+                                        });
+
+                                        userQualifikationIDList
+                                            .forEach((selectedID) {
+                                          fireQualifikationList!
+                                              .forEach((qualifikation) {
+                                            if (qualifikation.qualifikationID ==
+                                                selectedID) {
+                                              if (selectedQualifikationList!
+                                                      .contains(
+                                                          qualifikation) ==
+                                                  false) {
+                                                setState(() {
+                                                  selectedQualifikationList!
+                                                      .add(qualifikation);
+                                                });
+                                              }
+                                            }
+                                          });
+                                        });
+                                        print(
+                                            "selectedQualifikationList: $selectedQualifikationList");
                                         openFilterDialog(userLoggedIn);
                                       },
                                       child: Text(
@@ -803,12 +847,14 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                               /*        selectedQualifikationList!.isEmpty
                                   ? Text("No Qualifikation selected yet")
                                   : */
+                              /*
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Container(
                                   height: 200,
                                   child: SingleChildScrollView(
                                     child:
+                                        /*
                                         FutureBuilder<List<QualifikationModel>>(
                                             future: getSelectedQualifikation(
                                                 _loggedInUser),
@@ -872,10 +918,11 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                               }
                                               return CircularProgressIndicator();
                                             }),
+                                    */
                                   ),
                                 ),
                               ),
-
+*/
                               SizedBox(
                                   height: MediaQuery.of(context).size.height *
                                       0.04),
