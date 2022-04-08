@@ -116,8 +116,8 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
     }
 
     ///4. Return Selected Qualifikation aus Firestore
-    print(
-        "return: -> selectedQualifikationenList: ${selectedQualifikationenList}");
+    //  print(
+    //    "return: -> selectedQualifikationenList: ${selectedQualifikationenList}");
     return selectedQualifikationenList;
   }
 
@@ -847,14 +847,13 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                               /*        selectedQualifikationList!.isEmpty
                                   ? Text("No Qualifikation selected yet")
                                   : */
-                              /*
+
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Container(
                                   height: 200,
                                   child: SingleChildScrollView(
                                     child:
-                                        /*
                                         FutureBuilder<List<QualifikationModel>>(
                                             future: getSelectedQualifikation(
                                                 _loggedInUser),
@@ -918,11 +917,9 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                               }
                                               return CircularProgressIndicator();
                                             }),
-                                    */
                                   ),
                                 ),
                               ),
-*/
                               SizedBox(
                                   height: MediaQuery.of(context).size.height *
                                       0.04),
