@@ -35,8 +35,16 @@ class HelferProfil extends ConsumerStatefulWidget {
 
 class _HelferProfilState extends ConsumerState<HelferProfil> {
   double progress = 0.0;
+
+  ///Alle Qualifikationen Firebase
+  List<QualifikationModel>? fireQualifikationList = [];
+
+  ///Ausgewählte Qualifikationen Firebase
+  List<QualifikationModel>? fireSelectedQualifikationList = [];
+
+  ///Ausgewählte Qualifikationen setState(){}
   List<QualifikationModel>? selectedQualifikationList = [];
-  List<QualifikationModel> qualifikationList = [];
+
   UserModel _loggedInUser = UserModel();
 
   ///Get all Qualifikationen
@@ -55,7 +63,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
         alleQualifikationenList.add(quali);
       });
     });
-    print("all qualifikationModelList: $alleQualifikationenList");
+    // print("all qualifikationModelList: $alleQualifikationenList");
     return alleQualifikationenList;
   }
 
@@ -79,7 +87,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
         alleQualifikationenList.add(quali);
       });
     });
-    print("all qualifikationModelList: $alleQualifikationenList");
+    //  print("all qualifikationModelList: $alleQualifikationenList");
 
     ///2. Hole vom User selected qualifikationsIDs aus Firestore
     List<dynamic> userQualifikationIDList = [];
@@ -90,7 +98,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
         .then((value) {
       userQualifikationIDList = (value['qualifikationList']);
     });
-    print("qualifikationIDSelectedList: ${userQualifikationIDList}");
+    //  print("qualifikationIDSelectedList: ${userQualifikationIDList}");
 
     ///3. Filtere Liste aller Qualifikationen nach IDs
     if (userQualifikationIDList.isNotEmpty) {
@@ -98,8 +106,8 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
         alleQualifikationenList.forEach((qualifikation) {
           if (qualifikationID == qualifikation.qualifikationID &&
               selectedQualifikationenList.contains(qualifikation) == false) {
-            print("------------ add Qualifikation --------------- ");
-            print(" -> qualifikation:${qualifikation.qualifikationName}");
+            //  print("------------ add Qualifikation --------------- ");
+            // print(" -> qualifikation:${qualifikation.qualifikationName}");
             selectedQualifikationenList.add(qualifikation);
           }
         });
@@ -120,8 +128,8 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
       themeData: FilterListThemeData(context),
       headlineText: 'Wähle Qualifikationen aus',
       height: 500,
-      listData: await getAllQualifikationen(),
-      selectedListData: await getSelectedQualifikation(userLoggedIn),
+      listData: fireQualifikationList!,
+      selectedListData: selectedQualifikationList,
       choiceChipLabel: (item) => item!.qualifikationName,
       validateSelectedItem: (list, val) => list!.contains(val),
       controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
@@ -135,9 +143,14 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
       },
       onApplyButtonClick: (list) {
         setState(() {
-          selectedQualifikationList = List.from(list!);
+          selectedQualifikationList = list;
+          List<QualifikationModel> list2 = List.from(list!);
+          list2.forEach((quali) {
+            print("quali: ${quali.qualifikationID}");
+          });
+          fireSelectedQualifikationList = List.from(list);
           List<String> qualifikationIDList = [];
-          selectedQualifikationList!.forEach((qualifikation) {
+          fireSelectedQualifikationList!.forEach((qualifikation) {
             qualifikationIDList.add(qualifikation.qualifikationID!);
           });
           ref
@@ -175,16 +188,36 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
       UserModel? userLoggedIn =
           UserProvider().getUserNameByUserID(userID, userList!).first;
       print("userLoggedIn name: ${userLoggedIn.name}");
+      Future.delayed(Duration(microseconds: 10), () async {
+        var listALl = await getAllQualifikationen();
+        var listSelected = await getSelectedQualifikation(userLoggedIn);
+        setState(() {
+          fireQualifikationList = listALl;
+          fireSelectedQualifikationList = listSelected;
+
+          fireSelectedQualifikationList!.forEach((selectedQualifikation) {
+            fireQualifikationList!.forEach((qualifikation) {
+              if (selectedQualifikation.qualifikationID ==
+                  qualifikation.qualifikationID)
+                selectedQualifikationList!.add(qualifikation);
+            });
+          });
+        });
+        print(
+            "userLoggedIn.qualifikationList: ${userLoggedIn.qualifikationList}");
+      });
+
       setState(() {
         _loggedInUser = userLoggedIn;
       });
       if (userLoggedIn.qualifikationList != null) {
         userLoggedIn.qualifikationList!.forEach((qualifikationID) {
-          qualifikationList.forEach((qualifikation) {
+          fireQualifikationList!.forEach((qualifikation) {
             if (qualifikationID == qualifikation.qualifikationID &&
-                selectedQualifikationList!.contains(qualifikation) == false) {
+                fireSelectedQualifikationList!.contains(qualifikation) ==
+                    false) {
               print("hi");
-              selectedQualifikationList!.add(qualifikation);
+              fireSelectedQualifikationList!.add(qualifikation);
             }
           });
         });
@@ -197,7 +230,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
         value.docs.forEach((doc) {
           QualifikationModel quali = QualifikationModel(
               qualifikationID: doc.id, qualifikationName: doc['name']);
-          qualifikationList.add(quali);
+          fireQualifikationList!.add(quali);
         });
       });
     });
@@ -218,27 +251,46 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
         UserProvider().getUserNameByUserID(userID, userList!).first;
     print("userLoggedIn: $userLoggedIn");
     // getSelectedQualifikation(userLoggedIn);
-    getAllQualifikationen();
+
     setState(() {
       _loggedInUser = userLoggedIn;
     });
 
-    print("userLoggedIn.qualifikationList: ${userLoggedIn.qualifikationList}");
+    Future.delayed(Duration(microseconds: 10), () async {
+      var listALl = await getAllQualifikationen();
+      var listSelected = await getSelectedQualifikation(userLoggedIn);
+      setState(() {
+        fireQualifikationList = listALl;
+        fireSelectedQualifikationList = listSelected;
 
+        fireSelectedQualifikationList!.forEach((selectedQualifikation) {
+          fireQualifikationList!.forEach((qualifikation) {
+            if (selectedQualifikation.qualifikationID ==
+                qualifikation.qualifikationID)
+              selectedQualifikationList!.add(qualifikation);
+          });
+        });
+      });
+      print(
+          "userLoggedIn.qualifikationList: ${userLoggedIn.qualifikationList}");
+    });
+
+    /*
     if (userLoggedIn.qualifikationList != null) {
       userLoggedIn.qualifikationList!.forEach((qualifikationID) {
-        qualifikationList.forEach((qualifikation) {
+        fireQualifikationList!.forEach((qualifikation) {
           if (qualifikationID == qualifikation.qualifikationID &&
-              selectedQualifikationList!.contains(qualifikation) == false) {
+              fireSelectedQualifikationList!.contains(qualifikation) == false) {
             print("hi");
             setState(() {
-              selectedQualifikationList!.add(qualifikation);
+              fireSelectedQualifikationList!.add(qualifikation);
             });
           }
         });
       });
     }
-    print("selectedQualifikationList: ${selectedQualifikationList}");
+*/
+    print("selectedQualifikationList: ${fireSelectedQualifikationList}");
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
       bottomNavigationBar:
@@ -484,242 +536,74 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                 child: Container(
                                   height: 200,
                                   child: SingleChildScrollView(
-                                    child: FutureBuilder<
-                                            List<QualifikationModel>>(
-                                        future: getSelectedQualifikation(
-                                            _loggedInUser),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.waiting) {
-                                              return Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              );
-                                            } else {
-                                              List<QualifikationModel>? data =
-                                                  snapshot.data;
+                                    child:
+                                        FutureBuilder<List<QualifikationModel>>(
+                                            future: getSelectedQualifikation(
+                                                _loggedInUser),
+                                            builder: (context, snapshot) {
+                                              print("future Builder");
+                                              if (snapshot.hasData) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  );
+                                                } else {
+                                                  List<QualifikationModel>?
+                                                      data = snapshot.data;
 
-                                              print(
-                                                  "snapshot: ${data!.first.qualifikationName}");
-                                              return GridView.count(
-                                                shrinkWrap: true,
-                                                crossAxisCount: 7,
-                                                childAspectRatio: 3,
-                                                children:
-                                                    //[
-                                                    //   Text("${user.first['name']}"),
-                                                    data.map(
-                                                  (qualifikation) {
-                                                    return Container(
-                                                      margin:
-                                                          EdgeInsets.all(10),
-                                                      child: Text(
-                                                        "${qualifikation.qualifikationName}",
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 20,
-                                                        ),
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                          border: Border.all(
-                                                              color: Colors
-                                                                  .black)),
-                                                    );
-                                                  },
-                                                ).toList(),
-                                                //  ],
-                                              );
-                                            }
-                                          } else if (snapshot.hasError) {
-                                            return Text(
-                                                'Error while Loading Qualifikationen from Firestore');
-                                          }
-                                          return CircularProgressIndicator();
-                                          /*
-                                          final user =
-                                              snapshot.data?.docs.first;
-                                          print(
-                                              "userStream : ${user!['name']}");
+                                                  print(
+                                                      "snapshot: ${data!.first.qualifikationName}");
 
-                                          if (userLoggedIn.qualifikationList !=
-                                              null) {
-                                            userLoggedIn.qualifikationList!
-                                                .forEach((qualifikationID) {
-                                              qualifikationList
-                                                  .forEach((qualifikation) {
-                                                if (qualifikationID ==
-                                                        qualifikation
-                                                            .qualifikationID &&
-                                                    selectedQualifikationList!
-                                                            .contains(
-                                                                qualifikation) ==
-                                                        false) {
-                                                  print("hi");
-                                                  // setState(() {
-                                                  selectedQualifikationList!
-                                                      .add(qualifikation);
-                                                  //  });
+                                                  return Column(
+                                                    children: [
+                                                      data.isEmpty
+                                                          ? Text(
+                                                              "No qualifikationen selected yet")
+                                                          : GridView.count(
+                                                              shrinkWrap: true,
+                                                              crossAxisCount: 7,
+                                                              childAspectRatio:
+                                                                  3,
+                                                              children:
+                                                                  data.map(
+                                                                (qualifikation) {
+                                                                  //      print("hello");
+                                                                  return Container(
+                                                                    margin: EdgeInsets
+                                                                        .all(
+                                                                            10),
+                                                                    child: Text(
+                                                                      "${qualifikation.qualifikationName}",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize:
+                                                                            20,
+                                                                      ),
+                                                                    ),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                            border:
+                                                                                Border.all(color: Colors.black)),
+                                                                  );
+                                                                },
+                                                              ).toList()),
+                                                    ],
+                                                  );
                                                 }
-                                              });
-                                            });
-                                          }
-
-                                          return GridView.count(
-                                            shrinkWrap: true,
-                                            crossAxisCount: 7,
-                                            childAspectRatio: 3,
-                                            children:
-                                                //[
-                                                //   Text("${user.first['name']}"),
-                                                selectedQualifikationList!.map(
-                                              (qualifikation) {
-                                                return Container(
-                                                  margin: EdgeInsets.all(10),
-                                                  child: Text(
-                                                    "${qualifikation.qualifikationName}",
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 20,
-                                                    ),
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: Colors.black)),
-                                                );
-                                              },
-                                            ).toList(),
-                                            //  ],
-                                          );
-*/
-                                          /*                           return GridView.count(
-                                                  shrinkWrap: true,
-                                                  crossAxisCount: 7,
-                                                  childAspectRatio: 3,
-                                                  children:
-                                                      selectedQualifikationList!
-                                                          .map(
-                                                    (qualifikation) {
-                                                      return Container(
-                                                        margin:
-                                                            EdgeInsets.all(10),
-                                                        child: Text(
-                                                          "${qualifikation.qualifikationName}",
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 20,
-                                                          ),
-                                                        ),
-                                                        decoration: BoxDecoration(
-                                                            border: Border.all(
-                                                                color: Colors
-                                                                    .black)),
-                                                      );
-                                                    },
-                                                  ).toList(),
-                                                );*/
-                                        }),
+                                              } else if (snapshot.hasError) {
+                                                return Text(
+                                                    'Error while Loading Qualifikationen from Firestore');
+                                              }
+                                              return CircularProgressIndicator();
+                                            }),
                                   ),
                                 ),
                               ),
-                              /*
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                  height: 200,
-                                  child: SingleChildScrollView(
-                                    child: StreamBuilder(
-                                        stream: getSelectedQualifikation(
-                                            _loggedInUser),
-                                        builder: (context,
-                                            AsyncSnapshot<QuerySnapshot>
-                                                snapshot) {
-                                          final user =
-                                              snapshot.data?.docs.first;
-                                          print(
-                                              "userStream : ${user!['name']}");
 
-                                          if (userLoggedIn.qualifikationList !=
-                                              null) {
-                                            userLoggedIn.qualifikationList!
-                                                .forEach((qualifikationID) {
-                                              qualifikationList
-                                                  .forEach((qualifikation) {
-                                                if (qualifikationID ==
-                                                        qualifikation
-                                                            .qualifikationID &&
-                                                    selectedQualifikationList!
-                                                            .contains(
-                                                                qualifikation) ==
-                                                        false) {
-                                                  print("hi");
-                                                  // setState(() {
-                                                  selectedQualifikationList!
-                                                      .add(qualifikation);
-                                                  //  });
-                                                }
-                                              });
-                                            });
-                                          }
-
-                                          return GridView.count(
-                                            shrinkWrap: true,
-                                            crossAxisCount: 7,
-                                            childAspectRatio: 3,
-                                            children:
-                                                //[
-                                                //   Text("${user.first['name']}"),
-                                                selectedQualifikationList!.map(
-                                              (qualifikation) {
-                                                return Container(
-                                                  margin: EdgeInsets.all(10),
-                                                  child: Text(
-                                                    "${qualifikation.qualifikationName}",
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 20,
-                                                    ),
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: Colors.black)),
-                                                );
-                                              },
-                                            ).toList(),
-                                            //  ],
-                                          );
-
-                                          /*                           return GridView.count(
-                                                  shrinkWrap: true,
-                                                  crossAxisCount: 7,
-                                                  childAspectRatio: 3,
-                                                  children:
-                                                      selectedQualifikationList!
-                                                          .map(
-                                                    (qualifikation) {
-                                                      return Container(
-                                                        margin:
-                                                            EdgeInsets.all(10),
-                                                        child: Text(
-                                                          "${qualifikation.qualifikationName}",
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 20,
-                                                          ),
-                                                        ),
-                                                        decoration: BoxDecoration(
-                                                            border: Border.all(
-                                                                color: Colors
-                                                                    .black)),
-                                                      );
-                                                    },
-                                                  ).toList(),
-                                                );*/
-                                        }),
-                                  ),
-                                ),
-                              ),
-                              */
                               SizedBox(
                                   height: MediaQuery.of(context).size.height *
                                       0.04),
