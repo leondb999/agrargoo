@@ -108,6 +108,7 @@ class AuthRepository implements BaseAuthRepository {
           'landwirt': landwirt,
           'birthDate': birthDate,
           'qualifikationList': [],
+          'erfahrungen': "",
         }).then((value) {
           ///Landwirt Profil Page
           if (landwirt == true) {

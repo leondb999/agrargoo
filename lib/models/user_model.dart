@@ -9,6 +9,7 @@ class UserModel {
   String? profilImageURL;
   DateTime? birthDate;
   List<dynamic>? qualifikationList;
+  String? erfahrungen;
 
   UserModel({
     this.userID,
@@ -18,6 +19,7 @@ class UserModel {
     this.profilImageURL,
     this.birthDate,
     this.qualifikationList,
+    this.erfahrungen,
   });
 
   Map<String, dynamic> createMap() {
@@ -28,6 +30,7 @@ class UserModel {
       'landwirt': landwirt,
       'profilImageURL': profilImageURL,
       'birthDate': birthDate,
+      'erfahrungen': erfahrungen,
     };
   }
 
@@ -39,5 +42,6 @@ class UserModel {
         profilImageURL = firestoreMap['profilImageURL'],
         birthDate = DateTime.parse(
             (firestoreMap['birthDate'] as Timestamp).toDate().toString()),
-        qualifikationList = firestoreMap['qualifikationList'];
+        qualifikationList = firestoreMap['qualifikationList'],
+        erfahrungen = firestoreMap['erfahrungen'];
 }

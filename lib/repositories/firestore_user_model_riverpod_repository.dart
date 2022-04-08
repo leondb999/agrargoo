@@ -14,6 +14,7 @@ abstract class BaseFirestoreUserModelRepository {
   Stream<List<UserModel>> getUserModels();
   Future<bool> updateProfilPicture(UserModel userModel, String url);
   Stream<List<UserModel>> getUserByID(String id);
+  Future<bool> updateErfahrungen(UserModel userModel, String erfahrungen);
 }
 
 ///Riverpod Provider
@@ -93,5 +94,21 @@ class FireUserModelRepository implements BaseFirestoreUserModelRepository {
       return Future.error(e);
     }
     throw UnimplementedError();
+  }
+
+  Future<bool> updateErfahrungen(
+      UserModel userModel, String erfahrungen) async {
+    try {
+      _read(firestoreProvider)
+          .collection('users')
+          .doc(userModel.userID)
+          .update({
+        'erfahrungen': erfahrungen,
+      });
+      return true;
+    } catch (e) {
+      print(e);
+      return Future.error(e);
+    }
   }
 }

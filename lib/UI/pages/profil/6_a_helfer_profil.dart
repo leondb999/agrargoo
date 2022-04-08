@@ -46,6 +46,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
   List<QualifikationModel>? selectedQualifikationList = [];
 
   UserModel _loggedInUser = UserModel();
+  String erfahrungenText = "";
 
   ///Get all Qualifikationen
   Future<List<QualifikationModel>> getAllQualifikationen() async {
@@ -119,6 +120,54 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
     //  print(
     //    "return: -> selectedQualifikationenList: ${selectedQualifikationenList}");
     return selectedQualifikationenList;
+  }
+
+  TextEditingController erfahrungsFieldController = TextEditingController();
+
+  Future<void> openErfahrungenDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Edit Erfahrungen"),
+            content: TextField(
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              controller: erfahrungsFieldController,
+              decoration: InputDecoration(
+                  hintText: "Beschreibe deine Erfahrungen als Helfer"),
+              onChanged: (value) {
+                setState(() {
+                  erfahrungenText = value;
+                });
+              },
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                child: Text("Cancel"),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              ElevatedButton(
+                child: Text("OK"),
+                onPressed: () {
+                  print("erfahrungenText: ${erfahrungenText}");
+                  setState(() {
+                    print("qualifikationIDList: $erfahrungenText");
+                    ref
+                        .watch(userModelFirestoreControllerProvider.notifier)
+                        .updateErfahrungen(_loggedInUser, erfahrungenText);
+
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
   }
 
   ///Select Qualifikationen
@@ -328,7 +377,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                         Expanded(
                           flex: 3,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () async {},
                             child: Text(
                               "Bearbeiten",
                               style: TextStyle(color: Colors.white),
@@ -601,6 +650,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
     setState(() {
       _loggedInUser = userLoggedIn;
     });
+
 /*
     Future.delayed(Duration(microseconds: 10), () async {
       var listALl = await getAllQualifikationen();
@@ -944,7 +994,16 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                     ),
                                     SizedBox(width: 40),
                                     TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        print("Edit Erfahrungen");
+                                        setState(() {
+                                          // erfahrungsFieldController
+                                          //erfahrungenText = value;
+                                          erfahrungsFieldController.text =
+                                              _loggedInUser.erfahrungen!;
+                                        });
+                                        openErfahrungenDialog(context);
+                                      },
                                       child: Text(
                                         "Bearbeiten",
                                         style: TextStyle(color: Colors.white),
@@ -960,24 +1019,31 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                 ),
                               ),
                               Container(
-                                margin: const EdgeInsets.all(5.0),
-                                padding: const EdgeInsets.all(3.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10)),
-                                ),
-                                child: Text(
-                                    "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-                                    style: TextStyle(
-                                        fontStyle: FontStyle.normal,
-                                        fontFamily: 'Open Sans',
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: Color(0xFF000000))),
-                              ),
+                                  margin: const EdgeInsets.all(5.0),
+                                  padding: const EdgeInsets.all(3.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  child: _loggedInUser.erfahrungen!.isNotEmpty
+                                      ? Text("${_loggedInUser.erfahrungen}",
+                                          style: TextStyle(
+                                              fontStyle: FontStyle.normal,
+                                              fontFamily: 'Open Sans',
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.normal,
+                                              color: Color(0xFF000000)))
+                                      : Text(
+                                          "Keine Erfahrungen bis jetzt eingetragen",
+                                          style: TextStyle(
+                                              fontStyle: FontStyle.normal,
+                                              fontFamily: 'Open Sans',
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.normal,
+                                              color: Color(0xFF000000)))),
                               SizedBox(
                                   height: MediaQuery.of(context).size.height *
                                       0.04),
