@@ -32,15 +32,18 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                             scrollDirection: Axis.horizontal,
                             child: Row(children: [
                               Container(
-                                  width:
-                                      MediaQuery.of(context).size.width / 2.5,
-                                  height: MediaQuery.of(context).size.height,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: AssetImage(
-                                            'Images/landing2.jpg',
-                                          )))),
+                                width: MediaQuery.of(context).size.width / 2.5,
+                                height: MediaQuery.of(context).size.height,
+                                child: Image.asset('images/landing2.jpg'),
+                                /*
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: AssetImage(
+                                          'images/landing2.jpg',
+                                        ))),
+                                */
+                              ),
                               Row(children: [
                                 SizedBox(width: 10),
                                 new Column(children: [
