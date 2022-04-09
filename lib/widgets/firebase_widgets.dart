@@ -179,6 +179,17 @@ Card jobAnzeigeCard(
         ),
         subtitle: Row(
           children: <Widget>[
+            Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                  ),
+                  child: Text(
+                      "Verfügbarer Zeitraum: ${jobanzeige.startDate!.day}.${jobanzeige.startDate!.month}.${jobanzeige.endDate!.year}-${jobanzeige.endDate!.day}.${jobanzeige.endDate!.month}.${jobanzeige.endDate!.year}"),
+                ),
+              ],
+            ),
             Icon(Icons.place, color: Colors.black12),
             SizedBox(height: 30),
 
@@ -201,40 +212,9 @@ Card jobAnzeigeCard(
                     );
                   },
                 ),
-/*
-                  GridView.count(
-                    shrinkWrap: true,
-                    crossAxisCount: 7,
-                    childAspectRatio: 3,
-                    children: selectedQualifikationenList.map(
-                      (qualifikation) {
-                        return Container(
-                          height: 200,
-                          width: 100,
-                          margin: EdgeInsets.all(10),
-                          child: Text(
-                            "${qualifikation.qualifikationName}",
-                            style: TextStyle(
-                              height: 100,
-                              color: Colors.black,
-                              fontSize: 90,
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black)),
-                        );
-                      },
-                    ).toList()),
-                */
               ),
             ),
 
-            /*
-             childAspectRatio: 4.0,
-                shrinkWrap: true,
-                crossAxisCount: 7,
-                childAspectRatio: 3,
-             */
             landwirtMode
                 ? Text(
                     'Auftraggeber ID: ${jobanzeige.auftraggeberID}, Jobanzeige ID: ${jobanzeige.jobanzeigeID!},Auftraggeber: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort:${hof.first.standort}')
