@@ -116,7 +116,7 @@ Card jobAnzeigeCard(
   ///Hof Provider
   final hof = HofProvider().getHofByUserID(
       jobanzeige.auftraggeberID, p.Provider.of<List<HofModel>>(context));
-
+  print("jobanzeigeQualifikationen: ${jobanzeige.qualifikationList}");
   return Card(
     elevation: 6.0,
     margin: new EdgeInsets.symmetric(horizontal: 70.0, vertical: 13.0),
@@ -167,7 +167,8 @@ Card jobAnzeigeCard(
                           'status': jobanzeige.status,
                           'titel': jobanzeige.titel,
                           'jobanzeigeID': jobanzeige.jobanzeigeID,
-                          'stundenLohn': jobanzeige.stundenLohn
+                          'stundenLohn': jobanzeige.stundenLohn,
+                          'qualifikationList': jobanzeige.qualifikationList,
                         });
                       },
                       style: ElevatedButton.styleFrom(

@@ -5,6 +5,7 @@ class JobanzeigeModel {
   bool? status;
   String? titel;
   int? stundenLohn;
+  List<dynamic>? qualifikationList;
 
   JobanzeigeModel({
     this.jobanzeigeID,
@@ -13,6 +14,7 @@ class JobanzeigeModel {
     this.status,
     this.titel,
     this.stundenLohn,
+    this.qualifikationList,
   });
 
   Map<String, dynamic> createMap() {
@@ -23,6 +25,7 @@ class JobanzeigeModel {
       'status': status,
       'titel': titel,
       'stundenLohn': stundenLohn,
+      'qualifikationList': qualifikationList,
     };
   }
 
@@ -33,5 +36,6 @@ class JobanzeigeModel {
         hofID = firestoreMap['hofID'],
         status = firestoreMap['status'],
         titel = firestoreMap['titel'],
-        stundenLohn = firestoreMap['stundenLohn'];
+        stundenLohn = firestoreMap['stundenLohn'],
+        qualifikationList = firestoreMap['qualifikationList'];
 }

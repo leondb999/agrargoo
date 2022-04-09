@@ -1,6 +1,10 @@
 import 'package:agrargo/controllers/jobanzeige_controller.dart';
+import 'package:agrargo/controllers/user_controller.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
+import 'package:agrargo/models/qualifikation_model.dart';
 import 'package:agrargo/provider/jobanzeige_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:filter_list/filter_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -8,6 +12,7 @@ import 'package:provider/provider.dart' as p;
 import 'package:flutter/material.dart';
 
 import '../../../controllers/auth_controller.dart';
+import '../../../models/user_model.dart';
 import '../../../widgets/layout_widgets.dart';
 
 ///https://github.com/Mashood97/flutter_firestore/blob/master/lib/screens/edit_add_product.dart
@@ -35,6 +40,92 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
   bool? checkStatus;
   JobanzeigeModel anzeige = JobanzeigeModel();
   int _currentPrice = 10;
+
+  ///Alle Qualifikationen Firebase
+  List<QualifikationModel>? fireQualifikationList = [];
+
+  ///Ausgewählte Qualifikationen Firebase
+  List<QualifikationModel>? fireSelectedQualifikationList = [];
+
+  ///Ausgewählte Qualifikationen setState(){}
+  List<QualifikationModel>? selectedQualifikationList = [];
+
+  ///Get all Qualifikationen
+  Future<List<QualifikationModel>> getAllQualifikationen() async {
+    ///Alle Qualifikationen
+    List<QualifikationModel> alleQualifikationenList = [];
+
+    ///1. Hole alle Qualifikationen aus Firestore
+    await FirebaseFirestore.instance
+        .collection('qualifikationen')
+        .get()
+        .then((value) {
+      value.docs.forEach((doc) {
+        QualifikationModel quali = QualifikationModel(
+            qualifikationID: doc.id, qualifikationName: doc['name']);
+        alleQualifikationenList.add(quali);
+      });
+    });
+    // print("all qualifikationModelList: $alleQualifikationenList");
+    return alleQualifikationenList;
+  }
+
+  ///Select Qualifikationen
+  void openFilterDialog(JobanzeigeModel jobanzeigeModel) async {
+    await FilterListDialog.display<QualifikationModel>(
+      context,
+      hideSelectedTextCount: true,
+      themeData: FilterListThemeData(context),
+      headlineText: 'Wähle Qualifikationen aus',
+      height: 500,
+      listData: fireQualifikationList!,
+      selectedListData: selectedQualifikationList,
+      choiceChipLabel: (item) {
+        return item!.qualifikationName;
+      },
+      validateSelectedItem: (list, val) {
+        return list!.contains(val);
+      },
+      controlButtons: [ContolButtonType.All, ContolButtonType.Reset],
+      onItemSearch: (qualifikation, query) {
+        /// When search query change in search bar then this method will be called
+        ///
+        /// Check if items contains query
+        return qualifikation.qualifikationName!
+            .toLowerCase()
+            .contains(query.toLowerCase());
+      },
+      onApplyButtonClick: (list) {
+        setState(() {
+          selectedQualifikationList = List.from(list!);
+          print(
+              "---------------------------------------------------------------------------------------------------");
+          print("selectedQualifikasationLisast: $selectedQualifikationList");
+          print(
+              "---------------------------------------------------------------------------------------------------");
+          List<String> ids = [];
+          list.forEach((qualifikation) {
+            if (ids.contains(qualifikation.qualifikationID) == false) {
+              ids.add(qualifikation.qualifikationID!);
+            }
+          });
+          anzeige.qualifikationList = ids;
+          print(" anzeige.qualifikationList: ${anzeige.qualifikationList}");
+          /*
+          ref
+              .watch(userModelFirestoreControllerProvider.notifier)
+              .updateQualifikationen(userLoggedIn, qualifikationIDList);
+          */
+        });
+
+        Navigator.pop(context);
+        setState(() {
+          selectedQualifikationList = [];
+        });
+      },
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -52,6 +143,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
         anzeige.auftraggeberID = userID;
         anzeige.status = isSwitched;
         anzeige.stundenLohn = routeData['stundenLohn'];
+        anzeige.qualifikationList = routeData['qualifikationList'];
         _currentPrice = routeData['stundenLohn'];
         _hofName = routeData['hofName'];
         _standort = routeData['standort'];
@@ -90,7 +182,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
     String? userID = ref.read(authControllerProvider.notifier).state?.uid;
     if (anzeige.titel != null) {
       print(
-          "jobanzeige: titel ${anzeige.titel}, hofID: ${anzeige.hofID}, auftraggeberID: ${anzeige.auftraggeberID}, status: ${anzeige.status}, stundenLohn: ${anzeige.stundenLohn}");
+          "jobanzeige: titel ${anzeige.titel}, hofID: ${anzeige.hofID}, auftraggeberID: ${anzeige.auftraggeberID}, status: ${anzeige.status}, stundenLohn: ${anzeige.stundenLohn}, qualifikationList. ${anzeige.qualifikationList}");
     }
     print("hello");
 
@@ -115,6 +207,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                                 color: Color(0xFF2E6C49)))),
                     SizedBox(height: 80),
 
+                    ///Titel Textfield()
                     TextFormField(
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -134,6 +227,8 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                     SizedBox(
                       height: 20,
                     ),
+
+                    ///StundenLohn NumberPicker()
                     Text('Stundenlohn: $_currentPrice€/h'),
                     NumberPicker(
                       value: _currentPrice,
@@ -147,6 +242,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                       },
                     ),
 
+                    ///Active/deactivate Anzeige Switch()
                     SizedBox(
                       height: 20,
                     ),
@@ -172,7 +268,45 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
 
                     SizedBox(height: 30),
 
-                    /// Add Buttn
+                    ///TODO qualifikationPicker
+                    TextButton(
+                      onPressed: () async {
+                        var allList = await getAllQualifikationen();
+                        setState(() {
+                          fireQualifikationList = allList;
+                        });
+                        print("fireQualifikationList: $fireQualifikationList");
+
+                        anzeige.qualifikationList!.forEach((selectedID) {
+                          fireQualifikationList!.forEach((qualifikation) {
+                            if (qualifikation.qualifikationID == selectedID) {
+                              if (selectedQualifikationList!
+                                      .contains(qualifikation) ==
+                                  false) {
+                                setState(() {
+                                  selectedQualifikationList!.add(qualifikation);
+                                });
+                              }
+                            }
+                          });
+                        });
+
+                        print(
+                            "selectedQualifikationList: $selectedQualifikationList");
+                        openFilterDialog(anzeige);
+                      },
+                      child: Text(
+                        "Add Qualifikation",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Color(0xFF9FB98B)),
+                      ),
+                      // color: Colors.blue,
+                    ),
+
+                    ///Save Button
                     ElevatedButton(
                       child: Text('Speichern'),
                       onPressed: () {
