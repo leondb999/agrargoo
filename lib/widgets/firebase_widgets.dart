@@ -105,7 +105,8 @@ Widget _activeAnzeige(bool status) {
 ///Jobangebot Card
 Card jobAnzeigeCard(
     BuildContext context, JobanzeigeModel jobanzeige, bool landwirtMode) {
-  print("jobanzeige:$jobanzeige");
+  print(
+      "################################### jobanzeige Stundenlohn :${jobanzeige.stundenLohn}");
 
   ///User Provider
   final auftraggeber = UserProvider().getUserNameByUserID(
@@ -166,6 +167,7 @@ Card jobAnzeigeCard(
                           'status': jobanzeige.status,
                           'titel': jobanzeige.titel,
                           'jobanzeigeID': jobanzeige.jobanzeigeID,
+                          'stundenLohn': jobanzeige.stundenLohn
                         });
                       },
                       style: ElevatedButton.styleFrom(
@@ -176,7 +178,7 @@ Card jobAnzeigeCard(
                     ),
                   ])
                 : Text(
-                    "9,25 €/h",
+                    "${jobanzeige.stundenLohn} €/h",
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.normal,

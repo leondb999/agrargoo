@@ -5,7 +5,6 @@ import 'package:agrargo/UI/login_riverpod/test_screen.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/UI/pages/add/7_add_jobanzeige_landwirt.dart';
 import 'package:agrargo/UI/pages/add/8_add_hof_page_landwirt.dart';
-import 'package:agrargo/UI/pages/add/edit_helfer_profil.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/controllers/user_controller.dart';
 import 'package:agrargo/models/hof_model.dart';
@@ -181,7 +180,6 @@ class MyApp extends StatelessWidget {
           '/add-hof': (context) => AddHofPage(),
           '/chat': (context) => Chat(),
           '/landingpage': (context) => LandingPageCh(),
-          //  '/edit-helfer-page': (context) => EditHelfer(),
         },
       ),
     );

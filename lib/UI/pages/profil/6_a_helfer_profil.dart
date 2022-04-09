@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:age_calculator/age_calculator.dart';
-import 'package:agrargo/UI/pages/add/edit_helfer_profil.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/controllers/qualifikation_controller.dart';
 import 'package:agrargo/controllers/user_controller.dart';
@@ -465,7 +464,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                         Expanded(
                           flex: 10,
                           child: Text(
-                            '${userLoggedIn.birthDate}',
+                            '${userLoggedIn.birthDate!.day}.${userLoggedIn.birthDate!.month}.${userLoggedIn.birthDate!.year}',
                             style: TextStyle(
                               fontStyle: FontStyle.normal,
                               fontFamily: 'Open Sans',

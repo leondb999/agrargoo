@@ -4,13 +4,16 @@ class JobanzeigeModel {
   String? hofID;
   bool? status;
   String? titel;
+  int? stundenLohn;
 
-  JobanzeigeModel(
-      {this.jobanzeigeID,
-      this.auftraggeberID,
-      this.hofID,
-      this.status,
-      this.titel});
+  JobanzeigeModel({
+    this.jobanzeigeID,
+    this.auftraggeberID,
+    this.hofID,
+    this.status,
+    this.titel,
+    this.stundenLohn,
+  });
 
   Map<String, dynamic> createMap() {
     return {
@@ -19,6 +22,7 @@ class JobanzeigeModel {
       'hofID': hofID,
       'status': status,
       'titel': titel,
+      'stundenLohn': stundenLohn,
     };
   }
 
@@ -28,5 +32,6 @@ class JobanzeigeModel {
         auftraggeberID = firestoreMap['auftraggeberID'],
         hofID = firestoreMap['hofID'],
         status = firestoreMap['status'],
-        titel = firestoreMap['titel'];
+        titel = firestoreMap['titel'],
+        stundenLohn = firestoreMap['stundenLohn'];
 }

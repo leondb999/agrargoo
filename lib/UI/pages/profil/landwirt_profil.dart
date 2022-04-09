@@ -286,7 +286,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                         Expanded(
                           flex: 10,
                           child: Text(
-                            '${userLoggedIn.birthDate}',
+                            '${userLoggedIn.birthDate!.day}.${userLoggedIn.birthDate!.month}.${userLoggedIn.birthDate!.year}',
                             style: TextStyle(
                               fontStyle: FontStyle.normal,
                               fontFamily: 'Open Sans',
@@ -539,6 +539,8 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                 : ListView.builder(
                                     itemCount: jobanzeigenListUser.length,
                                     itemBuilder: (context, index) {
+                                      print(
+                                          " jobanzeigenListUser[index],: ${jobanzeigenListUser[index].titel} stundenLohn: ${jobanzeigenListUser[index].stundenLohn}");
                                       return jobAnzeigeCard(
                                         context,
                                         jobanzeigenListUser[index],

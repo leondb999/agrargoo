@@ -266,14 +266,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 fontSize: 15, color: Colors.black),
                             children: [
                               TextSpan(
-                                  text: 'Login',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF2E6C49)),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.pushReplacementNamed(
-                                          context, "/login");
-                                    })
+                                text: 'Login',
+                                style: TextStyle(
+                                    fontSize: 15, color: Color(0xFF2E6C49)),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.pushReplacementNamed(
+                                        context, "/login");
+                                  },
+                              ),
                             ],
                           ),
                         ),
@@ -289,5 +290,3 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     );
   }
 }
-
-String? validateEmail(String value) {}

@@ -3,6 +3,7 @@ import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/provider/jobanzeige_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart' as p;
 import 'package:flutter/material.dart';
 
@@ -33,6 +34,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
   bool? isSwitched = true;
   bool? checkStatus;
   JobanzeigeModel anzeige = JobanzeigeModel();
+  int _currentPrice = 10;
   @override
   void initState() {
     // TODO: implement initState
@@ -49,9 +51,12 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
         anzeige.hofID = routeData['hofID'];
         anzeige.auftraggeberID = userID;
         anzeige.status = isSwitched;
+        anzeige.stundenLohn = routeData['stundenLohn'];
+        _currentPrice = routeData['stundenLohn'];
         _hofName = routeData['hofName'];
         _standort = routeData['standort'];
       });
+      print("anzeige.stundenLohn: ${anzeige.stundenLohn}");
     }).then(
       (value) => routeData == null
           ? Future.delayed(Duration.zero, () {})
@@ -85,7 +90,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
     String? userID = ref.read(authControllerProvider.notifier).state?.uid;
     if (anzeige.titel != null) {
       print(
-          "jobanzeige: titel ${anzeige.titel}, hofID: ${anzeige.hofID}, auftraggeberID: ${anzeige.auftraggeberID}, status: ${anzeige.status}");
+          "jobanzeige: titel ${anzeige.titel}, hofID: ${anzeige.hofID}, auftraggeberID: ${anzeige.auftraggeberID}, status: ${anzeige.status}, stundenLohn: ${anzeige.stundenLohn}");
     }
     print("hello");
 
@@ -129,7 +134,22 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                     SizedBox(
                       height: 20,
                     ),
+                    Text('Stundenlohn: $_currentPrice€/h'),
+                    NumberPicker(
+                      value: _currentPrice,
+                      minValue: 0,
+                      maxValue: 100,
+                      onChanged: (value) {
+                        setState(() {
+                          _currentPrice = value;
+                          anzeige.stundenLohn = value;
+                        });
+                      },
+                    ),
 
+                    SizedBox(
+                      height: 20,
+                    ),
                     isSwitched!
                         ? Text(
                             "Anzeige wird veröffentlicht",
