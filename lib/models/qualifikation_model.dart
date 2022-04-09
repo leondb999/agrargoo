@@ -16,6 +16,6 @@ class QualifikationModel {
 
   QualifikationModel.fromFirestore(
       Map<String, dynamic> firestoreMap, String documentID)
-      : qualifikationName = firestoreMap['qualifikationName'],
-        qualifikationID = firestoreMap['qualifikationID'];
+      : qualifikationName = firestoreMap['name'],
+        qualifikationID = documentID;
 }

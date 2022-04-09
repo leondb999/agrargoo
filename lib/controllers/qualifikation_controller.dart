@@ -42,6 +42,8 @@ class FirestoreQualifikationModelController
 
   ///Get
   void getQualifikationModelList() {
-    _read(fireQualifikationModelRepositoryProvider).getQualifikationModelList();
+    var x = _read(fireQualifikationModelRepositoryProvider)
+        .getQualifikationModelList();
+    print("x: $x");
   }
 }

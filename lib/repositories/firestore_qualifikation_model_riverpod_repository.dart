@@ -60,7 +60,10 @@ class FireQualifikationModelRepository
   @override
   Stream<List<QualifikationModel>> getQualifikationModelList() {
     print("Stream<List<QualifikationModel>> getQualifikationModelList()");
-    return _read(firestoreProvider).collection('jobAnzeigen').snapshots().map(
+    return _read(firestoreProvider)
+        .collection('qualifikationen')
+        .snapshots()
+        .map(
           (snapshot) => snapshot.docs
               .map(
                   (doc) => QualifikationModel.fromFirestore(doc.data(), doc.id))

@@ -53,24 +53,6 @@ class _HelferUebersichtPageState extends ConsumerState<HelferUebersichtPage> {
           Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.015),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: jobAnzeigeList.isNotEmpty
-                      ? ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: jobAnzeigeList.length - 1,
-                          itemBuilder: (context, index) {
-                            return jobAnzeigeCard(
-                                context, activeAnzeigeList[index], false);
-                          },
-                        )
-                      : Text("aktuell gibt es keine Jobanzeigen")),
-            ),
-          ),
         ],
       ),
     );

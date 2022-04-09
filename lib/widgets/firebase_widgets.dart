@@ -1,13 +1,16 @@
 import 'package:agrargo/UI/pages/angebot/4_a_job_angebot_landwirt.dart';
 import 'package:agrargo/UI/pages/add/7_add_jobanzeige_landwirt.dart';
 import 'package:agrargo/UI/pages/add/8_add_hof_page_landwirt.dart';
+import 'package:agrargo/controllers/qualifikation_controller.dart';
 import 'package:agrargo/models/qualifikation_model.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/provider/hof_provider.dart';
+import 'package:agrargo/provider/qualifikation_provider.dart';
 import 'package:agrargo/provider/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/hof_model.dart';
 import 'package:provider/provider.dart' as p;
 
@@ -106,28 +109,52 @@ Widget _activeAnzeige(bool status) {
 
 ///Jobangebot Card
 Card jobAnzeigeCard(
-    BuildContext context, JobanzeigeModel jobanzeige, bool landwirtMode) {
-  print(
-      "################################### jobanzeige Stundenlohn :${jobanzeige.stundenLohn}");
-
+  BuildContext context,
+  JobanzeigeModel jobanzeige,
+  bool landwirtMode,
+  WidgetRef ref,
+) {
   ///User Provider
   final auftraggeber = UserProvider().getUserNameByUserID(
       jobanzeige.auftraggeberID, p.Provider.of<List<UserModel>>(context));
-  print("auftraggeber: $auftraggeber");
+//  print("auftraggeber: $auftraggeber");
 
   ///Hof Provider
   final hof = HofProvider().getHofByUserID(
       jobanzeige.auftraggeberID, p.Provider.of<List<HofModel>>(context));
 
-  print("cards jobanzeigeQualifikationen: ${jobanzeige.qualifikationList}");
+  ///Alle Qualifikationen
 
-  ///-----------------------------------------------------------------------------
-  List<QualifikationModel> alleQualifikationenList = [];
+  var allQualifikationenList =
+      ref.read(qualifikationModelFirestoreControllerProvider.notifier).state!;
+  print("allQualifikationenList: ${allQualifikationenList}");
+  print("anzeige.qualifikationList: ${jobanzeige.qualifikationList}");
 
-  print("jobAnzeigeCard: alleQualifikation: $alleQualifikationenList");
+  final selectedQualifikationenList = QualifikationProvider()
+      .filterQualifikationenByID(
+          jobanzeige.qualifikationList!, allQualifikationenList);
 
-  ///-----------------------------------------------------------------------------
-
+/*
+  ///Selected Qualifikationen
+  selectedQualifikationenList = ref
+      .read(qualifikationModelFirestoreControllerProvider.notifier)
+      .filterQualifikationenByID(
+        allQualifikationenList,
+        jobanzeige.qualifikationList!,
+      );
+  jobanzeige.qualifikationList!.forEach((qualifikationID) {
+    allQualifikationenList.forEach((qualifikation) {
+      if (qualifikation.qualifikationID == qualifikationID) {
+        selectedQualifikationenList.add(qualifikation);
+      }
+    });
+  });
+  */
+  print("selectedQualifikationenList: $selectedQualifikationenList");
+  selectedQualifikationenList.forEach((quali) {
+    print(
+        "jobAnzeigeCard_selectedQualifikationenList: ${quali.qualifikationName}");
+  });
   return Card(
     elevation: 6.0,
     margin: new EdgeInsets.symmetric(horizontal: 70.0, vertical: 13.0),
@@ -154,34 +181,65 @@ Card jobAnzeigeCard(
           children: <Widget>[
             Icon(Icons.place, color: Colors.black12),
             SizedBox(height: 30),
+
+            ///Liste der Qualifikationen der Anzeige
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                height: 100,
+                width: 150,
+                child: ListView.builder(
+                  itemCount: selectedQualifikationenList.length,
+                  itemBuilder: (context, index) {
+                    var qualifikation = selectedQualifikationenList[index];
+                    return Card(
+                      child: ListTile(
+                          title: Text(
+                        "${qualifikation.qualifikationName}",
+                      )),
+                    );
+                  },
+                ),
+/*
+                  GridView.count(
+                    shrinkWrap: true,
+                    crossAxisCount: 7,
+                    childAspectRatio: 3,
+                    children: selectedQualifikationenList.map(
+                      (qualifikation) {
+                        return Container(
+                          height: 200,
+                          width: 100,
+                          margin: EdgeInsets.all(10),
+                          child: Text(
+                            "${qualifikation.qualifikationName}",
+                            style: TextStyle(
+                              height: 100,
+                              color: Colors.black,
+                              fontSize: 90,
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black)),
+                        );
+                      },
+                    ).toList()),
+                */
+              ),
+            ),
+
+            /*
+             childAspectRatio: 4.0,
+                shrinkWrap: true,
+                crossAxisCount: 7,
+                childAspectRatio: 3,
+             */
             landwirtMode
                 ? Text(
                     'Auftraggeber ID: ${jobanzeige.auftraggeberID}, Jobanzeige ID: ${jobanzeige.jobanzeigeID!},Auftraggeber: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort:${hof.first.standort}')
                 : Text(
                     "Auftraggeberr: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort: ${hof.first.standort}"),
-            /*
-        GridView.count(
-                shrinkWrap: true,
-                crossAxisCount: 7,
-                childAspectRatio: 3,
-                children: jobanzeige.qualifikationList!.map(
-                  (qualifikation) {
-                    //      print("hello");
-                    return Container(
-                      margin: EdgeInsets.all(10),
-                      child: Text(
-                        "${qualifikation.qualifikationName}",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black)),
-                    );
-                  },
-                ).toList()),
-            */
           ],
         ),
         trailing: Column(

@@ -10,6 +10,7 @@ import 'package:agrargo/controllers/user_controller.dart';
 import 'package:agrargo/models/hof_model.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import 'package:agrargo/models/user_model.dart';
+import 'package:agrargo/provider/qualifikation_provider.dart';
 import 'package:agrargo/provider/user_provider.dart';
 import 'package:agrargo/repositories/firestore_jobanzeige_model_riverpod_repository.dart';
 import 'package:agrargo/repositories/firestore_repository.dart';
@@ -86,6 +87,7 @@ class MyApp extends StatelessWidget {
         ),
 
         ///QualifikationModel Provider
+        p.ChangeNotifierProvider.value(value: QualifikationProvider()),
 
         ///HofModel Provider
         p.ChangeNotifierProvider.value(value: HofProvider()),

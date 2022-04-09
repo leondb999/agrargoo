@@ -37,42 +37,44 @@ class _JobangebotUebersichtPageState
       resizeToAvoidBottomInset: false,
       bottomNavigationBar:
           navigationBar(index: 0, context: context, ref: ref, home: false),
-      body: Column(
-        children: [
-          SizedBox(height: MediaQuery.of(context).size.height * 0.017),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.1,
-            child: Row(
-              children: [
-                SizedBox(width: MediaQuery.of(context).size.width * 0.89),
-                Icon(Icons.filter_alt_sharp, color: Colors.black, size: 30.0),
-                SizedBox(width: 7),
-                Icon(Icons.sort, color: Colors.black, size: 30.0),
-              ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height * 0.017),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: Row(
+                children: [
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.89),
+                  Icon(Icons.filter_alt_sharp, color: Colors.black, size: 30.0),
+                  SizedBox(width: 7),
+                  Icon(Icons.sort, color: Colors.black, size: 30.0),
+                ],
+              ),
             ),
-          ),
-          Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.015),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: jobAnzeigeList.isNotEmpty
-                      ? ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: jobAnzeigeList.length,
-                          itemBuilder: (context, index) {
-                            return jobAnzeigeCard(
-                                context, activeAnzeigeList[index], false);
-                          },
-                        )
-                      : Text("aktuell gibt es keine Jobanzeigen")),
+            Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.015),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: jobAnzeigeList.isNotEmpty
+                        ? ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: jobAnzeigeList.length,
+                            itemBuilder: (context, index) {
+                              return jobAnzeigeCard(context,
+                                  activeAnzeigeList[index], false, ref);
+                            },
+                          )
+                        : Text("aktuell gibt es keine Jobanzeigen")),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
