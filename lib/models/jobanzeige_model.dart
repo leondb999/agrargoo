@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class JobanzeigeModel {
   String? jobanzeigeID;
   String? auftraggeberID;
@@ -5,7 +7,10 @@ class JobanzeigeModel {
   bool? status;
   String? titel;
   int? stundenLohn;
+
   List<dynamic>? qualifikationList;
+  DateTime? startDate;
+  DateTime? endDate;
 
   JobanzeigeModel({
     this.jobanzeigeID,
@@ -15,6 +20,8 @@ class JobanzeigeModel {
     this.titel,
     this.stundenLohn,
     this.qualifikationList,
+    this.startDate,
+    this.endDate,
   });
 
   Map<String, dynamic> createMap() {
@@ -26,6 +33,8 @@ class JobanzeigeModel {
       'titel': titel,
       'stundenLohn': stundenLohn,
       'qualifikationList': qualifikationList,
+      'startDate': startDate,
+      'endDate': endDate,
     };
   }
 
@@ -37,5 +46,9 @@ class JobanzeigeModel {
         status = firestoreMap['status'],
         titel = firestoreMap['titel'],
         stundenLohn = firestoreMap['stundenLohn'],
-        qualifikationList = firestoreMap['qualifikationList'];
+        qualifikationList = firestoreMap['qualifikationList'],
+        startDate = DateTime.parse(
+            (firestoreMap['startDate'] as Timestamp).toDate().toString()),
+        endDate = DateTime.parse(
+            (firestoreMap['endDate'] as Timestamp).toDate().toString());
 }

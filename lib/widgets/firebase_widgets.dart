@@ -261,6 +261,8 @@ Card jobAnzeigeCard(
                           'jobanzeigeID': jobanzeige.jobanzeigeID,
                           'stundenLohn': jobanzeige.stundenLohn,
                           'qualifikationList': jobanzeige.qualifikationList,
+                          'startDate': jobanzeige.startDate,
+                          'endDate': jobanzeige.endDate,
                         });
                       },
                       style: ElevatedButton.styleFrom(

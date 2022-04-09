@@ -40,6 +40,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
   bool? checkStatus;
   JobanzeigeModel anzeige = JobanzeigeModel();
   int _currentPrice = 10;
+  DateTimeRange? selectedDateRange;
 
   ///Alle Qualifikationen Firebase
   List<QualifikationModel>? fireQualifikationList = [];
@@ -68,6 +69,39 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
     });
     // print("all qualifikationModelList: $alleQualifikationenList");
     return alleQualifikationenList;
+  }
+
+  ///Date Range Picker
+  void _showDateRangePicker(
+      JobanzeigeModel jobanzeige, DateTime startDate, DateTime endDate) async {
+    print("userLoggedIn.startDate: ${jobanzeige.startDate}");
+    final DateTimeRange? result = await showDateRangePicker(
+      //  initialEntryMode: DatePickerEntryMode.calendar,
+      context: context,
+      initialDateRange: jobanzeige.startDate == DateTime(1700)
+          ? DateTimeRange(
+              start: DateTime.now(),
+              end: DateTime.now(),
+            )
+          : DateTimeRange(
+              start: jobanzeige.startDate!, end: jobanzeige.endDate!),
+      firstDate: DateTime(2022, 1, 1),
+      lastDate: DateTime(2030, 12, 31),
+      currentDate: DateTime.now(),
+      saveText: 'Done',
+    );
+
+    if (result != null) {
+      // Rebuild the UI
+      print("result DateRage.start: ${result.start.toString()}");
+      setState(() {
+        selectedDateRange = result;
+        anzeige.startDate = result.start;
+        anzeige.endDate = result.end;
+
+        print("selectedDateRange: $selectedDateRange");
+      });
+    }
   }
 
   ///Select Qualifikationen
@@ -139,6 +173,8 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
         anzeige.status = isSwitched;
         anzeige.stundenLohn = routeData['stundenLohn'];
         anzeige.qualifikationList = routeData['qualifikationList'];
+        anzeige.startDate = routeData['startDate'];
+        anzeige.endDate = routeData['endDate'];
         _currentPrice = routeData['stundenLohn'];
         _hofName = routeData['hofName'];
         _standort = routeData['standort'];
@@ -234,6 +270,16 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                           _currentPrice = value;
                           anzeige.stundenLohn = value;
                         });
+                      },
+                    ),
+                    ElevatedButton(
+                      child: Text("Choose verfügbarer Zeitraum"),
+                      onPressed: () {
+                        _showDateRangePicker(
+                          anzeige,
+                          anzeige.startDate!,
+                          anzeige.endDate!,
+                        );
                       },
                     ),
 
