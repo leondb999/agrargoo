@@ -57,6 +57,8 @@ dependencies:
   url_launcher: ^6.0.20
   equatable: ^2.0.3
   fluttertoast: ^8.0.9
+  table_calendar: ^3.0.5
+  syncfusion_flutter_datepicker: ^20.1.47
 
 #dependency_overrides:
  # firebase_auth_platform_interface: 6.1.11
