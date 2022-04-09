@@ -615,6 +615,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
       UserModel userLoggedIn, DateTime startDate, DateTime endDate) async {
     print("userLoggedIn.startDate: ${userLoggedIn.startDate}");
     final DateTimeRange? result = await showDateRangePicker(
+      //  initialEntryMode: DatePickerEntryMode.calendar,
       context: context,
       initialDateRange: userLoggedIn.startDate == DateTime(1700)
           ? DateTimeRange(
@@ -1175,33 +1176,30 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                 child: Row(
                                   children: <Widget>[
                                     Container(
-                                      margin: const EdgeInsets.all(15.0),
-                                      padding: const EdgeInsets.all(3.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                        border: Border.all(color: Colors.grey),
-                                      ),
-                                      child: userLoggedIn.startDate ==
-                                              DateTime(17000)
-                                          ? Text("${userLoggedIn.endDate}",
-                                              style: TextStyle(
-                                                  fontStyle: FontStyle.normal,
-                                                  fontFamily: 'Open Sans',
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Color(0xFF000000)))
-                                          : Text("No Startdate selected",
-                                              style: TextStyle(
-                                                  fontStyle: FontStyle.normal,
-                                                  fontFamily: 'Open Sans',
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Color(0xFF000000))),
-                                    ),
+                                        margin: const EdgeInsets.all(15.0),
+                                        padding: const EdgeInsets.all(3.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                          border:
+                                              Border.all(color: Colors.grey),
+                                        ),
+
+                                        ///startDate
+                                        child: Text(
+                                            userLoggedIn.startDate !=
+                                                    DateTime(1700)
+                                                ? "${userLoggedIn.startDate!.day}.${userLoggedIn.startDate!.month}.${userLoggedIn.startDate!.year}"
+                                                : "No Startdate selected",
+                                            style: TextStyle(
+                                                fontStyle: FontStyle.normal,
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.normal,
+                                                color: Color(0xFF000000)))),
                                     Text("-"),
                                     Container(
                                       margin: const EdgeInsets.all(15.0),
@@ -1214,22 +1212,18 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                             bottomRight: Radius.circular(10)),
                                         border: Border.all(color: Colors.grey),
                                       ),
-                                      child: userLoggedIn.endDate ==
-                                              DateTime(17000)
-                                          ? Text("${userLoggedIn.endDate}",
-                                              style: TextStyle(
-                                                  fontStyle: FontStyle.normal,
-                                                  fontFamily: 'Open Sans',
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Color(0xFF000000)))
-                                          : Text("No Enddate selected",
-                                              style: TextStyle(
-                                                  fontStyle: FontStyle.normal,
-                                                  fontFamily: 'Open Sans',
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Color(0xFF000000))),
+
+                                      ///endDate
+                                      child: Text(
+                                          userLoggedIn.endDate != DateTime(1700)
+                                              ? "${userLoggedIn.endDate!.day}.${userLoggedIn.endDate!.month}.${userLoggedIn.endDate!.year}"
+                                              : "No Enddate selected",
+                                          style: TextStyle(
+                                              fontStyle: FontStyle.normal,
+                                              fontFamily: 'Open Sans',
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.normal,
+                                              color: Color(0xFF000000))),
                                     ),
                                   ],
                                 ),
