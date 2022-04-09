@@ -13,7 +13,8 @@ import '../UI/pages/profil/6_a_helfer_profil.dart';
 import '../UI/pages/profil/landwirt_profil.dart';
 
 abstract class BaseFirestoreQualifikationModelRepository {
-  List<QualifikationModel> getQualifikationModelsList();
+  List<QualifikationModel> getQualifikationModelsList2();
+  Stream<List<QualifikationModel>> getQualifikationModelList();
 }
 
 ///Riverpod Provider
@@ -27,7 +28,7 @@ class FireQualifikationModelRepository
   const FireQualifikationModelRepository(this._read);
 
   @override
-  List<QualifikationModel> getQualifikationModelsList() {
+  List<QualifikationModel> getQualifikationModelsList2() {
     List<QualifikationModel> qualifikationsList = [];
     _read(firestoreProvider).collection('qualifikationen').get().then((value) {
       value.docs.forEach((doc) {
@@ -54,5 +55,16 @@ class FireQualifikationModelRepository
     }*/
 
     throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<QualifikationModel>> getQualifikationModelList() {
+    print("Stream<List<QualifikationModel>> getQualifikationModelList()");
+    return _read(firestoreProvider).collection('jobAnzeigen').snapshots().map(
+          (snapshot) => snapshot.docs
+              .map(
+                  (doc) => QualifikationModel.fromFirestore(doc.data(), doc.id))
+              .toList(),
+        );
   }
 }

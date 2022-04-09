@@ -111,11 +111,6 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
           });
           anzeige.qualifikationList = ids;
           print(" anzeige.qualifikationList: ${anzeige.qualifikationList}");
-          /*
-          ref
-              .watch(userModelFirestoreControllerProvider.notifier)
-              .updateQualifikationen(userLoggedIn, qualifikationIDList);
-          */
         });
 
         Navigator.pop(context);

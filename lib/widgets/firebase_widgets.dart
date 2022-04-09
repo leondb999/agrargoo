@@ -1,9 +1,11 @@
 import 'package:agrargo/UI/pages/angebot/4_a_job_angebot_landwirt.dart';
 import 'package:agrargo/UI/pages/add/7_add_jobanzeige_landwirt.dart';
 import 'package:agrargo/UI/pages/add/8_add_hof_page_landwirt.dart';
+import 'package:agrargo/models/qualifikation_model.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/provider/hof_provider.dart';
 import 'package:agrargo/provider/user_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
 import '../models/hof_model.dart';
@@ -116,7 +118,16 @@ Card jobAnzeigeCard(
   ///Hof Provider
   final hof = HofProvider().getHofByUserID(
       jobanzeige.auftraggeberID, p.Provider.of<List<HofModel>>(context));
-  print("jobanzeigeQualifikationen: ${jobanzeige.qualifikationList}");
+
+  print("cards jobanzeigeQualifikationen: ${jobanzeige.qualifikationList}");
+
+  ///-----------------------------------------------------------------------------
+  List<QualifikationModel> alleQualifikationenList = [];
+
+  print("jobAnzeigeCard: alleQualifikation: $alleQualifikationenList");
+
+  ///-----------------------------------------------------------------------------
+
   return Card(
     elevation: 6.0,
     margin: new EdgeInsets.symmetric(horizontal: 70.0, vertical: 13.0),
@@ -147,7 +158,30 @@ Card jobAnzeigeCard(
                 ? Text(
                     'Auftraggeber ID: ${jobanzeige.auftraggeberID}, Jobanzeige ID: ${jobanzeige.jobanzeigeID!},Auftraggeber: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort:${hof.first.standort}')
                 : Text(
-                    "Auftraggeberr: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort: ${hof.first.standort}")
+                    "Auftraggeberr: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort: ${hof.first.standort}"),
+            /*
+        GridView.count(
+                shrinkWrap: true,
+                crossAxisCount: 7,
+                childAspectRatio: 3,
+                children: jobanzeige.qualifikationList!.map(
+                  (qualifikation) {
+                    //      print("hello");
+                    return Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text(
+                        "${qualifikation.qualifikationName}",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black)),
+                    );
+                  },
+                ).toList()),
+            */
           ],
         ),
         trailing: Column(

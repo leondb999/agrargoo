@@ -27,9 +27,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart' as p;
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/jobanzeige_controller.dart';
+import '../../../controllers/qualifikation_controller.dart';
 import '../../../controllers/user_controller.dart';
 import '../../../main.dart';
 import '../../../repositories/firestore_hof_model_riverpod_repository.dart';
+import '../../../repositories/firestore_qualifikation_model_riverpod_repository.dart';
 
 class LandwirtProfil extends ConsumerStatefulWidget {
   const LandwirtProfil({Key? key}) : super(key: key);
@@ -417,12 +419,11 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
 
     ///Alle gespeicherten User in der Firestore Collection
     final userList = ref.watch(userModelFirestoreControllerProvider);
-    print("hi");
+
     print("userList: $userList");
 
     ///LoggedIn User
     String? userID = ref.read(authControllerProvider.notifier).state!.uid;
-    print("userLoggedIn: ");
     final userLoggedIn =
         UserProvider().getUserNameByUserID(userID, userList!).first;
 
@@ -443,6 +444,11 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
     List<JobanzeigeModel> jobanzeigenListUser =
         JobanzeigeProvider().getAnzeigeByUserID(userID, jobanzeigeModelList!);
     print("jobanzeigenListUser: ${jobanzeigenListUser}");
+
+    ///Qualifikationen Provider
+    final qualifikationModelList =
+        ref.watch(qualifikationModelFirestoreControllerProvider);
+    print("qualifikationModelList: $qualifikationModelList");
 
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
