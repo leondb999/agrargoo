@@ -147,7 +147,7 @@ Card jobAnzeigeCard(
                 ? Text(
                     'Auftraggeber ID: ${jobanzeige.auftraggeberID}, Jobanzeige ID: ${jobanzeige.jobanzeigeID!},Auftraggeber: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort:${hof.first.standort}')
                 : Text(
-                    "Auftraggeber: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort: ${hof.first.standort}")
+                    "Auftraggeberr: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort: ${hof.first.standort}")
           ],
         ),
         trailing: Column(
