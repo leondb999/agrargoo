@@ -20,7 +20,7 @@ class _JobangebotUebersichtPageState
     extends ConsumerState<JobangebotUebersichtPage> {
   @override
   Widget build(BuildContext context) {
-    User? authControllerState = ref.watch(authControllerProvider);
+    // User? authControllerState = ref.watch(authControllerProvider);
 
     final jobAnzeigeList = p.Provider.of<List<JobanzeigeModel>>(context);
     var activeAnzeigeList = [];
@@ -63,7 +63,7 @@ class _JobangebotUebersichtPageState
                       ? ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          itemCount: jobAnzeigeList.length - 1,
+                          itemCount: jobAnzeigeList.length,
                           itemBuilder: (context, index) {
                             return jobAnzeigeCard(
                                 context, activeAnzeigeList[index], false);

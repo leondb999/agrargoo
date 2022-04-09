@@ -16,7 +16,7 @@ class FireStoreService {
   Stream<List<UserModel>> getUserList() {
     final x = _db.collection(('users')).get().then((value) {
       value.docs.forEach((doc) {
-        //   print("getUserList: ${doc.id} name: ${doc['name']}");
+        print("getUserList: ${doc.id} name: ${doc['name']}");
       });
     });
     return _db.collection(('users')).snapshots().map((snapshot) => snapshot.docs

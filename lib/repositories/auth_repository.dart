@@ -14,8 +14,16 @@ abstract class BaseAuthRepository {
   Future<void> signInAnonymously();
   Future<void> signInEmailAndPW(
       BuildContext context, String email, String password);
-  Future<void> registerUserEmailAndPW(BuildContext context, String name,
-      String email, String password, bool landwirt, DateTime birthDate);
+  Future<void> registerUserEmailAndPW(
+    BuildContext context,
+    String name,
+    String email,
+    String password,
+    bool landwirt,
+    DateTime birthDate,
+    DateTime startDate,
+    DateTime endDate,
+  );
   Future<void> updateUserName(String name);
   User? getCurrentUser();
   Future<void> signOut(BuildContext context);
@@ -87,9 +95,17 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
-  Future<void> registerUserEmailAndPW(BuildContext context, String name,
-      String email, String password, bool landwirt, DateTime birthDate) async {
-    // TODO: implement registerUserEmailAndPW
+  Future<void> registerUserEmailAndPW(
+    BuildContext context,
+    String name,
+    String email,
+    String password,
+    bool landwirt,
+    DateTime birthDate,
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    print("registerUserEmailAndPW");
     try {
       await _read(firebaseAuthProvider)
           .createUserWithEmailAndPassword(email: email, password: password)
@@ -98,36 +114,43 @@ class AuthRepository implements BaseAuthRepository {
         //userCredential.user!.reload();
 
         User? user = userCredential.user;
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user?.uid)
-            .set({
-          'userID': user?.uid,
-          'name': name,
-          'email': email,
-          'landwirt': landwirt,
-          'birthDate': birthDate,
-          'qualifikationList': [],
-          'erfahrungen': "",
-        }).then((value) {
-          ///Landwirt Profil Page
-          if (landwirt == true) {
-            Navigator.pushNamed(
-              context,
-              LandwirtProfil.routename,
-              arguments: {'landwirt': landwirt},
-            );
-          }
+        try {
+          bool? success = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user?.uid)
+              .set({
+            'userID': user?.uid,
+            'name': name,
+            'email': email,
+            'landwirt': landwirt,
+            'birthDate': birthDate,
+            'qualifikationList': [],
+            'erfahrungen': "",
+            'startDate': startDate,
+            'endDate': endDate,
+          }).then((value) {
+            ///Landwirt Profil Page
+            if (landwirt == true) {
+              Navigator.pushNamed(
+                context,
+                LandwirtProfil.routename,
+                arguments: {'landwirt': landwirt},
+              );
+            }
 
-          ///Helfer Profil Page
-          if (landwirt == false) {
-            Navigator.pushNamed(
-              context,
-              HelferProfil.routename,
-              arguments: {'landwirt': landwirt},
-            );
-          }
-        });
+            ///Helfer Profil Page
+            if (landwirt == false) {
+              Navigator.pushNamed(
+                context,
+                HelferProfil.routename,
+                arguments: {'landwirt': landwirt},
+              );
+            }
+          });
+          print("success: $success");
+        } catch (e) {
+          print("Error while register User in firestore: $e");
+        }
 
         // Navigator.pop(context);
         //   Navigator.pushReplacementNamed(context, "/home");

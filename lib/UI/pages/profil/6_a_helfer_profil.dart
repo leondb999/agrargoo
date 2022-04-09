@@ -17,13 +17,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
-
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../../models/user_model.dart';
 import '../../../provider/general_providers.dart';
 import '../../../provider/user_provider.dart';
 import '../../../widgets/layout_widgets.dart';
 import '../angebot/4_a_job_angebot_landwirt.dart';
-import 'package:agrargo/enums/qualifikation_enums.dart';
 
 class HelferProfil extends ConsumerStatefulWidget {
   const HelferProfil({Key? key}) : super(key: key);
@@ -47,6 +46,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
 
   UserModel _loggedInUser = UserModel();
   String erfahrungenText = "";
+  DateTimeRange? selectedDateRange;
 
   ///Get all Qualifikationen
   Future<List<QualifikationModel>> getAllQualifikationen() async {
@@ -170,6 +170,47 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
         });
   }
 
+/*
+  Future<void> openDateRagePickerDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Wähle den Verfügbaren Zeitraum"),
+            content: Container(
+              width: 300,
+              child: SfDateRangePicker(
+                onSelectionChanged: _onSelectionChanged,
+                selectionMode: DateRangePickerSelectionMode.range,
+              ),
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                child: Text("Cancel"),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              ElevatedButton(
+                child: Text("OK"),
+                onPressed: () {
+                  setState(() {
+                    /*
+                    ref
+                        .watch(userModelFirestoreControllerProvider.notifier)
+                        .updateErfahrungen(_loggedInUser, erfahrungenText);
+                          */
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
+  }
+*/
   ///Select Qualifikationen
   void openFilterDialog(UserModel userLoggedIn) async {
     await FilterListDialog.display<QualifikationModel>(
@@ -565,6 +606,43 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
     );
   }
 
+  void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+    print("args: ${args.value}");
+// TODO: implement your code here
+  }
+
+  void _showDateRange(
+      UserModel userLoggedIn, DateTime startDate, DateTime endDate) async {
+    print("userLoggedIn.startDate: ${userLoggedIn.startDate}");
+    final DateTimeRange? result = await showDateRangePicker(
+      context: context,
+      initialDateRange: userLoggedIn.startDate == DateTime(1700)
+          ? DateTimeRange(
+              start: DateTime.now(),
+              end: DateTime.now(),
+            )
+          : DateTimeRange(
+              start: userLoggedIn.startDate!, end: userLoggedIn.endDate!),
+      firstDate: DateTime(2022, 1, 1),
+      lastDate: DateTime(2030, 12, 31),
+      currentDate: DateTime.now(),
+      saveText: 'Done',
+    );
+
+    if (result != null) {
+      // Rebuild the UI
+      print("result DateRage.start: ${result.start.toString()}");
+      setState(() {
+        selectedDateRange = result;
+        ref
+            .watch(userModelFirestoreControllerProvider.notifier)
+            .updateVerfuegbarerZeitraum(userLoggedIn, result.start, result.end);
+
+        print("selectedDateRange: $selectedDateRange");
+      });
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -573,15 +651,15 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
     Future.delayed(Duration(microseconds: 10), () async {
       //var qualiList = ref.read(qualifikationModelFirestoreControllerProvider);
       //print("qualifikationsListe: ${qualiList!}");
-      ///Alle gespeicherten User in der Firestore Collection
+
       var userList =
           ref.read(userModelFirestoreControllerProvider.notifier).state;
 
       ///LoggedIn User
       String? userID = ref.watch(authControllerProvider.notifier).state!.uid;
-
       UserModel? userLoggedIn =
           UserProvider().getUserNameByUserID(userID, userList!).first;
+
       print("userLoggedIn name: ${userLoggedIn.name}");
 
       var listSelected = await getSelectedQualifikation(userLoggedIn);
@@ -644,11 +722,16 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
     print("userID: $userID");
     UserModel userLoggedIn =
         UserProvider().getUserNameByUserID(userID, userList!).first;
-    print("userLoggedIn: $userLoggedIn");
-    // getSelectedQualifikation(userLoggedIn);
 
+    print("userLoggedIn: $userLoggedIn");
+    print(
+        "userLoggedIn startDate: ${userLoggedIn.startDate}, endDate. ${userLoggedIn.endDate}");
+
+    // getSelectedQualifikation(userLoggedIn);
+    ///Todo when reloading and press ok without adding something new to Erfahrungen --> Inhalt wird gelöscht in der DB
     setState(() {
       _loggedInUser = userLoggedIn;
+      //erfahrungenText = userLoggedIn.erfahrungen!;
     });
 
 /*
@@ -996,6 +1079,8 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                     TextButton(
                                       onPressed: () {
                                         print("Edit Erfahrungen");
+                                        print("DateTime(0): ${DateTime(0)}");
+
                                         setState(() {
                                           // erfahrungsFieldController
                                           //erfahrungenText = value;
@@ -1065,7 +1150,13 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                     ),
                                     SizedBox(width: 40),
                                     TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        _showDateRange(
+                                          userLoggedIn,
+                                          userLoggedIn.startDate!,
+                                          userLoggedIn.endDate!,
+                                        );
+                                      },
                                       child: Text(
                                         "Bearbeiten",
                                         style: TextStyle(color: Colors.white),
@@ -1094,13 +1185,22 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                             bottomRight: Radius.circular(10)),
                                         border: Border.all(color: Colors.grey),
                                       ),
-                                      child: Text('14.05.2022',
-                                          style: TextStyle(
-                                              fontStyle: FontStyle.normal,
-                                              fontFamily: 'Open Sans',
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.normal,
-                                              color: Color(0xFF000000))),
+                                      child: userLoggedIn.startDate ==
+                                              DateTime(17000)
+                                          ? Text("${userLoggedIn.endDate}",
+                                              style: TextStyle(
+                                                  fontStyle: FontStyle.normal,
+                                                  fontFamily: 'Open Sans',
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Color(0xFF000000)))
+                                          : Text("No Startdate selected",
+                                              style: TextStyle(
+                                                  fontStyle: FontStyle.normal,
+                                                  fontFamily: 'Open Sans',
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Color(0xFF000000))),
                                     ),
                                     Text("-"),
                                     Container(
@@ -1114,13 +1214,22 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                             bottomRight: Radius.circular(10)),
                                         border: Border.all(color: Colors.grey),
                                       ),
-                                      child: Text('29.06.2022',
-                                          style: TextStyle(
-                                              fontStyle: FontStyle.normal,
-                                              fontFamily: 'Open Sans',
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.normal,
-                                              color: Color(0xFF000000))),
+                                      child: userLoggedIn.endDate ==
+                                              DateTime(17000)
+                                          ? Text("${userLoggedIn.endDate}",
+                                              style: TextStyle(
+                                                  fontStyle: FontStyle.normal,
+                                                  fontFamily: 'Open Sans',
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Color(0xFF000000)))
+                                          : Text("No Enddate selected",
+                                              style: TextStyle(
+                                                  fontStyle: FontStyle.normal,
+                                                  fontFamily: 'Open Sans',
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Color(0xFF000000))),
                                     ),
                                   ],
                                 ),

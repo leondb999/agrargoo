@@ -40,6 +40,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   var routeData;
   DateTime selectedDate = DateTime(1800);
   DateDuration ageYears = DateDuration();
+  DateTimeRange? selectedDateRange;
   @override
   void initState() {
     // TODO: implement initState
@@ -211,6 +212,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
                             print(
                                 "authControllerState Sign Out: $authControllerState");
+                            DateTime startDate = DateTime(1700);
+                            DateTime endDate = DateTime(1700);
+                            print("startDate: $startDate, endDate: $endDate");
 
                             ///SignIn Email & Password
                             ref.read(authControllerProvider.notifier).register(
@@ -220,6 +224,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                   _password.text,
                                   _landwirt!,
                                   selectedDate,
+                                  startDate,
+                                  endDate,
                                 );
 
                             ///Login User in Firebase

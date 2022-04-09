@@ -417,12 +417,15 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
 
     ///Alle gespeicherten User in der Firestore Collection
     final userList = ref.watch(userModelFirestoreControllerProvider);
-    //print("userList: $userList");
+    print("hi");
+    print("userList: $userList");
 
     ///LoggedIn User
     String? userID = ref.read(authControllerProvider.notifier).state!.uid;
+    print("userLoggedIn: ");
     final userLoggedIn =
         UserProvider().getUserNameByUserID(userID, userList!).first;
+
     print("userLoggedIn: $userLoggedIn");
     //print(
     //    "userLoggedIn: ${userLoggedIn.name} profilImageURL: ${userLoggedIn.profilImageURL}");

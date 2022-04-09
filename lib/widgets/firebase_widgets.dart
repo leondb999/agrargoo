@@ -105,9 +105,12 @@ Widget _activeAnzeige(bool status) {
 ///Jobangebot Card
 Card jobAnzeigeCard(
     BuildContext context, JobanzeigeModel jobanzeige, bool landwirtMode) {
+  print("jobanzeige:$jobanzeige");
+
   ///User Provider
   final auftraggeber = UserProvider().getUserNameByUserID(
       jobanzeige.auftraggeberID, p.Provider.of<List<UserModel>>(context));
+  print("auftraggeber: $auftraggeber");
 
   ///Hof Provider
   final hof = HofProvider().getHofByUserID(
