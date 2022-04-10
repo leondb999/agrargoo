@@ -81,7 +81,21 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
       bottomNavigationBar:
           navigationBar(index: 1, context: context, ref: ref, home: false),
       body: StreamBuilder<List<types.User>>(
-        stream: FirebaseChatCore.instance.users(),
+        ///TODO knackpunkt
+        stream: FirebaseChatCore.instance
+            .users() /*.where((event) {
+          bool findUser = false;
+          event.forEach((user) {
+            if (user.id == 'e3id9w9bPecKea74Qpx4qnPAi2R2') {
+              findUser = true;
+              return findUser;
+              break;
+            }
+            print("user: ${user.id}");
+          });
+          return findUser;
+        })*/
+        ,
 
         ///FirebaseChatCore.instance.users(),
         initialData: const [],
