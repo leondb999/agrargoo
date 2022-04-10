@@ -68,6 +68,11 @@ class FirestoreUserModelController extends StateNotifier<List<UserModel>?> {
         .updateErfahrungen(userModel, erfahrungen);
   }
 
+  void updateName(UserModel userModel, String name) async {
+    bool success = await _read(fireUserModelRepositoryProvider)
+        .updateName(userModel, name);
+  }
+
   void updateVerfuegbarerZeitraum(
       UserModel userModel, DateTime startDate, DateTime endDate) async {
     bool success = await _read(fireUserModelRepositoryProvider)

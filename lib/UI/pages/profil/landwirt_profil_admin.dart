@@ -206,7 +206,14 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                         Expanded(
                           flex: 3,
                           child: TextButton(
-                            onPressed: () {},
+                            ///Todo Bearbeiten
+                            onPressed: () {
+                              setState(() {
+                                nameBearbeitenFieldController.text =
+                                    userLoggedIn.name!;
+                              });
+                              openNameBearbeitenDialog(context, userLoggedIn);
+                            },
                             child: Text(
                               "Bearbeiten",
                               style: TextStyle(color: Colors.white),
@@ -392,6 +399,57 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
         ),
       ],
     );
+  }
+
+  TextEditingController nameBearbeitenFieldController = TextEditingController();
+  String nameBearbeitenText = "";
+
+  ///AlertDialog um Erfahrungen zu bearbeiten
+  Future<void> openNameBearbeitenDialog(
+      BuildContext context, UserModel loggedInUser) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Edit Erfahrungen"),
+            content: TextField(
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              controller: nameBearbeitenFieldController,
+              decoration: InputDecoration(
+                  hintText: "Beschreibe deine Erfahrungen als Helfer"),
+              onChanged: (value) {
+                setState(() {
+                  nameBearbeitenText = value;
+                });
+              },
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                child: Text("Cancel"),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              ElevatedButton(
+                child: Text("OK"),
+                onPressed: () {
+                  print("erfahrungenText: $nameBearbeitenText");
+                  setState(() {
+                    print("qualifikationIDList: $nameBearbeitenText");
+                    ref
+                        .watch(userModelFirestoreControllerProvider.notifier)
+                        .updateName(loggedInUser, nameBearbeitenText);
+
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
   }
 
   @override

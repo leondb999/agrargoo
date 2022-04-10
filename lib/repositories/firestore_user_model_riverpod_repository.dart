@@ -17,6 +17,7 @@ abstract class BaseFirestoreUserModelRepository {
   Future<bool> updateErfahrungen(UserModel userModel, String erfahrungen);
   Future<bool> updateVerfuegbarerZeitraum(
       UserModel userModel, DateTime startDate, DateTime endDate);
+  Future<bool> updateName(UserModel userModel, String name);
 }
 
 ///Riverpod Provider
@@ -98,6 +99,7 @@ class FireUserModelRepository implements BaseFirestoreUserModelRepository {
     throw UnimplementedError();
   }
 
+  ///Update Erfahrungen
   Future<bool> updateErfahrungen(
       UserModel userModel, String erfahrungen) async {
     try {
@@ -106,6 +108,23 @@ class FireUserModelRepository implements BaseFirestoreUserModelRepository {
           .doc(userModel.userID)
           .update({
         'erfahrungen': erfahrungen,
+      });
+      return true;
+    } catch (e) {
+      print(e);
+      return Future.error(e);
+    }
+  }
+
+  ///Update Name
+
+  Future<bool> updateName(UserModel userModel, String name) async {
+    try {
+      _read(firestoreProvider)
+          .collection('users')
+          .doc(userModel.userID)
+          .update({
+        'name': name,
       });
       return true;
     } catch (e) {
