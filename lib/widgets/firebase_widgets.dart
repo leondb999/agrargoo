@@ -1,6 +1,7 @@
 import 'package:agrargo/UI/pages/angebot/4_a_job_angebot_landwirt.dart';
 import 'package:agrargo/UI/pages/add/7_add_jobanzeige_landwirt.dart';
 import 'package:agrargo/UI/pages/add/8_add_hof_page_landwirt.dart';
+import 'package:agrargo/UI/pages/profil/helfer_profil_oeffentlich.dart';
 import 'package:agrargo/controllers/qualifikation_controller.dart';
 import 'package:agrargo/models/qualifikation_model.dart';
 import 'package:agrargo/models/user_model.dart';
@@ -134,22 +135,6 @@ Card jobAnzeigeCard(
       .filterQualifikationenByID(
           jobanzeige.qualifikationList!, allQualifikationenList);
 
-/*
-  ///Selected Qualifikationen
-  selectedQualifikationenList = ref
-      .read(qualifikationModelFirestoreControllerProvider.notifier)
-      .filterQualifikationenByID(
-        allQualifikationenList,
-        jobanzeige.qualifikationList!,
-      );
-  jobanzeige.qualifikationList!.forEach((qualifikationID) {
-    allQualifikationenList.forEach((qualifikation) {
-      if (qualifikation.qualifikationID == qualifikationID) {
-        selectedQualifikationenList.add(qualifikation);
-      }
-    });
-  });
-  */
   print("selectedQualifikationenList: $selectedQualifikationenList");
   selectedQualifikationenList.forEach((quali) {
     print(
@@ -266,6 +251,43 @@ Card jobAnzeigeCard(
             context,
             Jobangebot.routename,
             arguments: {'jobanzeige_ID': jobanzeige.jobanzeigeID!},
+          );
+        },
+      ),
+    ),
+  );
+}
+
+Card helferCard(BuildContext context, UserModel userModelHelfer) {
+  print("uuuuserModel: ${userModelHelfer.userID}");
+  return Card(
+    elevation: 6.0,
+    margin: new EdgeInsets.symmetric(horizontal: 70.0, vertical: 13.0),
+    child: Container(
+      decoration: BoxDecoration(color: Color(0xFF9FB98B)),
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 35.0),
+        title: Text("${userModelHelfer.name}"),
+        subtitle: Row(
+          children: [Text("hi")],
+        ),
+        leading: Container(
+          padding: EdgeInsets.only(right: 12.0),
+          decoration: new BoxDecoration(
+              border: new Border(
+                  right: new BorderSide(width: 1.0, color: Colors.white54))),
+          child: CircleAvatar(
+            backgroundImage: userModelHelfer.profilImageURL != null
+                ? NetworkImage(userModelHelfer.profilImageURL!)
+                : NetworkImage(
+                    'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+          ),
+        ),
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            HelferProfilOeffentlich.routename,
+            arguments: {'userID': userModelHelfer.userID!},
           );
         },
       ),

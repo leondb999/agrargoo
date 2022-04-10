@@ -37,6 +37,18 @@ class UserProvider with ChangeNotifier {
     return filteredList;
   }
 
+  List<UserModel> filterUserListByLandwirt(List<UserModel> userList) {
+    List<UserModel> filteredList = [];
+    userList.forEach((user) {
+      if (user.landwirt == false) {
+        filteredList.add(user);
+      }
+    });
+    if (filteredList.isEmpty) return [];
+
+    return filteredList;
+  }
+
   void changeHofImageURL(String val) {
     profilImageURL = val;
     notifyListeners();

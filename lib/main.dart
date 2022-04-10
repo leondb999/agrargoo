@@ -7,6 +7,7 @@ import 'package:agrargo/UI/pages/add/7_add_jobanzeige_landwirt.dart';
 import 'package:agrargo/UI/pages/add/8_add_hof_page_landwirt.dart';
 import 'package:agrargo/UI/pages/chat/chat_leon.dart';
 import 'package:agrargo/UI/pages/chat/users_page_leon.dart';
+import 'package:agrargo/UI/pages/profil/helfer_profil_oeffentlich.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/controllers/user_controller.dart';
 import 'package:agrargo/models/hof_model.dart';
@@ -32,8 +33,8 @@ import 'UI/login_riverpod/login.dart';
 import 'UI/pages/uebersichten/3_a_jobangebote_uebersicht_helfer.dart';
 import 'UI/pages/uebersichten/3_b_helfer_übersicht_landwirt.dart';
 import 'UI/pages/angebot/4_a_job_angebot_landwirt.dart';
-import 'UI/pages/profil/6_a_helfer_profil.dart';
-import 'UI/pages/profil/landwirt_profil.dart';
+import 'UI/pages/profil/helfer_profil_admin.dart';
+import 'UI/pages/profil/landwirt_profil_admin.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -187,6 +188,7 @@ class MyApp extends StatelessWidget {
           //'/chat': (context) => ChatPageLeon(),
           '/landingpage': (context) => LandingPageCh(),
           '/chat-users-page1': (context) => ChatUsersPage(),
+          '/helfer-profil-oeffentlich': (context) => HelferProfilOeffentlich(),
         },
       ),
     );

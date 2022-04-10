@@ -15,8 +15,8 @@ import 'package:age_calculator/age_calculator.dart';
 import '../../main.dart';
 import '../../widgets/layout_widgets.dart';
 import '../../widgets/login_widgets.dart';
-import '../pages/profil/6_a_helfer_profil.dart';
-import '../pages/profil/landwirt_profil.dart';
+import '../pages/profil/helfer_profil_admin.dart';
+import '../pages/profil/landwirt_profil_admin.dart';
 
 ///https://www.geeksforgeeks.org/flutter-arguments-in-named-routes/
 ///TODO Vorname & Nachname

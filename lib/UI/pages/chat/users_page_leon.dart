@@ -11,6 +11,7 @@ import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 import '../../../repositories/firestore_user_model_riverpod_repository.dart';
+import '../../../widgets/layout_widgets.dart';
 import 'chatDetailPage.dart';
 
 /// UserPage | Quelle: https://github.com/flyerhq/flutter_firebase_chat_core/blob/main/example/lib/users.dart
@@ -76,10 +77,9 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
     print("userLoggedIn: name: ${userLoggedIn.name}");
 
     return Scaffold(
-      appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        title: const Text('Users'),
-      ),
+      appBar: appBar(context: context, ref: ref, home: false),
+      bottomNavigationBar:
+          navigationBar(index: 0, context: context, ref: ref, home: false),
       body: StreamBuilder<List<types.User>>(
         stream: FirebaseChatCore.instance.users(),
 

@@ -1,5 +1,5 @@
 import 'package:agrargo/UI/login_riverpod/register.dart';
-import 'package:agrargo/UI/pages/profil/6_a_helfer_profil.dart';
+import 'package:agrargo/UI/pages/profil/helfer_profil_admin.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/widgets/login_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../widgets/layout_widgets.dart';
-import '../pages/profil/landwirt_profil.dart';
+import '../pages/profil/landwirt_profil_admin.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   static const routename = '/login';

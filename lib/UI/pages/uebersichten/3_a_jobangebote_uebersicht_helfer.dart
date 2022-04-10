@@ -70,7 +70,7 @@ class _JobangebotUebersichtPageState
                                   activeAnzeigeList[index], false, ref);
                             },
                           )
-                        : Text("aktuell gibt es keine Jobanzeigen")),
+                        : Text("aktuell gibt es keine registrierten Helfer")),
               ),
             ),
           ],

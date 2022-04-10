@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
 
+import '../../../controllers/user_controller.dart';
+import '../../../provider/user_provider.dart';
+
 class HelferUebersichtPage extends ConsumerStatefulWidget {
   const HelferUebersichtPage({Key? key}) : super(key: key);
   static const routename = '/helfer-uebersicht';
@@ -21,39 +24,58 @@ class _HelferUebersichtPageState extends ConsumerState<HelferUebersichtPage> {
   Widget build(BuildContext context) {
     User? authControllerState = ref.watch(authControllerProvider);
 
-    final jobAnzeigeList = p.Provider.of<List<JobanzeigeModel>>(context);
-    var activeAnzeigeList = [];
-    jobAnzeigeList.forEach((anzeige) {
-      print("anzeige123: $anzeige");
-      if (anzeige.status == true) {
-        print("anzeige123 true: $anzeige");
-        activeAnzeigeList.add(anzeige);
-      }
-    });
-    print("activeAnzeigeList: $activeAnzeigeList");
+    ///Alle gespeicherten User in der Firestore Collection
+    final userList = ref.watch(userModelFirestoreControllerProvider);
+    print("userList123123: $userList");
+
+    ///LoggedIn User
+    String? userID = ref.read(authControllerProvider.notifier).state!.uid;
+    final userHelferList = UserProvider().filterUserListByLandwirt(userList!);
+    print("userHelferList: $userHelferList");
+
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
       resizeToAvoidBottomInset: false,
       bottomNavigationBar:
           navigationBar(index: 0, context: context, ref: ref, home: false),
-      body: Column(
-        children: [
-          SizedBox(height: MediaQuery.of(context).size.height * 0.017),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.1,
-            child: Row(
-              children: [
-                SizedBox(width: MediaQuery.of(context).size.width * 0.89),
-                Icon(Icons.filter_alt_sharp, color: Colors.black, size: 30.0),
-                SizedBox(width: 7),
-                Icon(Icons.sort, color: Colors.black, size: 30.0),
-              ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height * 0.017),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: Row(
+                children: [
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.89),
+                  Icon(Icons.filter_alt_sharp, color: Colors.black, size: 30.0),
+                  SizedBox(width: 7),
+                  Icon(Icons.sort, color: Colors.black, size: 30.0),
+                ],
+              ),
             ),
-          ),
-          Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.015),
-        ],
+            Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.015),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: userHelferList.isNotEmpty
+                      ? ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: userHelferList.length,
+                          itemBuilder: (context, index) {
+                            return helferCard(context, userHelferList[index]);
+                          },
+                        )
+                      : Text("aktuell gibt es keine Jobanzeigen"),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

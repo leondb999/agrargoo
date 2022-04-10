@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -169,10 +170,9 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
   Widget build(BuildContext context) {
     print("Room: ${widget.room}");
     return Scaffold(
-      appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        title: const Text('Chat'),
-      ),
+      appBar: appBar(context: context, ref: ref, home: false),
+      bottomNavigationBar:
+          navigationBar(index: 0, context: context, ref: ref, home: false),
       body: StreamBuilder<types.Room>(
         initialData: widget.room,
         stream: FirebaseChatCore.instance.room(widget.room.id),

@@ -9,8 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../UI/pages/profil/6_a_helfer_profil.dart';
-import '../UI/pages/profil/landwirt_profil.dart';
+import '../UI/pages/profil/helfer_profil_admin.dart';
+import '../UI/pages/profil/landwirt_profil_admin.dart';
 
 abstract class BaseFirestoreQualifikationModelRepository {
   List<QualifikationModel> getQualifikationModelsList2();

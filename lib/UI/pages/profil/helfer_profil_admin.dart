@@ -700,87 +700,336 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                   SizedBox(height: MediaQuery.of(context).size.height * 0.015),
                   Expanded(
                     child: SingleChildScrollView(
-                      child: Column(children: [
-                        Row(
-                          children: <Widget>[
-                            SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.015),
-                            Expanded(
-                              flex: 4,
-                              child: Column(
-                                children: [
-                                  userLoggedIn.profilImageURL == null
-                                      ? Image.network(
-                                          'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
-                                        )
-                                      : Image.network(
-                                          userLoggedIn.profilImageURL!,
-                                          width: 300,
-                                          loadingBuilder: (BuildContext context,
-                                              Widget child,
-                                              ImageChunkEvent?
-                                                  loadingProgress) {
-                                            if (loadingProgress == null)
-                                              return child;
-                                            return Center(
-                                              // child: CircularProgressIndicator(),
-                                              child: Container(
-                                                height: 100.0,
-                                                width: 100.0,
-                                                child:
-                                                    LiquidCircularProgressIndicator(
-                                                  value: progress / 100,
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation(
-                                                          Colors.green),
-                                                  backgroundColor: Colors.white,
-                                                  direction: Axis.vertical,
-                                                  center: Text(
-                                                    "${progress.toInt()}%",
-                                                    style: GoogleFonts.poppins(
-                                                        color: Colors.black87,
-                                                        fontSize: 25.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: <Widget>[
+                              SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.015),
+                              Expanded(
+                                flex: 4,
+                                child: Column(
+                                  children: [
+                                    userLoggedIn.profilImageURL == null
+                                        ? Image.network(
+                                            'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
+                                          )
+                                        : Image.network(
+                                            userLoggedIn.profilImageURL!,
+                                            width: 300,
+                                            loadingBuilder:
+                                                (BuildContext context,
+                                                    Widget child,
+                                                    ImageChunkEvent?
+                                                        loadingProgress) {
+                                              if (loadingProgress == null)
+                                                return child;
+                                              return Center(
+                                                // child: CircularProgressIndicator(),
+                                                child: Container(
+                                                  height: 100.0,
+                                                  width: 100.0,
+                                                  child:
+                                                      LiquidCircularProgressIndicator(
+                                                    value: progress / 100,
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation(
+                                                            Colors.green),
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    direction: Axis.vertical,
+                                                    center: Text(
+                                                      "${progress.toInt()}%",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              color: Colors
+                                                                  .black87,
+                                                              fontSize: 25.0),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                  SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.015),
-                                ],
+                                              );
+                                            },
+                                          ),
+                                    SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.015),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              flex: 6,
-                              child: Column(
-                                children: [
-                                  ///Das bin ich
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      child: Text(
-                                        "Das bin ich",
-                                        style: TextStyle(
-                                          fontStyle: FontStyle.normal,
-                                          fontFamily: 'Open Sans',
-                                          fontSize: 23.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF1f623c),
+                              Expanded(
+                                flex: 6,
+                                child: Column(
+                                  children: [
+                                    ///Das bin ich
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        child: Text(
+                                          "Das bin ich",
+                                          style: TextStyle(
+                                            fontStyle: FontStyle.normal,
+                                            fontFamily: 'Open Sans',
+                                            fontSize: 23.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF1f623c),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
 
-                                  ///Name & Alter des Users
-                                  Container(
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          margin: const EdgeInsets.all(15.0),
+                                    ///Name & Alter des Users
+                                    Container(
+                                      child: Row(
+                                        children: <Widget>[
+                                          Container(
+                                            margin: const EdgeInsets.all(15.0),
+                                            padding: const EdgeInsets.all(3.0),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10)),
+                                              border: Border.all(
+                                                  color: Colors.grey),
+                                            ),
+                                            child: Text(
+                                              '${userLoggedIn.name}, ${AgeCalculator.age(userLoggedIn.birthDate!).years} Jahre',
+                                              style: TextStyle(
+                                                fontStyle: FontStyle.normal,
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.normal,
+                                                color: Color(0xFF000000),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.04),
+
+                                    ///Qualifikationen
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            child: Text(
+                                              "Qualifikationen",
+                                              style: TextStyle(
+                                                fontStyle: FontStyle.normal,
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 23.0,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xFF1f623c),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: 40),
+                                          TextButton(
+                                            onPressed: () async {
+                                              /*
+                                        List<QualifikationModel> selectedList =
+                                            await getSelectedQualifikation(
+                                                _loggedInUser);
+                                        List<QualifikationModel> allList =
+                                            await getAllQualifikationen();
+                                        */
+                                              List<dynamic>
+                                                  userQualifikationIDList = [];
+                                              await FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(userID)
+                                                  .get()
+                                                  .then((value) {
+                                                userQualifikationIDList =
+                                                    value['qualifikationList'];
+                                              });
+                                              var allList =
+                                                  await getAllQualifikationen();
+                                              setState(() {
+                                                fireQualifikationList = allList;
+                                              });
+
+                                              userQualifikationIDList
+                                                  .forEach((selectedID) {
+                                                fireQualifikationList!
+                                                    .forEach((qualifikation) {
+                                                  if (qualifikation
+                                                          .qualifikationID ==
+                                                      selectedID) {
+                                                    if (selectedQualifikationList!
+                                                            .contains(
+                                                                qualifikation) ==
+                                                        false) {
+                                                      setState(() {
+                                                        selectedQualifikationList!
+                                                            .add(qualifikation);
+                                                      });
+                                                    }
+                                                  }
+                                                });
+                                              });
+                                              print(
+                                                  "selectedQualifikationList: $selectedQualifikationList");
+                                              openFilterDialog(userLoggedIn);
+                                            },
+                                            child: Text(
+                                              "Hinzufügen",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Color(0xFF9FB98B)),
+                                            ),
+                                            // color: Colors.blue,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    ///Future Builder Qualifikationen Abfrage
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        height: 200,
+                                        child: SingleChildScrollView(
+                                          child:
+                                              FutureBuilder<
+                                                      List<QualifikationModel>>(
+                                                  future:
+                                                      getSelectedQualifikation(
+                                                          _loggedInUser),
+                                                  builder: (context, snapshot) {
+                                                    print("future Builder");
+                                                    if (snapshot.hasData) {
+                                                      if (snapshot
+                                                              .connectionState ==
+                                                          ConnectionState
+                                                              .waiting) {
+                                                        return Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        );
+                                                      } else {
+                                                        List<QualifikationModel>?
+                                                            data =
+                                                            snapshot.data;
+
+                                                        print(
+                                                            "snapshot: ${data!.first.qualifikationName}");
+
+                                                        return Column(
+                                                          children: [
+                                                            data.isEmpty
+                                                                ? Text(
+                                                                    "No qualifikationen selected yet")
+                                                                : GridView.count(
+                                                                    shrinkWrap: true,
+                                                                    crossAxisCount: 7,
+                                                                    childAspectRatio: 3,
+                                                                    children: data.map(
+                                                                      (qualifikation) {
+                                                                        //      print("hello");
+                                                                        return Container(
+                                                                          margin:
+                                                                              EdgeInsets.all(10),
+                                                                          child:
+                                                                              Text(
+                                                                            "${qualifikation.qualifikationName}",
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: Colors.black,
+                                                                              fontSize: 20,
+                                                                            ),
+                                                                          ),
+                                                                          decoration:
+                                                                              BoxDecoration(border: Border.all(color: Colors.black)),
+                                                                        );
+                                                                      },
+                                                                    ).toList()),
+                                                          ],
+                                                        );
+                                                      }
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Text(
+                                                          'Error while Loading Qualifikationen from Firestore');
+                                                    }
+                                                    return CircularProgressIndicator();
+                                                  }),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.04),
+
+                                    ///Erfahrungen
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            child: Text(
+                                              "Erfahrungen",
+                                              style: TextStyle(
+                                                fontStyle: FontStyle.normal,
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 23.0,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xFF1f623c),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: 40),
+                                          TextButton(
+                                            onPressed: () {
+                                              print("Edit Erfahrungen");
+                                              print(
+                                                  "DateTime(0): ${DateTime(0)}");
+
+                                              setState(() {
+                                                // erfahrungsFieldController
+                                                //erfahrungenText = value;
+                                                erfahrungsFieldController.text =
+                                                    _loggedInUser.erfahrungen!;
+                                              });
+                                              openErfahrungenDialog(context);
+                                            },
+                                            child: Text(
+                                              "Bearbeiten",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Color(0xFF9FB98B)),
+                                            ),
+                                            // color: Colors.blue,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    ///Erfahrungen Abfrage
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                          margin: const EdgeInsets.all(5.0),
                                           padding: const EdgeInsets.all(3.0),
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.only(
@@ -789,322 +1038,119 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                                 bottomLeft: Radius.circular(10),
                                                 bottomRight:
                                                     Radius.circular(10)),
-                                            border:
-                                                Border.all(color: Colors.grey),
                                           ),
-                                          child: Text(
-                                            '${userLoggedIn.name}, ${AgeCalculator.age(userLoggedIn.birthDate!).years} Jahre',
-                                            style: TextStyle(
-                                              fontStyle: FontStyle.normal,
-                                              fontFamily: 'Open Sans',
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.normal,
-                                              color: Color(0xFF000000),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                          child: _loggedInUser
+                                                  .erfahrungen!.isNotEmpty
+                                              ? Text(
+                                                  "${_loggedInUser.erfahrungen}",
+                                                  style: TextStyle(
+                                                      fontStyle:
+                                                          FontStyle.normal,
+                                                      fontFamily: 'Open Sans',
+                                                      fontSize: 20.0,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color: Color(0xFF000000)))
+                                              : Text(
+                                                  "Keine Erfahrungen bis jetzt eingetragen",
+                                                  style: TextStyle(
+                                                      fontStyle:
+                                                          FontStyle.normal,
+                                                      fontFamily: 'Open Sans',
+                                                      fontSize: 20.0,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color:
+                                                          Color(0xFF000000)))),
                                     ),
-                                  ),
-                                  SizedBox(
+                                    SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.04),
+                                              0.04,
+                                    ),
 
-                                  ///Qualifikationen
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          child: Text(
-                                            "Qualifikationen",
-                                            style: TextStyle(
-                                              fontStyle: FontStyle.normal,
-                                              fontFamily: 'Open Sans',
-                                              fontSize: 23.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF1f623c),
+                                    ///Verfügbarer Zeitraum
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            child: Text(
+                                              "Verfügbarer Zeitraum",
+                                              style: TextStyle(
+                                                fontStyle: FontStyle.normal,
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 23.0,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xFF1f623c),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(width: 40),
-                                        TextButton(
-                                          onPressed: () async {
-                                            /*
-                                        List<QualifikationModel> selectedList =
-                                            await getSelectedQualifikation(
-                                                _loggedInUser);
-                                        List<QualifikationModel> allList =
-                                            await getAllQualifikationen();
-                                        */
-                                            List<dynamic>
-                                                userQualifikationIDList = [];
-                                            await FirebaseFirestore.instance
-                                                .collection('users')
-                                                .doc(userID)
-                                                .get()
-                                                .then((value) {
-                                              userQualifikationIDList =
-                                                  value['qualifikationList'];
-                                            });
-                                            var allList =
-                                                await getAllQualifikationen();
-                                            setState(() {
-                                              fireQualifikationList = allList;
-                                            });
-
-                                            userQualifikationIDList
-                                                .forEach((selectedID) {
-                                              fireQualifikationList!
-                                                  .forEach((qualifikation) {
-                                                if (qualifikation
-                                                        .qualifikationID ==
-                                                    selectedID) {
-                                                  if (selectedQualifikationList!
-                                                          .contains(
-                                                              qualifikation) ==
-                                                      false) {
-                                                    setState(() {
-                                                      selectedQualifikationList!
-                                                          .add(qualifikation);
-                                                    });
-                                                  }
-                                                }
-                                              });
-                                            });
-                                            print(
-                                                "selectedQualifikationList: $selectedQualifikationList");
-                                            openFilterDialog(userLoggedIn);
-                                          },
-                                          child: Text(
-                                            "Hinzufügen",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                          SizedBox(width: 40),
+                                          TextButton(
+                                            onPressed: () {
+                                              _showDateRangePicker(
+                                                userLoggedIn,
+                                                userLoggedIn.startDate!,
+                                                userLoggedIn.endDate!,
+                                              );
+                                            },
+                                            child: Text(
+                                              "Bearbeiten",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Color(0xFF9FB98B)),
+                                            ),
+                                            // color: Colors.blue,
                                           ),
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Color(0xFF9FB98B)),
-                                          ),
-                                          // color: Colors.blue,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  ///Future Builder Qualifikationen Abfrage
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      height: 200,
-                                      child: SingleChildScrollView(
-                                        child: FutureBuilder<
-                                                List<QualifikationModel>>(
-                                            future: getSelectedQualifikation(
-                                                _loggedInUser),
-                                            builder: (context, snapshot) {
-                                              print("future Builder");
-                                              if (snapshot.hasData) {
-                                                if (snapshot.connectionState ==
-                                                    ConnectionState.waiting) {
-                                                  return Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  );
-                                                } else {
-                                                  List<QualifikationModel>?
-                                                      data = snapshot.data;
-
-                                                  print(
-                                                      "snapshot: ${data!.first.qualifikationName}");
-
-                                                  return Column(
-                                                    children: [
-                                                      data.isEmpty
-                                                          ? Text(
-                                                              "No qualifikationen selected yet")
-                                                          : GridView.count(
-                                                              shrinkWrap: true,
-                                                              crossAxisCount: 7,
-                                                              childAspectRatio:
-                                                                  3,
-                                                              children:
-                                                                  data.map(
-                                                                (qualifikation) {
-                                                                  //      print("hello");
-                                                                  return Container(
-                                                                    margin: EdgeInsets
-                                                                        .all(
-                                                                            10),
-                                                                    child: Text(
-                                                                      "${qualifikation.qualifikationName}",
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontSize:
-                                                                            20,
-                                                                      ),
-                                                                    ),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                            border:
-                                                                                Border.all(color: Colors.black)),
-                                                                  );
-                                                                },
-                                                              ).toList()),
-                                                    ],
-                                                  );
-                                                }
-                                              } else if (snapshot.hasError) {
-                                                return Text(
-                                                    'Error while Loading Qualifikationen from Firestore');
-                                              }
-                                              return CircularProgressIndicator();
-                                            }),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.04),
 
-                                  ///Erfahrungen
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          child: Text(
-                                            "Erfahrungen",
-                                            style: TextStyle(
-                                              fontStyle: FontStyle.normal,
-                                              fontFamily: 'Open Sans',
-                                              fontSize: 23.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF1f623c),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 40),
-                                        TextButton(
-                                          onPressed: () {
-                                            print("Edit Erfahrungen");
-                                            print(
-                                                "DateTime(0): ${DateTime(0)}");
+                                    ///StartDate & endDate Abfrage
+                                    Container(
+                                      child: Row(
+                                        children: <Widget>[
+                                          Container(
+                                              margin:
+                                                  const EdgeInsets.all(15.0),
+                                              padding:
+                                                  const EdgeInsets.all(3.0),
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10)),
+                                                border: Border.all(
+                                                    color: Colors.grey),
+                                              ),
 
-                                            setState(() {
-                                              // erfahrungsFieldController
-                                              //erfahrungenText = value;
-                                              erfahrungsFieldController.text =
-                                                  _loggedInUser.erfahrungen!;
-                                            });
-                                            openErfahrungenDialog(context);
-                                          },
-                                          child: Text(
-                                            "Bearbeiten",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Color(0xFF9FB98B)),
-                                          ),
-                                          // color: Colors.blue,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  ///Erfahrungen Abfrage
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                        margin: const EdgeInsets.all(5.0),
-                                        padding: const EdgeInsets.all(3.0),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10),
-                                              bottomLeft: Radius.circular(10),
-                                              bottomRight: Radius.circular(10)),
-                                        ),
-                                        child: _loggedInUser
-                                                .erfahrungen!.isNotEmpty
-                                            ? Text(
-                                                "${_loggedInUser.erfahrungen}",
-                                                style: TextStyle(
-                                                    fontStyle: FontStyle.normal,
-                                                    fontFamily: 'Open Sans',
-                                                    fontSize: 20.0,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    color: Color(0xFF000000)))
-                                            : Text(
-                                                "Keine Erfahrungen bis jetzt eingetragen",
-                                                style: TextStyle(
-                                                    fontStyle: FontStyle.normal,
-                                                    fontFamily: 'Open Sans',
-                                                    fontSize: 20.0,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    color: Color(0xFF000000)))),
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.04,
-                                  ),
-
-                                  ///Verfügbarer Zeitraum
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          child: Text(
-                                            "Verfügbarer Zeitraum",
-                                            style: TextStyle(
-                                              fontStyle: FontStyle.normal,
-                                              fontFamily: 'Open Sans',
-                                              fontSize: 23.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF1f623c),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 40),
-                                        TextButton(
-                                          onPressed: () {
-                                            _showDateRangePicker(
-                                              userLoggedIn,
-                                              userLoggedIn.startDate!,
-                                              userLoggedIn.endDate!,
-                                            );
-                                          },
-                                          child: Text(
-                                            "Bearbeiten",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Color(0xFF9FB98B)),
-                                          ),
-                                          // color: Colors.blue,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  ///StartDate & endDate Abfrage
-                                  Container(
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
+                                              ///startDate
+                                              child: Text(
+                                                  userLoggedIn.startDate !=
+                                                          DateTime(1700)
+                                                      ? "${userLoggedIn.startDate!.day}.${userLoggedIn.startDate!.month}.${userLoggedIn.startDate!.year}"
+                                                      : "No Startdate selected",
+                                                  style: TextStyle(
+                                                      fontStyle:
+                                                          FontStyle.normal,
+                                                      fontFamily: 'Open Sans',
+                                                      fontSize: 20.0,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color:
+                                                          Color(0xFF000000)))),
+                                          Text("-"),
+                                          Container(
                                             margin: const EdgeInsets.all(15.0),
                                             padding: const EdgeInsets.all(3.0),
                                             decoration: BoxDecoration(
@@ -1119,82 +1165,57 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                                   color: Colors.grey),
                                             ),
 
-                                            ///startDate
+                                            ///endDate
                                             child: Text(
-                                                userLoggedIn.startDate !=
+                                                userLoggedIn.endDate !=
                                                         DateTime(1700)
-                                                    ? "${userLoggedIn.startDate!.day}.${userLoggedIn.startDate!.month}.${userLoggedIn.startDate!.year}"
-                                                    : "No Startdate selected",
+                                                    ? "${userLoggedIn.endDate!.day}.${userLoggedIn.endDate!.month}.${userLoggedIn.endDate!.year}"
+                                                    : "No Enddate selected",
                                                 style: TextStyle(
                                                     fontStyle: FontStyle.normal,
                                                     fontFamily: 'Open Sans',
                                                     fontSize: 20.0,
                                                     fontWeight:
                                                         FontWeight.normal,
-                                                    color: Color(0xFF000000)))),
-                                        Text("-"),
-                                        Container(
-                                          margin: const EdgeInsets.all(15.0),
-                                          padding: const EdgeInsets.all(3.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(10),
-                                                topRight: Radius.circular(10),
-                                                bottomLeft: Radius.circular(10),
-                                                bottomRight:
-                                                    Radius.circular(10)),
-                                            border:
-                                                Border.all(color: Colors.grey),
+                                                    color: Color(0xFF000000))),
                                           ),
-
-                                          ///endDate
-                                          child: Text(
-                                              userLoggedIn.endDate !=
-                                                      DateTime(1700)
-                                                  ? "${userLoggedIn.endDate!.day}.${userLoggedIn.endDate!.month}.${userLoggedIn.endDate!.year}"
-                                                  : "No Enddate selected",
-                                              style: TextStyle(
-                                                  fontStyle: FontStyle.normal,
-                                                  fontFamily: 'Open Sans',
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Color(0xFF000000))),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      width: 300,
-                                      child: TableCalendar(
-                                        rangeStartDay: DateTime.utc(
-                                            userLoggedIn.startDate!.year,
-                                            userLoggedIn.startDate!.month,
-                                            userLoggedIn.startDate!.day),
-                                        rangeEndDay: DateTime.utc(
-                                            userLoggedIn.endDate!.year,
-                                            userLoggedIn.endDate!.month,
-                                            userLoggedIn.endDate!.day),
-                                        firstDay: DateTime.utc(2010, 10, 16),
-                                        lastDay: DateTime.utc(2030, 3, 14),
-                                        focusedDay: DateTime.now(),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.05,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        width: 300,
+                                        child: TableCalendar(
+                                          rangeStartDay: DateTime.utc(
+                                              userLoggedIn.startDate!.year,
+                                              userLoggedIn.startDate!.month,
+                                              userLoggedIn.startDate!.day),
+                                          rangeEndDay: DateTime.utc(
+                                              userLoggedIn.endDate!.year,
+                                              userLoggedIn.endDate!.month,
+                                              userLoggedIn.endDate!.day),
+                                          firstDay: DateTime.utc(2010, 10, 16),
+                                          lastDay: DateTime.utc(2030, 3, 14),
+                                          focusedDay: DateTime.now(),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.015),
-                          ],
-                        ),
-                      ]),
+                              SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.015),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
