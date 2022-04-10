@@ -54,6 +54,9 @@ Card hofCard({
                       'hofID': hof.hofID,
                       'hofName': hof.hofName,
                       'standort': hof.standort,
+                      'startDate': DateTime.now(),
+                      'endDate': DateTime.now(),
+                      'qualifikationList': [],
                     });
                   },
                   padding: EdgeInsets.all(15.0),
