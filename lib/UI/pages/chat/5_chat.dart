@@ -25,7 +25,7 @@ import 'chatUsersModel.dart';
 import '../../../repositories/firebase_storage_repository.dart';
 
 class Chat extends ConsumerStatefulWidget {
-  static const routename = '/chat';
+  static const routename = '/chat-christina';
   Chat();
   @override
   _ChatPageState createState() => _ChatPageState();

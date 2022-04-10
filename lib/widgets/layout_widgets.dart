@@ -4,6 +4,7 @@ import 'package:agrargo/UI/login_riverpod/login.dart';
 import 'package:agrargo/UI/pages/1_landing_page_christina.dart';
 import 'package:agrargo/UI/pages/2_who_are_you.dart';
 import 'package:agrargo/UI/pages/chat/5_chat.dart';
+import 'package:agrargo/UI/pages/chat/users_page_leon.dart';
 import 'package:agrargo/UI/pages/profil/6_a_helfer_profil.dart';
 import 'package:agrargo/UI/pages/profil/landwirt_profil.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
@@ -20,6 +21,7 @@ import 'package:provider/provider.dart' as p;
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/UI/pages/profil/landwirt_profil.dart' as l;
 
+import '../UI/pages/chat/chat_leon.dart';
 import '../UI/pages/uebersichten/3_a_jobangebote_uebersicht_helfer.dart';
 import '../UI/pages/uebersichten/3_b_helfer_übersicht_landwirt.dart';
 
@@ -121,7 +123,7 @@ BottomNavigationBar navigationBar(
           case 1:
             if (user != null) {
               ///User ist eingeloggt
-              Navigator.of(context).pushNamed(Chat.routename);
+              Navigator.of(context).pushNamed(ChatUsersPage.routename);
             } else {
               ///User ist ausgeloggt
               Navigator.of(context).pushNamed(WhoAreYou.routename);
