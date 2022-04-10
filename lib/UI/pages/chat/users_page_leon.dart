@@ -79,7 +79,7 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
       bottomNavigationBar:
-          navigationBar(index: 0, context: context, ref: ref, home: false),
+          navigationBar(index: 1, context: context, ref: ref, home: false),
       body: StreamBuilder<List<types.User>>(
         stream: FirebaseChatCore.instance.users(),
 

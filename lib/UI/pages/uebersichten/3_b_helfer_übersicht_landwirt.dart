@@ -41,21 +41,17 @@ class _HelferUebersichtPageState extends ConsumerState<HelferUebersichtPage> {
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(height: MediaQuery.of(context).size.height * 0.017),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.03),
             Container(
-              height: MediaQuery.of(context).size.height * 0.1,
-              child: Row(
-                children: [
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.89),
-                  Icon(Icons.filter_alt_sharp, color: Colors.black, size: 30.0),
-                  SizedBox(width: 7),
-                  Icon(Icons.sort, color: Colors.black, size: 30.0),
-                ],
-              ),
+              child: Center(
+                  child: Text("Helfer hier unkompliziert suchen",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 35.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2E6C49)))),
             ),
-            Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.015),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,

@@ -95,7 +95,7 @@ class _LoginState extends ConsumerState<LoginPage> {
                       ///Password Input Field
                       customTextFormField(
                         controller: _password,
-                        hintText: 'Password',
+                        hintText: 'Passwort',
                         icon: Icon(CupertinoIcons.lock_circle,
                             color: Color(0xFF9FB98B), size: 24),
                         validateString: 'password',

@@ -24,6 +24,8 @@ import '../../../widgets/layout_widgets.dart';
 import '../angebot/4_a_job_angebot_landwirt.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../chat/5_chat.dart';
+
 class HelferProfilOeffentlich extends ConsumerStatefulWidget {
   const HelferProfilOeffentlich({Key? key}) : super(key: key);
   static const routename = '/helfer-profil-oeffentlich';
@@ -166,8 +168,6 @@ class _HelferProfilOeffentlichState
                       flex: 4,
                       child: Column(
                         children: [
-                          Text("UserID: $userID"),
-                          Text("Name: ${selectedHelferModel.name}"),
                           selectedHelferModel.profilImageURL == null
                               ? Image.network(
                                   'https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none',
@@ -204,6 +204,28 @@ class _HelferProfilOeffentlichState
                           SizedBox(
                               height:
                                   MediaQuery.of(context).size.height * 0.015),
+                          Container(
+                              margin: const EdgeInsets.all(15.0),
+                              padding: const EdgeInsets.all(7.0),
+
+                              ///Bewerben Button
+                              child: ElevatedButton(
+                                child: Text('Helfer anschreiben'),
+                                onPressed: () {
+                                  ///TODO Navigieren zu Person
+                                  ///User Logged In
+
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => Chat()));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFF9FB98B),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 50, vertical: 20),
+                                    textStyle: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                              )),
                         ],
                       ),
                     ),
@@ -288,7 +310,6 @@ class _HelferProfilOeffentlichState
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Container(
-                              height: 200,
                               child: SingleChildScrollView(
                                 child: FutureBuilder<List<QualifikationModel>>(
                                     future: getSelectedQualifikation(
@@ -322,20 +343,46 @@ class _HelferProfilOeffentlichState
                                                           //      print("hello");
                                                           return Container(
                                                             margin:
-                                                                EdgeInsets.all(
-                                                                    10),
+                                                                const EdgeInsets
+                                                                    .all(15.0),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(3.0),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .grey),
+                                                            ),
                                                             child: Text(
                                                               "${qualifikation.qualifikationName}",
                                                               style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 20,
+                                                                fontStyle:
+                                                                    FontStyle
+                                                                        .normal,
+                                                                fontFamily:
+                                                                    'Open Sans',
+                                                                fontSize: 20.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                color: Color(
+                                                                    0xFF000000),
                                                               ),
                                                             ),
-                                                            decoration: BoxDecoration(
-                                                                border: Border.all(
-                                                                    color: Colors
-                                                                        .black)),
                                                           );
                                                         },
                                                       ).toList()),

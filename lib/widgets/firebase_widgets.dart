@@ -177,6 +177,10 @@ Card jobAnzeigeCard(
             ),
             Icon(Icons.place, color: Colors.black12),
             SizedBox(height: 30),
+            landwirtMode
+                ? Text(
+                    'Auftraggeber ID: ${jobanzeige.auftraggeberID}, Jobanzeige ID: ${jobanzeige.jobanzeigeID!},Auftraggeber: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort:${hof.first.standort}')
+                : Text("${hof.first.standort}"),
 
             ///Liste der Qualifikationen der Anzeige
 
@@ -199,12 +203,6 @@ Card jobAnzeigeCard(
                 ),
               ),
             ),
-
-            landwirtMode
-                ? Text(
-                    'Auftraggeber ID: ${jobanzeige.auftraggeberID}, Jobanzeige ID: ${jobanzeige.jobanzeigeID!},Auftraggeber: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort:${hof.first.standort}')
-                : Text(
-                    "Auftraggeberr: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort: ${hof.first.standort}"),
           ],
         ),
         trailing: Column(

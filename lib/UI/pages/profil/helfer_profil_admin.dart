@@ -382,7 +382,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                         Expanded(
                           flex: 3,
                           child: TextButton(
-                            onPressed: () async {},
+                            onPressed: () {},
                             child: Text(
                               "Bearbeiten",
                               style: TextStyle(color: Colors.white),
@@ -496,60 +496,6 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                       ],
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                    Row(
-                      children: <Widget>[
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.015),
-                        Expanded(
-                          flex: 1,
-                          child: Text(""),
-                        ),
-                        Expanded(
-                          flex: 5,
-                          child: Text(
-                            "Rechnungsadresse",
-                            style: TextStyle(
-                              fontStyle: FontStyle.normal,
-                              fontFamily: 'Open Sans',
-                              fontSize: 23.0,
-                              color: Color(0xFF1f623c),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 10,
-                          child: Text(
-                            '${userLoggedIn.name}',
-                            style: TextStyle(
-                              fontStyle: FontStyle.normal,
-                              fontFamily: 'Open Sans',
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.normal,
-                              color: Color(0xFF000000),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Bearbeiten",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Color(0xFF9FB98B)),
-                            ),
-                            // color: Colors.blue,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Text(""),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -884,7 +830,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                               openFilterDialog(userLoggedIn);
                                             },
                                             child: Text(
-                                              "Hinzufügen",
+                                              "Bearbeiten",
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
@@ -903,7 +849,6 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Container(
-                                        height: 200,
                                         child: SingleChildScrollView(
                                           child:
                                               FutureBuilder<
@@ -944,18 +889,31 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                                                         //      print("hello");
                                                                         return Container(
                                                                           margin:
-                                                                              EdgeInsets.all(10),
+                                                                              const EdgeInsets.all(15.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(3.0),
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius: BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10)),
+                                                                            border:
+                                                                                Border.all(color: Colors.grey),
+                                                                          ),
                                                                           child:
                                                                               Text(
                                                                             "${qualifikation.qualifikationName}",
                                                                             style:
                                                                                 TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontSize: 20,
+                                                                              fontStyle: FontStyle.normal,
+                                                                              fontFamily: 'Open Sans',
+                                                                              fontSize: 20.0,
+                                                                              fontWeight: FontWeight.normal,
+                                                                              color: Color(0xFF000000),
                                                                             ),
                                                                           ),
-                                                                          decoration:
-                                                                              BoxDecoration(border: Border.all(color: Colors.black)),
                                                                         );
                                                                       },
                                                                     ).toList()),

@@ -172,7 +172,7 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
       bottomNavigationBar:
-          navigationBar(index: 0, context: context, ref: ref, home: false),
+          navigationBar(index: 1, context: context, ref: ref, home: false),
       body: StreamBuilder<types.Room>(
         initialData: widget.room,
         stream: FirebaseChatCore.instance.room(widget.room.id),
