@@ -104,7 +104,8 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                     size: 20.0,
                   ),
                   SizedBox(width: 3),
-                  Text("01.04.2022 - 07.05.2022",
+                  Text(
+                      "${jobanzeige.startDate!.day}.${jobanzeige.startDate!.month}.${jobanzeige.startDate!.year} - ${jobanzeige.endDate!.day}.${jobanzeige.endDate!.month}.${jobanzeige.endDate!.year}",
                       style: TextStyle(
                           fontStyle: FontStyle.italic,
                           fontSize: 20.0,
@@ -130,7 +131,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                       Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            child: Text("jobanzeigeID.titel",
+                            child: Text("${jobanzeige.titel}",
                                 style: TextStyle(
                                     fontStyle: FontStyle.normal,
                                     fontFamily: 'Open Sans',
@@ -164,7 +165,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                       Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            child: Text("Besondere Anforderungen",
+                            child: Text("Besondere Qualifikationen",
                                 style: TextStyle(
                                     fontStyle: FontStyle.normal,
                                     fontFamily: 'Open Sans',
@@ -225,7 +226,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                                     bottomRight: Radius.circular(10)),
                                 border: Border.all(color: Colors.grey),
                               ),
-                              child: Text('9,25 €/h',
+                              child: Text('${jobanzeige.stundenLohn} €',
                                   style: TextStyle(
                                       fontStyle: FontStyle.normal,
                                       fontFamily: 'Open Sans',

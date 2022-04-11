@@ -237,7 +237,7 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
 
                     SizedBox(height: 40),
 
-                    /// Add Buttn
+                    /// Add Button
                     ElevatedButton(
                         child: Text('Speichern'),
                         onPressed: () {

@@ -272,8 +272,16 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                         });
                       },
                     ),
-                    ElevatedButton(
-                      child: Text("Choose verfügbarer Zeitraum"),
+
+                    TextButton(
+                      child: Text(
+                        "Verfügbaren Zeitraum wählen",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Color(0xFF9FB98B)),
+                      ),
                       onPressed: () {
                         _showDateRangePicker(
                           anzeige,
@@ -282,30 +290,6 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                         );
                       },
                     ),
-
-                    ///Active/deactivate Anzeige Switch()
-                    SizedBox(
-                      height: 20,
-                    ),
-                    isSwitched!
-                        ? Text(
-                            "Anzeige wird veröffentlicht",
-                            style: TextStyle(color: Colors.green),
-                          )
-                        : Text(
-                            'Anzeige nicht veröffentlicht',
-                            style: TextStyle(color: Colors.redAccent),
-                          ),
-                    Switch(
-                        activeColor: Color(0xFF9FB98B),
-                        value: isSwitched!,
-                        onChanged: (value) {
-                          setState(() {
-                            isSwitched = value;
-                            anzeige.status = isSwitched;
-                          });
-                          //jobanzeigeProvider.changeStatus(isSwitched!);
-                        }),
 
                     SizedBox(height: 30),
 
@@ -337,7 +321,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                         openFilterDialog(anzeige);
                       },
                       child: Text(
-                        "Add Qualifikation",
+                        "Qualifikationen hinzufügen",
                         style: TextStyle(color: Colors.white),
                       ),
                       style: ButtonStyle(
@@ -346,6 +330,32 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                       ),
                       // color: Colors.blue,
                     ),
+
+                    ///Active/deactivate Anzeige Switch()
+                    SizedBox(
+                      height: 20,
+                    ),
+                    isSwitched!
+                        ? Text(
+                            "Anzeige wird veröffentlicht",
+                            style: TextStyle(color: Colors.green),
+                          )
+                        : Text(
+                            'Anzeige nicht veröffentlicht',
+                            style: TextStyle(color: Colors.redAccent),
+                          ),
+                    Switch(
+                        activeColor: Color(0xFF9FB98B),
+                        value: isSwitched!,
+                        onChanged: (value) {
+                          setState(() {
+                            isSwitched = value;
+                            anzeige.status = isSwitched;
+                          });
+                          //jobanzeigeProvider.changeStatus(isSwitched!);
+                        }),
+
+                    SizedBox(height: 30),
 
                     ///Save Button
                     ElevatedButton(
@@ -370,7 +380,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
 
                     ///Delete Button
                     ElevatedButton(
-                      child: Text('Delete'),
+                      child: Text('Löschen'),
                       style: ElevatedButton.styleFrom(
                           primary: Colors.redAccent,
                           padding: EdgeInsets.symmetric(

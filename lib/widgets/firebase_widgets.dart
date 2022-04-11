@@ -90,7 +90,7 @@ Card hofCard({
               });
             },
             child: Text(
-              'Edit',
+              'Bearbeiten',
             ),
           ),
         ],
@@ -149,7 +149,7 @@ Card jobAnzeigeCard(
     child: Container(
       decoration: BoxDecoration(color: Color(0xFF9FB98B)),
       child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 35.0),
+        contentPadding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0),
         leading: Container(
             padding: EdgeInsets.only(right: 12.0),
             decoration: new BoxDecoration(
@@ -166,24 +166,24 @@ Card jobAnzeigeCard(
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         subtitle: Row(
-          children: <Widget>[
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                  ),
-                  child: Text(
-                      "Verfügbarer Zeitraum: ${jobanzeige.startDate!.day}.${jobanzeige.startDate!.month}.${jobanzeige.endDate!.year}-${jobanzeige.endDate!.day}.${jobanzeige.endDate!.month}.${jobanzeige.endDate!.year}"),
-                ),
-              ],
-            ),
-            Icon(Icons.place, color: Colors.black12),
-            SizedBox(height: 30),
-            landwirtMode
-                ? Text(
-                    'Auftraggeber ID: ${jobanzeige.auftraggeberID}, Jobanzeige ID: ${jobanzeige.jobanzeigeID!},Auftraggeber: ${auftraggeber.first.name}, Hof: ${hof.first.hofName}, Standort:${hof.first.standort}')
-                : Text("${hof.first.standort}"),
+          children: [
+            Column(children: <Widget>[
+              Row(
+                children: [
+                  Icon(Icons.date_range, color: Colors.black12),
+                  Text(
+                      "Zeitraum: ${jobanzeige.startDate!.day}.${jobanzeige.startDate!.month}.${jobanzeige.endDate!.year}-${jobanzeige.endDate!.day}.${jobanzeige.endDate!.month}.${jobanzeige.endDate!.year}"),
+                ],
+              ),
+              Row(children: [
+                Icon(Icons.place, color: Colors.black12),
+                landwirtMode
+                    ? Text(
+                        'Hof: ${hof.first.hofName}, Standort:${hof.first.standort}')
+                    : Text("${hof.first.standort}"),
+              ]),
+            ]),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.04),
 
             ///Liste der Qualifikationen der Anzeige
 
@@ -216,7 +216,7 @@ Card jobAnzeigeCard(
                     SizedBox(
                         height: MediaQuery.of(context).size.height * 0.005),
                     ElevatedButton(
-                      child: Text("Edit"),
+                      child: Text("Bearbeiten"),
                       onPressed: () {
                         Navigator.of(context)
                             .pushNamed(AddEditJobanzeige.routename, arguments: {
@@ -270,7 +270,11 @@ Card helferCard(BuildContext context, UserModel userModelHelfer) {
         contentPadding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 35.0),
         title: Text("${userModelHelfer.name}"),
         subtitle: Row(
-          children: [Text("hi")],
+          children: [
+            Icon(Icons.date_range, color: Colors.black12),
+            Text(
+                "Verfügbarer Zeitraum: ${userModelHelfer.startDate!.day}.${userModelHelfer.startDate!.month}.${userModelHelfer.endDate!.year}-${userModelHelfer.endDate!.day}.${userModelHelfer.endDate!.month}.${userModelHelfer.endDate!.year}"),
+          ],
         ),
         leading: Container(
           padding: EdgeInsets.only(right: 12.0),

@@ -242,6 +242,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Center(
               child: Column(
                 children: [
@@ -282,13 +283,14 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             Center(
-              child: ElevatedButton(
-                child: Text("Bild hochladen"),
-                style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF9FB98B),
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                    textStyle:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              child: TextButton(
+                child: Text(
+                  "Bild hochladen",
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Color(0xFF9FB98B)),
+                ),
 
                 ///Todo implement CircularProgressindicator um dem Nutzer zu zeigen, dass das Profilbild grade am hochladen ist
                 onPressed: () async {
@@ -325,27 +327,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 25, 20, 4),
-                      child: Container(
-                        height: 60,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Name',
-                              style: TextStyle(color: Colors.white70),
-                            ),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            border:
-                                Border.all(width: 1.0, color: Colors.white70)),
-                      ),
-                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                     Row(
                       children: <Widget>[
                         SizedBox(
@@ -355,13 +337,12 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                           child: Text(""),
                         ),
                         Expanded(
-                          flex: 5,
+                          flex: 6,
                           child: Text(
                             "Name",
                             style: TextStyle(
                               fontStyle: FontStyle.normal,
-                              fontFamily: 'Open Sans',
-                              fontSize: 23.0,
+                              fontSize: 22.0,
                               color: Color(0xFF1f623c),
                             ),
                           ),
@@ -410,13 +391,12 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                           child: Text(""),
                         ),
                         Expanded(
-                          flex: 5,
+                          flex: 6,
                           child: Text(
                             "E-Mail",
                             style: TextStyle(
                               fontStyle: FontStyle.normal,
-                              fontFamily: 'Open Sans',
-                              fontSize: 23.0,
+                              fontSize: 22.0,
                               color: Color(0xFF1f623c),
                             ),
                           ),
@@ -450,13 +430,12 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                           child: Text(""),
                         ),
                         Expanded(
-                          flex: 5,
+                          flex: 6,
                           child: Text(
                             "Geburtsdatum",
                             style: TextStyle(
                               fontStyle: FontStyle.normal,
-                              fontFamily: 'Open Sans',
-                              fontSize: 23.0,
+                              fontSize: 22.0,
                               color: Color(0xFF1f623c),
                             ),
                           ),
@@ -475,27 +454,11 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                           ),
                         ),
                         Expanded(
-                          flex: 3,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Bearbeiten",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Color(0xFF9FB98B)),
-                            ),
-                            // color: Colors.blue,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
+                          flex: 4,
                           child: Text(""),
                         ),
                       ],
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                   ],
                 ),
               ),
@@ -875,49 +838,52 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                                         print(
                                                             "snapshot: ${data!.first.qualifikationName}");
 
-                                                        return Column(
-                                                          children: [
-                                                            data.isEmpty
-                                                                ? Text(
-                                                                    "No qualifikationen selected yet")
-                                                                : GridView.count(
-                                                                    shrinkWrap: true,
-                                                                    crossAxisCount: 7,
-                                                                    childAspectRatio: 3,
-                                                                    children: data.map(
-                                                                      (qualifikation) {
-                                                                        //      print("hello");
-                                                                        return Container(
-                                                                          margin:
-                                                                              const EdgeInsets.all(15.0),
-                                                                          padding:
-                                                                              const EdgeInsets.all(3.0),
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(10),
-                                                                                topRight: Radius.circular(10),
-                                                                                bottomLeft: Radius.circular(10),
-                                                                                bottomRight: Radius.circular(10)),
-                                                                            border:
-                                                                                Border.all(color: Colors.grey),
+                                                        return Container(
+                                                          child: data.isEmpty
+                                                              ? Text(
+                                                                  "No qualifikationen selected yet")
+                                                              : SingleChildScrollView(
+                                                                  child: Row(
+                                                                      children:
+                                                                          data.map(
+                                                                    (qualifikation) {
+                                                                      //      print("hello");
+                                                                      return Container(
+                                                                        margin:
+                                                                            const EdgeInsets.all(15.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(3.0),
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          borderRadius: BorderRadius.only(
+                                                                              topLeft: Radius.circular(10),
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(10)),
+                                                                          border:
+                                                                              Border.all(color: Colors.grey),
+                                                                        ),
+                                                                        child:
+                                                                            Text(
+                                                                          "${qualifikation.qualifikationName}",
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontStyle:
+                                                                                FontStyle.normal,
+                                                                            fontFamily:
+                                                                                'Open Sans',
+                                                                            fontSize:
+                                                                                20.0,
+                                                                            fontWeight:
+                                                                                FontWeight.normal,
+                                                                            color:
+                                                                                Color(0xFF000000),
                                                                           ),
-                                                                          child:
-                                                                              Text(
-                                                                            "${qualifikation.qualifikationName}",
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontStyle: FontStyle.normal,
-                                                                              fontFamily: 'Open Sans',
-                                                                              fontSize: 20.0,
-                                                                              fontWeight: FontWeight.normal,
-                                                                              color: Color(0xFF000000),
-                                                                            ),
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                    ).toList()),
-                                                          ],
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                  ).toList()),
+                                                                ),
                                                         );
                                                       }
                                                     } else if (snapshot
