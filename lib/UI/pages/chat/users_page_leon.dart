@@ -108,7 +108,6 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
         ///FirebaseChatCore.instance.users(),
         initialData: const [],
         builder: (context, snapshot) {
-          buildSearchBar();
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Container(
               alignment: Alignment.center,
@@ -139,7 +138,6 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
                   ),
                   child: Row(
                     children: [
-                      buildSearchBar(),
                       _buildAvatar(userModel),
                       Text("${userModel.name}"),
                     ],
@@ -149,76 +147,6 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
             },
           );
         },
-      ),
-    );
-  }
-
-  Widget buildSearchBar() {
-    return Container(
-      margin: const EdgeInsets.all(Sizes.dimen_10),
-      height: Sizes.dimen_50,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(
-            width: Sizes.dimen_10,
-          ),
-          const Icon(
-            Icons.person_search,
-            color: AppColors.white,
-            size: Sizes.dimen_24,
-          ),
-          const SizedBox(
-            width: 5,
-          ),
-          Expanded(
-            child: TextFormField(
-              textInputAction: TextInputAction.search,
-              controller: searchTextEditingController,
-              onChanged: (value) {
-                if (value.isNotEmpty) {
-                  buttonClearController.add(true);
-                  setState(() {
-                    _textSearch = value;
-                  });
-                } else {
-                  buttonClearController.add(false);
-                  setState(() {
-                    _textSearch = "";
-                  });
-                }
-              },
-              decoration: const InputDecoration.collapsed(
-                hintText: 'Search here...',
-                hintStyle: TextStyle(color: AppColors.white),
-              ),
-            ),
-          ),
-          StreamBuilder(
-              stream: buttonClearController.stream,
-              builder: (context, snapshot) {
-                return snapshot.data == true
-                    ? GestureDetector(
-                        onTap: () {
-                          searchTextEditingController.clear();
-                          buttonClearController.add(false);
-                          setState(() {
-                            _textSearch = '';
-                          });
-                        },
-                        child: const Icon(
-                          Icons.clear_rounded,
-                          color: AppColors.greyColor,
-                          size: 20,
-                        ),
-                      )
-                    : const SizedBox.shrink();
-              })
-        ],
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Sizes.dimen_30),
-        color: AppColors.spaceLight,
       ),
     );
   }
