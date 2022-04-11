@@ -37,60 +37,65 @@ class _WhoAreYouState extends ConsumerState<WhoAreYou> {
                   style: TextStyle(
                       fontStyle: FontStyle.italic,
                       fontFamily: 'Open Sans',
-                      fontSize: 50.0,
+                      fontSize: 52.0,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF2E6C49)))),
           SizedBox(height: MediaQuery.of(context).size.height * 0.0515),
 
           ///Landwirt
-          ElevatedButton(
-            child: Text('Landwirt'),
-            onPressed: () {
-              setState(() {
-                landwirt = true;
-              });
-              if (authControllerState != null) {
-                Navigator.pushNamed(
-                  context,
-                  LandwirtProfil.routename,
-                );
-              } else {
-                Navigator.pushNamed(
-                  context,
-                  LoginPage.routename,
-                  arguments: {'landwirt': landwirt},
-                );
-              }
-            },
-            style: ElevatedButton.styleFrom(
-                primary: Color(0xFF9FB98B),
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                textStyle:
-                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          ),
+
+          new SizedBox(
+              width: MediaQuery.of(context).size.width * 0.12,
+              height: MediaQuery.of(context).size.height * 0.06,
+              child: ElevatedButton(
+                child: Text('Landwirt'),
+                onPressed: () {
+                  setState(() {
+                    landwirt = true;
+                  });
+                  if (authControllerState != null) {
+                    Navigator.pushNamed(
+                      context,
+                      LandwirtProfil.routename,
+                    );
+                  } else {
+                    Navigator.pushNamed(
+                      context,
+                      LoginPage.routename,
+                      arguments: {'landwirt': landwirt},
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF9FB98B),
+                    textStyle:
+                        TextStyle(fontSize: 23, fontWeight: FontWeight.bold)),
+              )),
           SizedBox(height: MediaQuery.of(context).size.height * 0.015),
 
           //margin: EdgeInsets.only(top: 35.0, bottom: 300),
 
           ///Helfer
-          ElevatedButton(
-            child: Text('Helfer'),
-            onPressed: () {
-              setState(() {
-                landwirt = false;
-              });
-              Navigator.pushNamed(
-                context,
-                JobangebotUebersichtPage.routename,
-                arguments: {'landwirt': landwirt},
-              );
-            },
-            style: ElevatedButton.styleFrom(
-                primary: Color(0xFF9FB98B),
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                textStyle:
-                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          ),
+          new SizedBox(
+              width: MediaQuery.of(context).size.width * 0.12,
+              height: MediaQuery.of(context).size.height * 0.06,
+              child: ElevatedButton(
+                child: Text('Helfer'),
+                onPressed: () {
+                  setState(() {
+                    landwirt = false;
+                  });
+                  Navigator.pushNamed(
+                    context,
+                    JobangebotUebersichtPage.routename,
+                    arguments: {'landwirt': landwirt},
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF9FB98B),
+                    textStyle:
+                        TextStyle(fontSize: 23, fontWeight: FontWeight.bold)),
+              )),
         ],
       ),
     );
