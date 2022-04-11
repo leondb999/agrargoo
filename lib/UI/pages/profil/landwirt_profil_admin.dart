@@ -71,6 +71,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Center(
                 child: Column(children: [
               ///Todo implement function with Error handling for Error:   Error: [firebase_storage/object-not-found] No object exists at the desired reference. ||ALso, um zu prüfen, ob die URL eine valide URL ist
@@ -105,14 +106,16 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                       },
                     ),
             ])),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             Center(
-              child: ElevatedButton(
-                child: Text("Bild hochladen"),
-                style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF9FB98B),
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                    textStyle:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              child: TextButton(
+                child: Text(
+                  "Bild hochladen",
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Color(0xFF9FB98B)),
+                ),
 
                 ///Todo implement CircularProgressindicator um dem Nutzer zu zeigen, dass das Profilbild grade am hochladen ist
                 onPressed: () async {
@@ -179,13 +182,12 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                           child: Text(""),
                         ),
                         Expanded(
-                          flex: 5,
+                          flex: 6,
                           child: Text(
                             "Name",
                             style: TextStyle(
                               fontStyle: FontStyle.normal,
-                              fontFamily: 'Open Sans',
-                              fontSize: 23.0,
+                              fontSize: 22.0,
                               color: Color(0xFF1f623c),
                             ),
                           ),
@@ -241,13 +243,12 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                           child: Text(""),
                         ),
                         Expanded(
-                          flex: 5,
+                          flex: 6,
                           child: Text(
                             "E-Mail",
                             style: TextStyle(
                               fontStyle: FontStyle.normal,
-                              fontFamily: 'Open Sans',
-                              fontSize: 23.0,
+                              fontSize: 22.0,
                               color: Color(0xFF1f623c),
                             ),
                           ),
@@ -281,13 +282,12 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                           child: Text(""),
                         ),
                         Expanded(
-                          flex: 5,
+                          flex: 6,
                           child: Text(
                             "Geburtsdatum",
                             style: TextStyle(
                               fontStyle: FontStyle.normal,
-                              fontFamily: 'Open Sans',
-                              fontSize: 23.0,
+                              fontSize: 22.0,
                               color: Color(0xFF1f623c),
                             ),
                           ),
@@ -306,81 +306,12 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                           ),
                         ),
                         Expanded(
-                          flex: 3,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Bearbeiten",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Color(0xFF9FB98B)),
-                            ),
-                            // color: Colors.blue,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
+                          flex: 4,
                           child: Text(""),
                         ),
                       ],
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                    Row(
-                      children: <Widget>[
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.015),
-                        Expanded(
-                          flex: 1,
-                          child: Text(""),
-                        ),
-                        Expanded(
-                          flex: 5,
-                          child: Text(
-                            "Rechnungsadresse",
-                            style: TextStyle(
-                              fontStyle: FontStyle.normal,
-                              fontFamily: 'Open Sans',
-                              fontSize: 23.0,
-                              color: Color(0xFF1f623c),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 10,
-                          child: Text(
-                            '${userLoggedIn.name}',
-                            style: TextStyle(
-                              fontStyle: FontStyle.normal,
-                              fontFamily: 'Open Sans',
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.normal,
-                              color: Color(0xFF000000),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Bearbeiten",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Color(0xFF9FB98B)),
-                            ),
-                            // color: Colors.blue,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Text(""),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),

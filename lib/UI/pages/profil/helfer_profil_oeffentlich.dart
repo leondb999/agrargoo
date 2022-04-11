@@ -152,7 +152,7 @@ class _HelferProfilOeffentlichState
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
       bottomNavigationBar:
-          navigationBar(index: 2, context: context, ref: ref, home: false),
+          navigationBar(index: 0, context: context, ref: ref, home: false),
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
