@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:agrargo/UI/pages/chat/chat_leon.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/controllers/user_controller.dart';
@@ -10,6 +12,8 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
+import '../../../allConstants/color_constants.dart';
+import '../../../allConstants/size_constants.dart';
 import '../../../repositories/firestore_user_model_riverpod_repository.dart';
 import '../../../widgets/layout_widgets.dart';
 import 'chatDetailPage.dart';
@@ -24,6 +28,10 @@ class ChatUsersPage extends ConsumerStatefulWidget {
 }
 
 class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
+  TextEditingController searchTextEditingController = TextEditingController();
+  StreamController<bool> buttonClearController = StreamController<bool>();
+  String _textSearch = "";
+
   Widget _buildAvatar(UserModel userModel) {
     final color = Colors.green;
     final hasImage = userModel.profilImageURL != null;
@@ -100,6 +108,7 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
         ///FirebaseChatCore.instance.users(),
         initialData: const [],
         builder: (context, snapshot) {
+          buildSearchBar();
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Container(
               alignment: Alignment.center,
@@ -118,17 +127,19 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
               final userModel =
                   UserProvider().getUserNameByUserID(user.id, userList).first;
               print("user.id: ${user.id}, userModel.name: ${userModel.name}");
-              return GestureDetector(
-                onTap: () {
+
+              return FlatButton(
+                onPressed: () {
                   _handlePressed(user, context);
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
+                    horizontal: 18,
+                    vertical: 10,
                   ),
                   child: Row(
                     children: [
+                      buildSearchBar(),
                       _buildAvatar(userModel),
                       Text("${userModel.name}"),
                     ],
@@ -138,6 +149,76 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
             },
           );
         },
+      ),
+    );
+  }
+
+  Widget buildSearchBar() {
+    return Container(
+      margin: const EdgeInsets.all(Sizes.dimen_10),
+      height: Sizes.dimen_50,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(
+            width: Sizes.dimen_10,
+          ),
+          const Icon(
+            Icons.person_search,
+            color: AppColors.white,
+            size: Sizes.dimen_24,
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          Expanded(
+            child: TextFormField(
+              textInputAction: TextInputAction.search,
+              controller: searchTextEditingController,
+              onChanged: (value) {
+                if (value.isNotEmpty) {
+                  buttonClearController.add(true);
+                  setState(() {
+                    _textSearch = value;
+                  });
+                } else {
+                  buttonClearController.add(false);
+                  setState(() {
+                    _textSearch = "";
+                  });
+                }
+              },
+              decoration: const InputDecoration.collapsed(
+                hintText: 'Search here...',
+                hintStyle: TextStyle(color: AppColors.white),
+              ),
+            ),
+          ),
+          StreamBuilder(
+              stream: buttonClearController.stream,
+              builder: (context, snapshot) {
+                return snapshot.data == true
+                    ? GestureDetector(
+                        onTap: () {
+                          searchTextEditingController.clear();
+                          buttonClearController.add(false);
+                          setState(() {
+                            _textSearch = '';
+                          });
+                        },
+                        child: const Icon(
+                          Icons.clear_rounded,
+                          color: AppColors.greyColor,
+                          size: 20,
+                        ),
+                      )
+                    : const SizedBox.shrink();
+              })
+        ],
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(Sizes.dimen_30),
+        color: AppColors.spaceLight,
       ),
     );
   }
