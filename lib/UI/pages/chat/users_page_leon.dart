@@ -114,7 +114,7 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
               margin: const EdgeInsets.only(
                 bottom: 200,
               ),
-              child: const Text('No users'),
+              child: const Text('Kein Nutzer'),
             );
           }
 
@@ -131,17 +131,25 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
                 onPressed: () {
                   _handlePressed(user, context);
                 },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 10,
-                  ),
-                  child: Row(
-                    children: [
-                      _buildAvatar(userModel),
-                      Text("${userModel.name}"),
-                    ],
-                  ),
+                child: Column(
+                  children: [
+                    Row(children: [
+                      Expanded(
+                        flex: 1,
+                        child: _buildAvatar(userModel),
+                      ),
+                      Expanded(
+                        flex: 12,
+                        child: Text("${userModel.name}"),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child:
+                            //get room where ${userLoggedIn.UserId) == room.userIDs und userModel.UserId == room.userIDs
+                            Text("{FirebaseChatCore.instance.room()}"),
+                      ),
+                    ]),
+                  ],
                 ),
               );
             },

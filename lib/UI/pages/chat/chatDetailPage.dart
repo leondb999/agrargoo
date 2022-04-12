@@ -259,8 +259,7 @@ class _ChatPageState extends State<ChatPage> {
             keyboardType: TextInputType.text,
             textCapitalization: TextCapitalization.sentences,
             controller: textEditingController,
-            decoration:
-                kTextInputDecoration.copyWith(hintText: 'write here...'),
+            decoration: kTextInputDecoration.copyWith(hintText: 'Nachricht...'),
             onSubmitted: (value) {
               onSendMessage(textEditingController.text, MessageType.text);
             },
@@ -482,7 +481,7 @@ class _ChatPageState extends State<ChatPage> {
                             buildItem(index, snapshot.data?.docs[index]));
                   } else {
                     return const Center(
-                      child: Text('No messages...'),
+                      child: Text('Keine Nachrichten...'),
                     );
                   }
                 } else {
