@@ -12,6 +12,7 @@ import '../../../allConstants/color_constants.dart';
 import '../../../allConstants/firestore_constants.dart';
 import '../../../allConstants/size_constants.dart';
 import '../../../allConstants/text_field_constants.dart';
+import '../../../controllers/auth_controller.dart';
 import '../../../models/chat_user.dart';
 import '../../../provider/auth_provider.dart';
 import '../../../provider/home_provider.dart';
@@ -137,6 +138,11 @@ class _ChatPageState extends ConsumerState<Chat> {
     super.initState();
     authProvider = context.read<AuthProvider>();
     homeProvider = context.read<HomeProvider>();
+
+    Future.delayed(Duration(microseconds: 10), () {
+      String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+    });
+
     if (authProvider.getFirebaseUserId()?.isNotEmpty == true) {
       currentUserId = authProvider.getFirebaseUserId()!;
     } else {
@@ -162,9 +168,10 @@ class _ChatPageState extends ConsumerState<Chat> {
                   Expanded(
                     child: StreamBuilder<QuerySnapshot>(
                       stream: homeProvider.getFirestoreData(
-                          FirestoreConstants.pathUserCollection,
-                          _limit,
-                          _textSearch),
+                        FirestoreConstants.pathUserCollection,
+                        _limit,
+                        _textSearch,
+                      ),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.hasData) {

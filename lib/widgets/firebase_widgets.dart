@@ -251,7 +251,10 @@ Card jobAnzeigeCard(
           Navigator.pushNamed(
             context,
             Jobangebot.routename,
-            arguments: {'jobanzeige_ID': jobanzeige.jobanzeigeID!},
+            arguments: {
+              'jobanzeige_ID': jobanzeige.jobanzeigeID!,
+              'auftraggeberID': jobanzeige.auftraggeberID!,
+            },
           );
         },
       ),

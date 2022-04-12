@@ -1,11 +1,14 @@
 import 'package:agrargo/UI/login_riverpod/login.dart';
 import 'package:agrargo/UI/pages/chat/5_chat.dart';
+import 'package:agrargo/UI/pages/chat/chat_leon.dart';
 import 'package:agrargo/controllers/jobanzeige_controller.dart';
 import 'package:agrargo/models/jobanzeige_model.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../controllers/auth_controller.dart';
@@ -25,27 +28,57 @@ class Jobangebot extends ConsumerStatefulWidget {
 class _JobangebotState extends ConsumerState<Jobangebot> {
   final usersCollection = FirebaseFirestore.instance.collection('users');
   String _jobanzeigeID = "";
-
+  List<types.User> typesUserList = [];
+  String auftraggeberID = "";
   var routeData;
+  void _handlePressed(types.User otherUser, BuildContext context) async {
+    final room = await FirebaseChatCore.instance.createRoom(otherUser);
+
+    /// 'createdAt': FieldValue.serverTimestamp(),
+    Navigator.of(context).pop();
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ChatPageLeon(
+          room: room,
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(microseconds: 10), () {
+    Future.delayed(Duration(microseconds: 10), () async {
       ///Get jobanzeigeID form Route
       routeData =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
       setState(() {
         _jobanzeigeID = routeData['jobanzeige_ID'];
+        auftraggeberID = routeData['auftraggeberID'];
       });
       print("routeData: $routeData");
       String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+      print("auftraggeberID: $auftraggeberID");
+      await FirebaseChatCore.instance.users().forEach((typeUsers) {
+        typeUsers.forEach((typeUser) {
+          print("typeUser.id ${typeUser.id}");
+          if (typeUser.id == auftraggeberID) {
+            print("typeUser12: $typeUser");
+            setState(() {
+              typesUserList.add(typeUser);
+            });
+          }
+        });
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print("typesUserList: $typesUserList");
+
     ///Get LoggedIn User
     User? authControllerState = ref.watch(authControllerProvider);
 
@@ -58,6 +91,11 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
         .watch(fireJobanzeigeModelRepositoryProvider)
         .getJobanzeigeByID(jobanzeigeModelList!, _jobanzeigeID)
         .first;
+    print("auftraggeberID: ${jobanzeige.auftraggeberID}");
+    final typeUser = ref
+        .watch(fireJobanzeigeModelRepositoryProvider)
+        .getTypesUserByJobanzeigeID(jobanzeige.auftraggeberID!);
+    print("typeUser: $typeUser");
 
     ///Get all HofModels
     var hofModelList = ref.watch(hofModelFirestoreControllerProvider);
@@ -257,16 +295,38 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                             onPressed: () {
                               ///TODO Implement Navigation to Jobangebot
                               ///User Logged In
-
                               authControllerState != null
-                                  ? Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) => Chat()))
+                                  ? _handlePressed(typesUserList.first, context)
                                   : Navigator.pushNamed(
                                       context,
                                       LoginPage.routename,
                                       arguments: {'landwirt': false},
                                     );
+                              print("typesUserList: ${typesUserList.first}");
+                              /*
+                              void _handlePressed(types.User otherUser,
+                                  BuildContext context) async {
+                                final room = await FirebaseChatCore.instance
+                                    .createRoom(otherUser);
+
+                                /// 'createdAt': FieldValue.serverTimestamp(),
+                                Navigator.of(context).pop();
+                                await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatPageLeon(
+                                      room: room,
+                                    ),
+                                  ),
+                                );
+                              }
+
+
+
+                                  ? Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) => Chat()))
+                                  :
+                              */
                             },
                             style: ElevatedButton.styleFrom(
                                 primary: Color(0xFF9FB98B),

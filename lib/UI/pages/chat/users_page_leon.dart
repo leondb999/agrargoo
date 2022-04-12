@@ -68,14 +68,49 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
     );
   }
 
+  List<types.User> typesUserList = [];
+
+  List<types.Room> userLoggedInRoomList = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration(microseconds: 10), () async {
+      ///Get alle Rooms die es gibt
+      String? userID = ref.read(authControllerProvider.notifier).state!.uid;
+
+      await FirebaseChatCore.instance.rooms().forEach((rooms) {
+        rooms.forEach((room) {
+          room.users.forEach((user) {
+            if (user.id == userID) {
+              // print("room: $room");
+              if (userLoggedInRoomList.contains(room) == false) {
+                setState(() {
+                  userLoggedInRoomList.add(room);
+                });
+              }
+            }
+          });
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("userLoggedInRoomList: ${userLoggedInRoomList}");
+    print("typesUserList: $typesUserList");
+
+    userLoggedInRoomList.forEach((room) {
+      print("room: $room");
+    });
+
     ///Authentication State check: Logged In or Logged Out
     User? authControllerState = ref.watch(authControllerProvider);
 
     ///Alle gespeicherten User in der Firestore Collection
     final userList = ref.watch(userModelFirestoreControllerProvider);
-    print("userList:$userList");
+    //  print("userList:$userList");
 
     ///LoggedIn User
     String? userID = ref.read(authControllerProvider.notifier).state!.uid;
@@ -125,7 +160,7 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
 
               final userModel =
                   UserProvider().getUserNameByUserID(user.id, userList).first;
-              print("user.id: ${user.id}, userModel.name: ${userModel.name}");
+              //  print("user.id: ${user.id}, userModel.name: ${userModel.name}");
 
               return FlatButton(
                 onPressed: () {

@@ -168,7 +168,7 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
 
   @override
   Widget build(BuildContext context) {
-    print("Room: ${widget.room}");
+    //print("Room: ${widget.room}");
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
       bottomNavigationBar:
