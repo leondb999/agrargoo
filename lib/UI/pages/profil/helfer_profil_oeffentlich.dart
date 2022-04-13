@@ -13,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
@@ -23,8 +24,10 @@ import '../../../provider/user_provider.dart';
 import '../../../widgets/layout_widgets.dart';
 import '../angebot/4_a_job_angebot_landwirt.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 import '../chat/5_chat.dart';
+import '../chat/chat_leon.dart';
 
 class HelferProfilOeffentlich extends ConsumerStatefulWidget {
   const HelferProfilOeffentlich({Key? key}) : super(key: key);
@@ -40,6 +43,21 @@ class _HelferProfilOeffentlichState
   double progress = 0.0;
   var routeData;
   String userID = "";
+  List<types.User> typesUserList = [];
+
+  void _handlePressed(types.User otherUser, BuildContext context) async {
+    final room = await FirebaseChatCore.instance.createRoom(otherUser);
+
+    /// 'createdAt': FieldValue.serverTimestamp(),
+    Navigator.of(context).pop();
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ChatPageLeon(
+          room: room,
+        ),
+      ),
+    );
+  }
 
   ///Alle Qualifikationen Firebase
   List<QualifikationModel>? fireQualifikationList = [];
@@ -132,6 +150,17 @@ class _HelferProfilOeffentlichState
         routeData = routeData2;
         userID = routeData['userID'];
       });
+      await FirebaseChatCore.instance.users().forEach((typeUsers) {
+        typeUsers.forEach((typeUser) {
+          print("typeUser.id ${typeUser.id}");
+          if (typeUser.id == userID) {
+            print("typeUser12: $typeUser");
+            setState(() {
+              typesUserList.add(typeUser);
+            });
+          }
+        });
+      });
     });
   }
 
@@ -215,8 +244,9 @@ class _HelferProfilOeffentlichState
                                   ///TODO Navigieren zu Person
                                   ///User Logged In
 
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => Chat()));
+                                  _handlePressed(typesUserList.first, context);
+                                  print(
+                                      "typesUserList: ${typesUserList.first}");
                                 },
                                 style: ElevatedButton.styleFrom(
                                     primary: Color(0xFF9FB98B),
@@ -279,6 +309,9 @@ class _HelferProfilOeffentlichState
                               ],
                             ),
                           ),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.04),
                           SizedBox(
                               height:
                                   MediaQuery.of(context).size.height * 0.04),
@@ -401,6 +434,52 @@ class _HelferProfilOeffentlichState
                           SizedBox(
                               height:
                                   MediaQuery.of(context).size.height * 0.04),
+
+                          ///Erfahrungen
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              child: Text(
+                                "Erfahrungen",
+                                style: TextStyle(
+                                  fontStyle: FontStyle.normal,
+                                  fontFamily: 'Open Sans',
+                                  fontSize: 23.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF1f623c),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          ///Erfahrungen des Users
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.all(15.0),
+                                  padding: const EdgeInsets.all(3.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  child: Text(
+                                    '${selectedHelferModel.erfahrungen}',
+                                    style: TextStyle(
+                                      fontStyle: FontStyle.normal,
+                                      fontFamily: 'Open Sans',
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.normal,
+                                      color: Color(0xFF000000),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
 
                           ///Verfügbarer Zeitraum
                           Align(
