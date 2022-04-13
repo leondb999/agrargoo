@@ -189,14 +189,16 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                               bottomLeft: Radius.circular(10),
                               bottomRight: Radius.circular(10)),
                         ),
-                        child: Text(
-                            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-                            style: TextStyle(
-                                fontStyle: FontStyle.normal,
-                                fontFamily: 'Open Sans',
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.normal,
-                                color: Color(0xFF000000))),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text("${jobanzeige.beschreibung}",
+                              style: TextStyle(
+                                  fontStyle: FontStyle.normal,
+                                  fontFamily: 'Open Sans',
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.normal,
+                                  color: Color(0xFF000000))),
+                        ),
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.07),

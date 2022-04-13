@@ -6,6 +6,7 @@ class JobanzeigeModel {
   String? hofID;
   bool? status;
   String? titel;
+  String? beschreibung;
   int? stundenLohn;
 
   List<dynamic>? qualifikationList;
@@ -18,6 +19,7 @@ class JobanzeigeModel {
     this.hofID,
     this.status,
     this.titel,
+    this.beschreibung,
     this.stundenLohn,
     this.qualifikationList,
     this.startDate,
@@ -31,6 +33,7 @@ class JobanzeigeModel {
       'hofID': hofID,
       'status': status,
       'titel': titel,
+      'beschreibung': beschreibung,
       'stundenLohn': stundenLohn,
       'qualifikationList': qualifikationList,
       'startDate': startDate,
@@ -45,6 +48,7 @@ class JobanzeigeModel {
         hofID = firestoreMap['hofID'],
         status = firestoreMap['status'],
         titel = firestoreMap['titel'],
+        beschreibung = firestoreMap['beschreibung'],
         stundenLohn = firestoreMap['stundenLohn'],
         qualifikationList = firestoreMap['qualifikationList'],
         startDate = DateTime.parse(

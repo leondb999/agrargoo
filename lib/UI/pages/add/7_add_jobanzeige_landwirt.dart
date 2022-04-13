@@ -27,6 +27,7 @@ class AddEditJobanzeige extends ConsumerStatefulWidget {
 class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
+  final beschreibungController = TextEditingController();
   final priceController = TextEditingController();
   var routeData;
   void clearData() {
@@ -172,6 +173,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
         anzeige.auftraggeberID = userID;
         anzeige.status = isSwitched;
         anzeige.stundenLohn = routeData['stundenLohn'];
+        anzeige.beschreibung = routeData['beschreibung'];
         anzeige.qualifikationList = routeData['qualifikationList'];
         anzeige.startDate = routeData['startDate'];
         anzeige.endDate = routeData['endDate'];
@@ -193,6 +195,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                 });
 
                 anzeige.titel = routeData['titel'];
+                anzeige.beschreibung = routeData['beschreibung'];
                 anzeige.status = routeData['status'];
                 anzeige.jobanzeigeID = routeData['jobanzeigeID'];
               },
@@ -253,6 +256,27 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                           // jobanzeigeProvider.changeJobanzeigeTitel(val),
                           setState(() {
                             anzeige.titel = val;
+                          });
+                        }),
+                    SizedBox(
+                      height: 20,
+                    ),
+
+                    ///Beschreibung Textfield()
+                    TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Beschreibung der Anzeige';
+                          }
+                          return null;
+                        },
+                        controller: beschreibungController,
+                        decoration: InputDecoration(
+                            hintText: 'Bitte gib eine Beschreibung ein'),
+                        onChanged: (val) {
+                          // jobanzeigeProvider.changeJobanzeigeTitel(val),
+                          setState(() {
+                            anzeige.beschreibung = val;
                           });
                         }),
                     SizedBox(

@@ -224,6 +224,7 @@ Card jobAnzeigeCard(
                           'auftraggeberID': jobanzeige.auftraggeberID,
                           'status': jobanzeige.status,
                           'titel': jobanzeige.titel,
+                          'beschreibung': jobanzeige.beschreibung,
                           'jobanzeigeID': jobanzeige.jobanzeigeID,
                           'stundenLohn': jobanzeige.stundenLohn,
                           'qualifikationList': jobanzeige.qualifikationList,
