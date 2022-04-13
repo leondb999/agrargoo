@@ -22,8 +22,9 @@ import 'package:searchfield/searchfield.dart';
 
 /// UserPage | Quelle: https://github.com/flyerhq/flutter_firebase_chat_core/blob/main/example/lib/users.dart
 class ChatUsersPage extends ConsumerStatefulWidget {
-  const ChatUsersPage({Key? key}) : super(key: key);
   static const routename = '/chat-users-page1';
+
+  ChatUsersPage();
 
   @override
   _ChatUsersPageState createState() => _ChatUsersPageState();
@@ -60,6 +61,9 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
 
   void _handlePressed(types.User otherUser, BuildContext context) async {
     final room = await FirebaseChatCore.instance.createRoom(otherUser);
+    final userList = ref.watch(userModelFirestoreControllerProvider);
+    final userModel =
+        UserProvider().getUserNameByUserID(otherUser.id, userList!).first;
 
     /// 'createdAt': FieldValue.serverTimestamp(),
     Navigator.of(context).pop();
@@ -67,6 +71,9 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
       MaterialPageRoute(
         builder: (context) => ChatPageLeon(
           room: room,
+          friendName: "${userModel.name}",
+          friendId: "${userModel.userID}",
+          friendImage: "${userModel.profilImageURL}",
         ),
       ),
     );

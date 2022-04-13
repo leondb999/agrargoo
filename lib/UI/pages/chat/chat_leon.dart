@@ -16,12 +16,21 @@ import 'package:path_provider/path_provider.dart';
 
 ///Quelle: https://github.com/flyerhq/flutter_firebase_chat_core/blob/main/example/lib/chat.dart
 class ChatPageLeon extends ConsumerStatefulWidget {
-  const ChatPageLeon({
-    Key? key,
-    required this.room,
-  }) : super(key: key);
-  static const routename = '/chat';
   final types.Room room;
+  final String? friendId;
+  final String? friendName;
+  final String? friendImage;
+
+  ChatPageLeon(
+      {Key? key,
+      required this.room,
+      required this.friendId,
+      required this.friendName,
+      required this.friendImage})
+      : super(key: key);
+
+  static const routename = '/chat';
+
   @override
   _ChatPageLeonState createState() => _ChatPageLeonState();
 }
@@ -170,7 +179,58 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
   Widget build(BuildContext context) {
     //print("Room: ${widget.room}");
     return Scaffold(
-      appBar: appBar(context: context, ref: ref, home: false),
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Color(0xFF9FB98B), //change your color here
+        ),
+        toolbarHeight: MediaQuery.of(context).size.height * 0.09,
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        flexibleSpace: SafeArea(
+          child: Container(
+            padding: EdgeInsets.only(right: 16),
+            child: Row(
+              children: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Color(0xFF9FB98B),
+                  ),
+                ),
+                SizedBox(
+                  width: 2,
+                ),
+                CircleAvatar(
+                  backgroundImage: NetworkImage('${widget.friendImage}'),
+                  maxRadius: 20,
+                ),
+                SizedBox(
+                  width: 12,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        '${widget.friendName}',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
       bottomNavigationBar:
           navigationBar(index: 1, context: context, ref: ref, home: false),
       body: StreamBuilder<types.Room>(

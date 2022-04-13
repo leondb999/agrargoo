@@ -13,6 +13,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/hof_controller.dart';
+import '../../../controllers/user_controller.dart';
+import '../../../provider/user_provider.dart';
 import '../../../repositories/firestore_hof_model_riverpod_repository.dart';
 import '../../../repositories/firestore_jobanzeige_model_riverpod_repository.dart';
 import '../../../widgets/layout_widgets.dart';
@@ -33,6 +35,9 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
   var routeData;
   void _handlePressed(types.User otherUser, BuildContext context) async {
     final room = await FirebaseChatCore.instance.createRoom(otherUser);
+    final userList = ref.watch(userModelFirestoreControllerProvider);
+    final userModel =
+        UserProvider().getUserNameByUserID(otherUser.id, userList!).first;
 
     /// 'createdAt': FieldValue.serverTimestamp(),
     Navigator.of(context).pop();
@@ -40,6 +45,9 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
       MaterialPageRoute(
         builder: (context) => ChatPageLeon(
           room: room,
+          friendName: "${userModel.name}",
+          friendId: "${userModel.userID}",
+          friendImage: "${userModel.profilImageURL}",
         ),
       ),
     );
