@@ -47,6 +47,9 @@ class _HelferProfilOeffentlichState
 
   void _handlePressed(types.User otherUser, BuildContext context) async {
     final room = await FirebaseChatCore.instance.createRoom(otherUser);
+    final userList = ref.watch(userModelFirestoreControllerProvider);
+    final userModel =
+        UserProvider().getUserNameByUserID(otherUser.id, userList!).first;
 
     /// 'createdAt': FieldValue.serverTimestamp(),
     Navigator.of(context).pop();
@@ -54,6 +57,9 @@ class _HelferProfilOeffentlichState
       MaterialPageRoute(
         builder: (context) => ChatPageLeon(
           room: room,
+          friendName: "${userModel.name}",
+          friendId: "${userModel.userID}",
+          friendImage: "${userModel.profilImageURL}",
         ),
       ),
     );
