@@ -14,6 +14,8 @@ import 'package:mime/mime.dart';
 
 import 'package:path_provider/path_provider.dart';
 
+import '../../../models/user_model.dart';
+
 ///Quelle: https://github.com/flyerhq/flutter_firebase_chat_core/blob/main/example/lib/chat.dart
 class ChatPageLeon extends ConsumerStatefulWidget {
   final types.Room room;
@@ -37,6 +39,28 @@ class ChatPageLeon extends ConsumerStatefulWidget {
 
 class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
   bool _isAttachmentUploading = false;
+
+  Widget _buildAvatar() {
+    final color = Color(0xFF9FB98B);
+    final hasImage = NetworkImage('${widget.friendImage}') != null;
+    final name = '${widget.friendName}';
+
+    return Container(
+      margin: const EdgeInsets.only(right: 16),
+      child: CircleAvatar(
+        backgroundColor: hasImage ? Colors.transparent : color,
+        backgroundImage:
+            hasImage ? NetworkImage('${widget.friendImage}') : null,
+        radius: 20,
+        child: !hasImage
+            ? Text(
+                name!.isEmpty ? '' : name[0].toUpperCase(),
+                style: const TextStyle(color: Colors.white),
+              )
+            : null,
+      ),
+    );
+  }
 
   void _handleAtachmentPressed() {
     showModalBottomSheet<void>(
@@ -204,7 +228,7 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
                   width: 2,
                 ),
                 CircleAvatar(
-                  backgroundImage: NetworkImage('${widget.friendImage}'),
+                  child: _buildAvatar(),
                   maxRadius: 20,
                 ),
                 SizedBox(
