@@ -260,6 +260,9 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
                               flex: 12,
                               child: Text("${userModel.name}"),
                             ),
+                            SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height / 19.5),
                             /*Expanded(
                               flex: 1,
                               child:
