@@ -160,7 +160,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
             child: Column(children: [
               Row(
                 children: <Widget>[
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.015),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                   Expanded(
                     flex: 6,
                     child: Column(children: [

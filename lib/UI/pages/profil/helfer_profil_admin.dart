@@ -228,6 +228,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
   Widget _buildEinstellungenAlertDialog(
       BuildContext context, String userID, UserModel userLoggedIn) {
     return new AlertDialog(
+      insetPadding: EdgeInsets.all(100),
       title: const Text(
         "Einstellungen",
         style: TextStyle(
@@ -809,93 +810,104 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                     ),
 
                                     ///Future Builder Qualifikationen Abfrage
+
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Container(
-                                        child: SingleChildScrollView(
-                                          child:
-                                              FutureBuilder<
-                                                      List<QualifikationModel>>(
-                                                  future:
-                                                      getSelectedQualifikation(
-                                                          _loggedInUser),
-                                                  builder: (context, snapshot) {
-                                                    print("future Builder");
-                                                    if (snapshot.hasData) {
-                                                      if (snapshot
-                                                              .connectionState ==
-                                                          ConnectionState
-                                                              .waiting) {
-                                                        return Center(
-                                                          child:
-                                                              CircularProgressIndicator(),
-                                                        );
-                                                      } else {
-                                                        List<QualifikationModel>?
-                                                            data =
-                                                            snapshot.data;
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.50,
+                                        child:
+                                            FutureBuilder<
+                                                    List<QualifikationModel>>(
+                                                future:
+                                                    getSelectedQualifikation(
+                                                        _loggedInUser),
+                                                builder: (context, snapshot) {
+                                                  print("future Builder");
+                                                  if (snapshot.hasData) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      );
+                                                    } else {
+                                                      List<QualifikationModel>?
+                                                          data = snapshot.data;
 
-                                                        print(
-                                                            "snapshot: ${data!.first.qualifikationName}");
+                                                      print(
+                                                          "snapshot: ${data!.first.qualifikationName}");
 
-                                                        return Container(
-                                                          child: data.isEmpty
-                                                              ? Text(
-                                                                  "No qualifikationen selected yet")
-                                                              : SingleChildScrollView(
-                                                                  child: Row(
-                                                                      children:
-                                                                          data.map(
-                                                                    (qualifikation) {
-                                                                      //      print("hello");
-                                                                      return Container(
-                                                                        margin:
-                                                                            const EdgeInsets.all(15.0),
-                                                                        padding:
-                                                                            const EdgeInsets.all(3.0),
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          borderRadius: BorderRadius.only(
-                                                                              topLeft: Radius.circular(10),
-                                                                              topRight: Radius.circular(10),
-                                                                              bottomLeft: Radius.circular(10),
-                                                                              bottomRight: Radius.circular(10)),
-                                                                          border:
-                                                                              Border.all(color: Colors.grey),
-                                                                        ),
-                                                                        child:
-                                                                            Text(
-                                                                          "${qualifikation.qualifikationName}",
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontStyle:
-                                                                                FontStyle.normal,
-                                                                            fontFamily:
-                                                                                'Open Sans',
-                                                                            fontSize:
-                                                                                20.0,
-                                                                            fontWeight:
-                                                                                FontWeight.normal,
-                                                                            color:
-                                                                                Color(0xFF000000),
-                                                                          ),
-                                                                        ),
-                                                                      );
-                                                                    },
-                                                                  ).toList()),
-                                                                ),
-                                                        );
-                                                      }
-                                                    } else if (snapshot
-                                                        .hasError) {
-                                                      return Text(
-                                                          'Error while Loading Qualifikationen from Firestore');
+                                                      return Expanded(
+                                                        child: data.isEmpty
+                                                            ? Text(
+                                                                "Noch keine Qualifikationen ausgewählt")
+                                                            : Row(
+                                                                children:
+                                                                    data.map(
+                                                                (qualifikation) {
+                                                                  //      print("hello");
+                                                                  return Container(
+                                                                    margin: const EdgeInsets
+                                                                            .all(
+                                                                        15.0),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            3.0),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius: BorderRadius.only(
+                                                                          topLeft: Radius.circular(
+                                                                              10),
+                                                                          topRight: Radius.circular(
+                                                                              10),
+                                                                          bottomLeft: Radius.circular(
+                                                                              10),
+                                                                          bottomRight:
+                                                                              Radius.circular(10)),
+                                                                      border: Border.all(
+                                                                          color:
+                                                                              Colors.grey),
+                                                                    ),
+                                                                    child: Text(
+                                                                      "${qualifikation.qualifikationName}",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontStyle:
+                                                                            FontStyle.normal,
+                                                                        fontFamily:
+                                                                            'Open Sans',
+                                                                        fontSize:
+                                                                            20.0,
+                                                                        fontWeight:
+                                                                            FontWeight.normal,
+                                                                        color: Color(
+                                                                            0xFF000000),
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              ).toList()),
+                                                      );
                                                     }
-                                                    return CircularProgressIndicator();
-                                                  }),
-                                        ),
+                                                  } else {
+                                                    Text(
+                                                      "Noch keine Qualifikationen ausgewählt!!",
+                                                    );
+                                                  }
+
+                                                  if (snapshot.hasError) {
+                                                    return Text(
+                                                        'Error while Loading Qualifikationen from Firestore');
+                                                  }
+                                                  return CircularProgressIndicator();
+                                                }),
                                       ),
                                     ),
+
                                     SizedBox(
                                         height:
                                             MediaQuery.of(context).size.height *
