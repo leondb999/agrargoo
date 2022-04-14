@@ -68,8 +68,9 @@ class _WhoAreYouState extends ConsumerState<WhoAreYou> {
                 },
                 style: ElevatedButton.styleFrom(
                     primary: Color(0xFF9FB98B),
-                    textStyle:
-                        TextStyle(fontSize: 23, fontWeight: FontWeight.bold)),
+                    textStyle: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.03,
+                        fontWeight: FontWeight.bold)),
               )),
           SizedBox(height: MediaQuery.of(context).size.height * 0.015),
 
@@ -93,8 +94,9 @@ class _WhoAreYouState extends ConsumerState<WhoAreYou> {
                 },
                 style: ElevatedButton.styleFrom(
                     primary: Color(0xFF9FB98B),
-                    textStyle:
-                        TextStyle(fontSize: 23, fontWeight: FontWeight.bold)),
+                    textStyle: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.03,
+                        fontWeight: FontWeight.bold)),
               )),
         ],
       ),

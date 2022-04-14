@@ -43,7 +43,6 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
   Widget _buildAvatar() {
     final color = Color(0xFF9FB98B);
     final hasImage = NetworkImage('${widget.friendImage}') != null;
-    final name = '${widget.friendName}';
 
     return Container(
       margin: const EdgeInsets.only(right: 16),
@@ -51,10 +50,11 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
         backgroundColor: hasImage ? Colors.transparent : color,
         backgroundImage:
             hasImage ? NetworkImage('${widget.friendImage}') : null,
-        radius: 20,
         child: !hasImage
             ? Text(
-                name!.isEmpty ? '' : name[0].toUpperCase(),
+                '${widget.friendName}'.isEmpty
+                    ? ''
+                    : '${widget.friendName}'[0].toUpperCase(),
                 style: const TextStyle(color: Colors.white),
               )
             : null,

@@ -185,7 +185,6 @@ class MyApp extends StatelessWidget {
           '/helfer-uebersicht': (context) => HelferUebersichtPage(),
           '/add-edit-jobanzeige': (context) => AddEditJobanzeige(),
           '/add-hof': (context) => AddHofPage(),
-          //'/chat': (context) => ChatPageLeon(),
           '/landingpage': (context) => LandingPageCh(),
           '/chat-users-page1': (context) => ChatUsersPage(),
           '/helfer-profil-oeffentlich': (context) => HelferProfilOeffentlich(),

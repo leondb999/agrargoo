@@ -260,12 +260,14 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
                               flex: 12,
                               child: Text("${userModel.name}"),
                             ),
-                            Expanded(
+                            /*Expanded(
                               flex: 1,
                               child:
                                   //get room where ${userLoggedIn.UserId) == room.userIDs und userModel.UserId == room.userIDs
                                   Text("{FirebaseChatCore.instance.room()}"),
                             ),
+
+                             */
                           ]),
                         ],
                       ),
