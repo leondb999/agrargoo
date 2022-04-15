@@ -188,6 +188,7 @@ class MyApp extends StatelessWidget {
           '/landingpage': (context) => LandingPageCh(),
           '/chat-users-page1': (context) => ChatUsersPage(),
           '/helfer-profil-oeffentlich': (context) => HelferProfilOeffentlich(),
+          '/chat': (context) => ChatPageLeon(),
         },
       ),
     );
