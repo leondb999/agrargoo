@@ -313,12 +313,10 @@ class _HelferProfilOeffentlichState
                               ],
                             ),
                           ),
+
                           SizedBox(
                               height:
-                                  MediaQuery.of(context).size.height * 0.04),
-                          SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.04),
+                                  MediaQuery.of(context).size.height * 0.03),
 
                           ///Qualifikationen
                           Align(
@@ -347,6 +345,7 @@ class _HelferProfilOeffentlichState
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Container(
+                              width: MediaQuery.of(context).size.width * 0.4,
                               child: SingleChildScrollView(
                                 child: FutureBuilder<List<QualifikationModel>>(
                                     future: getSelectedQualifikation(
@@ -373,18 +372,25 @@ class _HelferProfilOeffentlichState
                                                       "No qualifikationen selected yet")
                                                   : GridView.count(
                                                       shrinkWrap: true,
-                                                      crossAxisCount: 7,
-                                                      childAspectRatio: 3,
+                                                      crossAxisCount: 4,
+                                                      childAspectRatio: 4 / 2,
                                                       children: data.map(
                                                         (qualifikation) {
                                                           //      print("hello");
                                                           return Container(
                                                             margin:
                                                                 const EdgeInsets
-                                                                    .all(15.0),
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        17,
+                                                                    vertical:
+                                                                        4),
                                                             padding:
                                                                 const EdgeInsets
-                                                                    .all(3.0),
+                                                                        .symmetric(
+                                                                    vertical: 4,
+                                                                    horizontal:
+                                                                        3),
                                                             decoration:
                                                                 BoxDecoration(
                                                               borderRadius: BorderRadius.only(
@@ -404,20 +410,24 @@ class _HelferProfilOeffentlichState
                                                                   color: Colors
                                                                       .grey),
                                                             ),
-                                                            child: Text(
-                                                              "${qualifikation.qualifikationName}",
-                                                              style: TextStyle(
-                                                                fontStyle:
-                                                                    FontStyle
-                                                                        .normal,
-                                                                fontFamily:
-                                                                    'Open Sans',
-                                                                fontSize: 20.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                color: Color(
-                                                                    0xFF000000),
+                                                            child: Center(
+                                                              child: Text(
+                                                                "${qualifikation.qualifikationName}",
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontStyle:
+                                                                      FontStyle
+                                                                          .normal,
+                                                                  fontFamily:
+                                                                      'Open Sans',
+                                                                  fontSize:
+                                                                      20.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  color: Color(
+                                                                      0xFF000000),
+                                                                ),
                                                               ),
                                                             ),
                                                           );
@@ -437,7 +447,7 @@ class _HelferProfilOeffentlichState
                           ),
                           SizedBox(
                               height:
-                                  MediaQuery.of(context).size.height * 0.04),
+                                  MediaQuery.of(context).size.height * 0.03),
 
                           ///Erfahrungen
                           Align(
@@ -484,6 +494,9 @@ class _HelferProfilOeffentlichState
                               ],
                             ),
                           ),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.03),
 
                           ///Verfügbarer Zeitraum
                           Align(

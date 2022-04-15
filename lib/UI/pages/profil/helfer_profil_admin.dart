@@ -816,95 +816,84 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                       child: Container(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.50,
-                                        child:
-                                            FutureBuilder<
-                                                    List<QualifikationModel>>(
-                                                future:
-                                                    getSelectedQualifikation(
-                                                        _loggedInUser),
-                                                builder: (context, snapshot) {
-                                                  print("future Builder");
-                                                  if (snapshot.hasData) {
-                                                    if (snapshot
-                                                            .connectionState ==
-                                                        ConnectionState
-                                                            .waiting) {
-                                                      return Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      );
+                                                0.4,
+                                        child: SingleChildScrollView(
+                                          child:
+                                              FutureBuilder<
+                                                      List<QualifikationModel>>(
+                                                  future:
+                                                      getSelectedQualifikation(
+                                                          _loggedInUser),
+                                                  builder: (context, snapshot) {
+                                                    print("future Builder");
+                                                    if (snapshot.hasData) {
+                                                      if (snapshot
+                                                              .connectionState ==
+                                                          ConnectionState
+                                                              .waiting) {
+                                                        return Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        );
+                                                      } else {
+                                                        List<QualifikationModel>?
+                                                            data =
+                                                            snapshot.data;
+
+                                                        print(
+                                                            "snapshot: ${data!.first.qualifikationName}");
+
+                                                        return Column(
+                                                            children: [
+                                                              data.isEmpty
+                                                                  ? Text(
+                                                                      "Noch keine Qualifikationen ausgewählt")
+                                                                  : GridView.count(
+                                                                      shrinkWrap: true,
+                                                                      crossAxisCount: 4,
+                                                                      childAspectRatio: 4 / 2,
+                                                                      children: data.map(
+                                                                        (qualifikation) {
+                                                                          //      print("hello");
+                                                                          return Container(
+                                                                            margin:
+                                                                                const EdgeInsets.symmetric(horizontal: 17, vertical: 4),
+                                                                            padding:
+                                                                                const EdgeInsets.symmetric(vertical: 4, horizontal: 3),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                              border: Border.all(color: Colors.grey),
+                                                                            ),
+                                                                            child:
+                                                                                Text(
+                                                                              "${qualifikation.qualifikationName}",
+                                                                              style: TextStyle(
+                                                                                fontStyle: FontStyle.normal,
+                                                                                fontFamily: 'Open Sans',
+                                                                                fontSize: 20.0,
+                                                                                fontWeight: FontWeight.normal,
+                                                                                color: Color(0xFF000000),
+                                                                              ),
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                      ).toList()),
+                                                            ]);
+                                                      }
                                                     } else {
-                                                      List<QualifikationModel>?
-                                                          data = snapshot.data;
-
-                                                      print(
-                                                          "snapshot: ${data!.first.qualifikationName}");
-
-                                                      return Expanded(
-                                                        child: data.isEmpty
-                                                            ? Text(
-                                                                "Noch keine Qualifikationen ausgewählt")
-                                                            : Row(
-                                                                children:
-                                                                    data.map(
-                                                                (qualifikation) {
-                                                                  //      print("hello");
-                                                                  return Container(
-                                                                    margin: const EdgeInsets
-                                                                            .all(
-                                                                        15.0),
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            3.0),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius: BorderRadius.only(
-                                                                          topLeft: Radius.circular(
-                                                                              10),
-                                                                          topRight: Radius.circular(
-                                                                              10),
-                                                                          bottomLeft: Radius.circular(
-                                                                              10),
-                                                                          bottomRight:
-                                                                              Radius.circular(10)),
-                                                                      border: Border.all(
-                                                                          color:
-                                                                              Colors.grey),
-                                                                    ),
-                                                                    child: Text(
-                                                                      "${qualifikation.qualifikationName}",
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontStyle:
-                                                                            FontStyle.normal,
-                                                                        fontFamily:
-                                                                            'Open Sans',
-                                                                        fontSize:
-                                                                            20.0,
-                                                                        fontWeight:
-                                                                            FontWeight.normal,
-                                                                        color: Color(
-                                                                            0xFF000000),
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                              ).toList()),
+                                                      Text(
+                                                        "Noch keine Qualifikationen ausgewählt!!",
                                                       );
                                                     }
-                                                  } else {
-                                                    Text(
-                                                      "Noch keine Qualifikationen ausgewählt!!",
-                                                    );
-                                                  }
 
-                                                  if (snapshot.hasError) {
-                                                    return Text(
-                                                        'Error while Loading Qualifikationen from Firestore');
-                                                  }
-                                                  return CircularProgressIndicator();
-                                                }),
+                                                    if (snapshot.hasError) {
+                                                      return Text(
+                                                          'Error while Loading Qualifikationen from Firestore');
+                                                    }
+                                                    return CircularProgressIndicator();
+                                                  }),
+                                        ),
                                       ),
                                     ),
 
