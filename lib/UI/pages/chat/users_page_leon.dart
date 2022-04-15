@@ -194,6 +194,46 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
                   );
                 }
 
+                if (searchResult.length > 0) {
+                  return ListView.builder(itemBuilder: (context, index) {
+                    itemCount:
+                    searchResult.length;
+                    int ind = 0;
+
+                    while (snapshot.data![ind].id !=
+                        searchResult[index]["userID"]) {
+                      ind = ind + 1;
+                    }
+
+                    final user = snapshot.data![ind];
+                    final userModel = UserProvider()
+                        .getUserNameByUserID(
+                            searchResult[index]["userID"], userList)
+                        .first;
+
+                    return FlatButton(
+                      onPressed: () {
+                        _handlePressed(user, context);
+                      },
+                      child: Column(
+                        children: [
+                          Row(children: [
+                            Expanded(
+                              flex: 1,
+                              child: _buildAvatar(userModel),
+                            ),
+                            Expanded(
+                              flex: 12,
+                              child: Text("${searchResult[index]['name']}"),
+                            ),
+                          ]),
+                        ],
+                      ),
+                    );
+                  });
+                }
+                ;
+
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
@@ -204,46 +244,6 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
                         .first;
                     //  print("user.id: ${user.id}, userModel.name: ${userModel.name}");
 
-                    if (searchResult.length > 0) {
-                      Expanded(
-                          child: ListView.builder(
-                              itemCount: searchResult.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                    leading: CircleAvatar(
-                                      child: Image.network(searchResult[index]
-                                          ['profilImageURL']),
-                                    ),
-                                    title: Text(searchResult[index]['name']));
-                              }));
-
-                      return FlatButton(
-                        onPressed: () {
-                          _handlePressed(user, context);
-                        },
-                        child: Column(
-                          children: [
-                            Row(children: [
-                              Expanded(
-                                flex: 1,
-                                child: _buildAvatar(userModel),
-                              ),
-                              Expanded(
-                                flex: 12,
-                                child: Text("${searchResult[index]['name']}"),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child:
-                                    //get room where ${userLoggedIn.UserId) == room.userIDs und userModel.UserId == room.userIDs
-                                    Text("{FirebaseChatCore.instance.room()}"),
-                              ),
-                            ]),
-                          ],
-                        ),
-                      );
-                    }
                     return FlatButton(
                       onPressed: () {
                         _handlePressed(user, context);
