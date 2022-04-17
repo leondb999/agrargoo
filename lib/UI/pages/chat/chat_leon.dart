@@ -42,27 +42,6 @@ class ChatPageLeon extends ConsumerStatefulWidget {
 class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
   bool _isAttachmentUploading = false;
 
-  Widget _buildAvatar() {
-    final color = Color(0xFF9FB98B);
-    final hasImage = NetworkImage('${widget.friendImage}') != null;
-    final name = '${widget.friendName}';
-
-    return Container(
-      child: CircleAvatar(
-        backgroundColor: hasImage ? Colors.transparent : color,
-        backgroundImage:
-            hasImage ? NetworkImage('${widget.friendImage}') : null,
-        radius: 20,
-        child: !hasImage
-            ? Text(
-                name.isEmpty ? '' : name[0].toUpperCase(),
-                style: const TextStyle(color: Colors.white),
-              )
-            : null,
-      ),
-    );
-  }
-
   void _handlePreviewDataFetched(
     types.TextMessage message,
     types.PreviewData previewData,
@@ -90,7 +69,12 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
   Widget build(BuildContext context) {
     //print("Room: ${widget.room}");
     final color = Color(0xFF9FB98B);
-    final hasImage = NetworkImage('${widget.friendImage}') != null;
+    bool hasImage = false;
+
+    if ('${widget.friendImage}' != "null") {
+      hasImage = true;
+    }
+
     final name = '${widget.friendName}';
 
     return Scaffold(

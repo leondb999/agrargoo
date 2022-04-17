@@ -66,16 +66,30 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
     final userModel =
         UserProvider().getUserNameByUserID(otherUser.id, userList!).first;
 
-    /// 'createdAt': FieldValue.serverTimestamp(),
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChatPageLeon(
-          friendName: "${userModel.name}",
-          friendId: "${userModel.userID}",
-          friendImage: "${userModel.profilImageURL}",
+    if (userModel.profilImageURL != null) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ChatPageLeon(
+            friendName: "${userModel.name}",
+            friendId: "${userModel.userID}",
+            friendImage: "${userModel.profilImageURL}",
+          ),
         ),
-      ),
-    );
+      );
+    }
+
+    if (userModel.profilImageURL == null) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ChatPageLeon(
+            friendName: "${userModel.name}",
+            friendId: "${userModel.userID}",
+          ),
+        ),
+      );
+    }
+
+    /// 'createdAt': FieldValue.serverTimestamp(),
   }
 
   void onSearch() async {
