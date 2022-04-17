@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:agrargo/provider/user_provider.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -44,18 +45,17 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
   Widget _buildAvatar() {
     final color = Color(0xFF9FB98B);
     final hasImage = NetworkImage('${widget.friendImage}') != null;
+    final name = '${widget.friendName}';
 
     return Container(
-      margin: const EdgeInsets.only(right: 16),
       child: CircleAvatar(
         backgroundColor: hasImage ? Colors.transparent : color,
         backgroundImage:
             hasImage ? NetworkImage('${widget.friendImage}') : null,
+        radius: 20,
         child: !hasImage
             ? Text(
-                '${widget.friendName}'.isEmpty
-                    ? ''
-                    : '${widget.friendName}'[0].toUpperCase(),
+                name.isEmpty ? '' : name[0].toUpperCase(),
                 style: const TextStyle(color: Colors.white),
               )
             : null,
@@ -89,6 +89,10 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
   @override
   Widget build(BuildContext context) {
     //print("Room: ${widget.room}");
+    final color = Color(0xFF9FB98B);
+    final hasImage = NetworkImage('${widget.friendImage}') != null;
+    final name = '${widget.friendName}';
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -115,8 +119,16 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
                   width: 2,
                 ),
                 CircleAvatar(
-                  child: _buildAvatar(),
-                  maxRadius: 20,
+                  backgroundColor: hasImage ? Colors.transparent : color,
+                  backgroundImage:
+                      hasImage ? NetworkImage('${widget.friendImage}') : null,
+                  radius: 20,
+                  child: !hasImage
+                      ? Text(
+                          name.isEmpty ? '' : name[0].toUpperCase(),
+                          style: const TextStyle(color: Colors.white),
+                        )
+                      : null,
                 ),
                 SizedBox(
                   width: 12,
