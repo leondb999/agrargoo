@@ -13,7 +13,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/hof_controller.dart';
+import '../../../controllers/qualifikation_controller.dart';
 import '../../../controllers/user_controller.dart';
+import '../../../provider/qualifikation_provider.dart';
 import '../../../provider/user_provider.dart';
 import '../../../repositories/firestore_hof_model_riverpod_repository.dart';
 import '../../../repositories/firestore_jobanzeige_model_riverpod_repository.dart';
@@ -106,6 +108,21 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
     ///Get all HofModels
     var hofModelList = ref.watch(hofModelFirestoreControllerProvider);
 
+    var allQualifikationenList =
+        ref.read(qualifikationModelFirestoreControllerProvider.notifier).state!;
+    print("allQualifikationenList: ${allQualifikationenList}");
+    print("anzeige.qualifikationList: ${jobanzeige.qualifikationList}");
+
+    final selectedQualifikationenList = QualifikationProvider()
+        .filterQualifikationenByID(
+            jobanzeige.qualifikationList!, allQualifikationenList);
+
+    print("selectedQualifikationenList: $selectedQualifikationenList");
+    selectedQualifikationenList.forEach((quali) {
+      print(
+          "jobAnzeigeCard_selectedQualifikationenList: ${quali.qualifikationName}");
+    });
+
     ///Get Hof by ID
     final hof = ref
         .watch(fireHofModelRepositoryProvider)
@@ -115,6 +132,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
       print(
           "jobanzeige: titel: ${jobanzeige.titel}, hofName: ${hof.hofName} standort: ${hof.standort}");
     }
+
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
       resizeToAvoidBottomInset: false,
@@ -219,31 +237,47 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF1f623c))),
                           )),
-                      Container(
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(7.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                                border: Border.all(color: Colors.grey),
-                              ),
-                              child: Text('Traktor-Führerschein',
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.normal,
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.normal,
-                                      color: Color(0xFF000000))),
-                            ),
-                          ],
-                        ),
-                      ),
+
+                      ///Liste der Qualifikationen der Anzeige
+                      Column(children: [
+                        selectedQualifikationenList.isEmpty
+                            ? Text("Noch keine Qualifikationen ausgewählt")
+                            : GridView.count(
+                                shrinkWrap: true,
+                                crossAxisCount: 6,
+                                childAspectRatio: 4 / 2,
+                                children: selectedQualifikationenList.map(
+                                  (qualifikation) {
+                                    //      print("hello");
+                                    return Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 17, vertical: 4),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4, horizontal: 3),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                        border: Border.all(color: Colors.grey),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "${qualifikation.qualifikationName}",
+                                          style: TextStyle(
+                                            fontStyle: FontStyle.normal,
+                                            fontFamily: 'Open Sans',
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.normal,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).toList()),
+                      ]),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.05),
                       Align(
