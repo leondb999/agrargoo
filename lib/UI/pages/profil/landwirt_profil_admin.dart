@@ -57,7 +57,6 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
   Widget _buildPopupDialog(
       BuildContext context, String userID, UserModel userLoggedIn) {
     return new AlertDialog(
-      insetPadding: EdgeInsets.all(100),
       title: const Text(
         "Einstellungen",
         style: TextStyle(

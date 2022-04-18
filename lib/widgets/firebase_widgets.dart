@@ -57,6 +57,7 @@ Card hofCard({
                       'startDate': DateTime.now(),
                       'endDate': DateTime.now(),
                       'qualifikationList': [],
+                      "edit": false,
                     });
                   },
                   padding: EdgeInsets.all(15.0),
@@ -238,6 +239,7 @@ Card jobAnzeigeCard(
                           'qualifikationList': jobanzeige.qualifikationList,
                           'startDate': jobanzeige.startDate,
                           'endDate': jobanzeige.endDate,
+                          "edit": true,
                         });
                       },
                       style: ElevatedButton.styleFrom(
@@ -279,6 +281,54 @@ Card helferCard(BuildContext context, UserModel userModelHelfer) {
     child: Container(
       decoration: BoxDecoration(color: Color(0xFF9FB98B)),
       child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 20.0),
+        leading: Container(
+            height: MediaQuery.of(context).size.height * 0.7,
+            padding: EdgeInsets.only(right: 12.0),
+            decoration: new BoxDecoration(
+                border: new Border(
+                    right: new BorderSide(width: 1.0, color: Colors.white54))),
+            child: CircleAvatar(
+              backgroundImage: userModelHelfer.profilImageURL != null
+                  ? NetworkImage(userModelHelfer.profilImageURL!)
+                  : NetworkImage(
+                      'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+            )),
+        title: Text(
+          "${userModelHelfer.name}",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Row(children: [
+          Column(children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).size.height * 0.005),
+            Row(
+              children: [
+                Icon(Icons.date_range, color: Colors.black12),
+                Text(
+                    "Verfügbarer Zeitraum: ${userModelHelfer.startDate!.day}.${userModelHelfer.startDate!.month}.${userModelHelfer.endDate!.year}-${userModelHelfer.endDate!.day}.${userModelHelfer.endDate!.month}.${userModelHelfer.endDate!.year}"),
+              ],
+            ),
+          ])
+        ]),
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            HelferProfilOeffentlich.routename,
+            arguments: {'userID': userModelHelfer.userID!},
+          );
+        },
+      ),
+    ),
+  );
+
+/*Card helferCard(BuildContext context, UserModel userModelHelfer) {
+  print("uuuuserModel: ${userModelHelfer.userID}");
+  return Card(
+    elevation: 6.0,
+    margin: new EdgeInsets.symmetric(horizontal: 70.0, vertical: 13.0),
+    child: Container(
+      decoration: BoxDecoration(color: Color(0xFF9FB98B)),
+      child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 35.0),
         title: Text("${userModelHelfer.name}"),
         subtitle: Row(
@@ -309,5 +359,5 @@ Card helferCard(BuildContext context, UserModel userModelHelfer) {
         },
       ),
     ),
-  );
+  );*/
 }

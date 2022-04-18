@@ -30,6 +30,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
   final beschreibungController = TextEditingController();
   final priceController = TextEditingController();
   var routeData;
+  bool? edit = false;
   void clearData() {
     nameController.text = '';
     priceController.text = '';
@@ -180,6 +181,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
         _currentPrice = routeData['stundenLohn'];
         _hofName = routeData['hofName'];
         _standort = routeData['standort'];
+        edit = routeData["edit"];
       });
       print("anzeige.stundenLohn: ${anzeige.stundenLohn}");
     }).then(
@@ -188,6 +190,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
           : Future.delayed(
               Duration.zero,
               () {
+                beschreibungController.text = routeData["beschreibung"];
                 nameController.text = routeData['titel'];
                 setState(() {
                   isSwitched = routeData['status'];
@@ -232,13 +235,20 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    const Center(
-                        child: Text("Eine neue Anzeige hinzufügen",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 35.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF2E6C49)))),
+                    Center(
+                        child: edit == true
+                            ? Text("Anzeige bearbeiten",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 35.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF2E6C49)))
+                            : Text("Eine neue Anzeige hinzufügen",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 35.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF2E6C49)))),
                     SizedBox(height: 80),
 
                     ///Titel Textfield()
