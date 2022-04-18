@@ -306,7 +306,6 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                         });
                       },
                     ),
-
                     TextButton(
                       child: Text(
                         "Verfügbaren Zeitraum wählen",
@@ -413,23 +412,26 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                     SizedBox(height: 20),
 
                     ///Delete Button
-                    ElevatedButton(
-                      child: Text('Löschen'),
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.redAccent,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 20)),
-                      onPressed: () {
-                        if (anzeige.jobanzeigeID != null) {
-                          ref
-                              .read(jobanzeigeModelFirestoreControllerProvider
-                                  .notifier)
-                              .removeJobanzeige(anzeige.jobanzeigeID!);
-                        }
+                    edit == true
+                        ? ElevatedButton(
+                            child: Text('Löschen'),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.redAccent,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 20)),
+                            onPressed: () {
+                              if (anzeige.jobanzeigeID != null) {
+                                ref
+                                    .read(
+                                        jobanzeigeModelFirestoreControllerProvider
+                                            .notifier)
+                                    .removeJobanzeige(anzeige.jobanzeigeID!);
+                              }
 
-                        Navigator.of(context).pop();
-                      },
-                    ),
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        : Text(""),
 
                     /*
                     Container(

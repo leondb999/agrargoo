@@ -88,6 +88,7 @@ Card hofCard({
                 'besitzerID': hof.besitzerID,
                 'standort': hof.standort,
                 'hofImageURL': hof.hofImageURL,
+                "edit": true,
               });
             },
             child: Text(

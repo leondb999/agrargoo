@@ -30,6 +30,7 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
   final nameController = TextEditingController();
   final standortController = TextEditingController();
   var routeData;
+  bool? edit = false;
 
   File? uploadedImage;
   String? uploadedImageURL = "";
@@ -78,6 +79,7 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
 
                 setState(() {
                   uploadedImageURL = routeData['hofImageURL'];
+                  edit = routeData["edit"];
                 });
               },
             ),
@@ -116,13 +118,20 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    const Center(
-                        child: Text("Einen neuen Hof hinzufügen",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 35.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF2E6C49)))),
+                    Center(
+                        child: edit == true
+                            ? Text("Deinen Hof bearbeiten",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 35.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF2E6C49)))
+                            : Text("Einen neuen Hof hinzufügen",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 35.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF2E6C49)))),
                     SizedBox(height: 50),
 
                     ///Show Uploaded File
@@ -267,20 +276,23 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                     SizedBox(height: 20),
 
                     ///Delete Button
-                    ElevatedButton(
-                      child: Text('Löschen'),
-                      onPressed: () {
-                        ref
-                            .read(hofModelFirestoreControllerProvider.notifier)
-                            .removeHof(hofModel.hofID!);
+                    edit == true
+                        ? ElevatedButton(
+                            child: Text('Löschen'),
+                            onPressed: () {
+                              ref
+                                  .read(hofModelFirestoreControllerProvider
+                                      .notifier)
+                                  .removeHof(hofModel.hofID!);
 
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.redAccent,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 20)),
-                    ),
+                              Navigator.of(context).pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.redAccent,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 20)),
+                          )
+                        : Text(""),
                     SizedBox(height: 100),
                   ],
                 ),
