@@ -39,12 +39,12 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                           .center, //Center Column contents horizontally,
                       children: <Widget>[
                         Container(
-                          height: MediaQuery.of(context).size.height * 0.075,
+                          height: MediaQuery.of(context).size.height * 0.070,
                           child: Image.network(
                               "https://firebasestorage.googleapis.com/v0/b/agrargo-2571b.appspot.com/o/logo_large.png?alt=media&token=d4af03b7-4191-495c-8d63-946be214fff8"),
                         ),
                         SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.1),
+                            height: MediaQuery.of(context).size.height * 0.08),
                         Center(
                             child: Container(
                                 width: MediaQuery.of(context).size.width / 1.65,
@@ -53,7 +53,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                     style: TextStyle(
                                         fontStyle: FontStyle.italic,
                                         fontFamily: 'Open Sans',
-                                        fontSize: 40.0,
+                                        fontSize: 45.0,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF586015))))),
                         SizedBox(
@@ -65,7 +65,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                     style: TextStyle(
                                         fontStyle: FontStyle.italic,
                                         fontFamily: 'Open Sans',
-                                        fontSize: 25.0,
+                                        fontSize: 32.0,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black)))),
                         SizedBox(
@@ -91,7 +91,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                     "1.",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 15.0,
+                                      fontSize: 20.0,
                                     ),
                                   ))),
                               SizedBox(width: 10),
@@ -101,7 +101,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                     "Deine Wünsche",
                                     style: TextStyle(
                                       fontFamily: 'Open Sans',
-                                      fontSize: 25.0,
+                                      fontSize: 28.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -121,7 +121,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                     "2.",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 15.0,
+                                      fontSize: 20.0,
                                     ),
                                   ))),
                               SizedBox(width: 10),
@@ -130,7 +130,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                   child: Text(
                                     "Match finden",
                                     style: TextStyle(
-                                      fontSize: 25.0,
+                                      fontSize: 28.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -150,7 +150,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                     "3.",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 15.0,
+                                      fontSize: 20.0,
                                     ),
                                   ))),
                               SizedBox(width: 10),
@@ -159,7 +159,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                   child: Text(
                                     "Durchstarten",
                                     style: TextStyle(
-                                      fontSize: 25.0,
+                                      fontSize: 28.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

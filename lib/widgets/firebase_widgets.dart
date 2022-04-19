@@ -149,7 +149,7 @@ Card jobAnzeigeCard(
     elevation: 6.0,
     margin: new EdgeInsets.symmetric(horizontal: 70.0, vertical: 13.0),
     child: Container(
-      decoration: BoxDecoration(color: Color(0xFF9FB98B)),
+      decoration: BoxDecoration(color: Color(0xFFA7BB7B)),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0),
         leading: Container(
