@@ -50,6 +50,13 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
         .get();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
+
   /*
   void _handlePreviewDataFetched(
     types.TextMessage message,
