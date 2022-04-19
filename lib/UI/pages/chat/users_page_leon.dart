@@ -6,7 +6,6 @@ import 'package:agrargo/controllers/user_controller.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/provider/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,10 +19,12 @@ import '../../../repositories/firestore_user_model_riverpod_repository.dart';
 import '../../../widgets/layout_widgets.dart';
 import 'chatDetailPage.dart';
 import 'package:searchfield/searchfield.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 /// UserPage | Quelle: https://github.com/flyerhq/flutter_firebase_chat_core/blob/main/example/lib/users.dart
 class ChatUsersPage extends ConsumerStatefulWidget {
   static const routename = '/chat-users-page1';
+
   ChatUsersPage();
 
   @override
@@ -36,9 +37,9 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
   TextEditingController searchController = TextEditingController();
   List<Map> searchResult = [];
   bool isLoading = false;
-  Icon _searchIcon = new Icon(Icons.search);
   User? user = FirebaseAuth.instance.currentUser;
 
+  /*
   Widget _buildAvatar(UserModel userModel) {
     final color = Color(0xFF9FB98B);
     final hasImage = userModel.profilImageURL != null;
@@ -62,6 +63,7 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
   }
 
   void _handlePressed(types.User otherUser, BuildContext context) async {
+    //final room = await FirebaseChatCore.instance.createRoom(otherUser);
     //ChatPageLeon.room = await FirebaseChatCore.instance.createRoom(otherUser);
     final userList = ref.watch(userModelFirestoreControllerProvider);
     final userModel =
@@ -120,17 +122,11 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
     });
   }
 
-  void getData() async {
-    final data = await FirebaseFirestore.instance
-        .collection("messages")
-        .orderBy("updatetAt", descending: true)
-        .limit(1)
-        .get();
-  }
-
   List<types.User> typesUserList = [];
 
   List<types.Room> userLoggedInRoomList = [];
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -156,11 +152,14 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
     });
   }
 
+   */
+
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore.instance.collection("messages").orderBy("createdAt");
+    /*
     print("userLoggedInRoomList: ${userLoggedInRoomList}");
     print("typesUserList: $typesUserList");
+
     userLoggedInRoomList.forEach((room) {
       print("room: $room");
     });
@@ -179,142 +178,81 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
         UserProvider().getUserNameByUserID(userID, userList!).first;
     print("userLoggedIn: name: ${userLoggedIn.name}");
 
-    /*
-    ///Alle gespeicherten User in der Firestore Collection
-    final userList = ref.watch(userModelFirestoreControllerProvider);
-*/
+
+     */
     return Scaffold(
-        appBar: appBar(context: context, ref: ref, home: false),
-        bottomNavigationBar:
-            navigationBar(index: 1, context: context, ref: ref, home: false),
-        body: Column(children: [
-          buildSearchBar(),
-          SizedBox(height: MediaQuery.of(context).size.height / 50),
-          Expanded(
-            child: StreamBuilder<List<types.User>>(
-
-                ///TODO knackpunkt
-                stream: FirebaseChatCore.instance.users(),
-
-                ///FirebaseChatCore.instance.users(),
-
-                initialData: const [],
-                builder: (context, AsyncSnapshot snapshot) {
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Container(
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.only(
-                        bottom: 200,
-                      ),
-                      child: const Text('Kein Nutzer'),
-                    );
-                  }
-                  return ListView.builder(
-                      itemCount: snapshot.data.docs.length,
-                      itemBuilder: (context, index) {
-                        final user = snapshot.data![index];
-                        var friendId = snapshot.data.docs[index].id;
-                        // final room = snapshot.data![index];
-                        var lastMsg = snapshot.data![index]['last_msg'];
-
-                        final userModel = UserProvider()
-                            .getUserNameByUserID(user.id, userList)
-                            .first;
-                        //  print("user.id: ${user.id}, userModel.name: ${userModel.name}");
-
-                        return FlatButton(
-                            onPressed: () {
-                              _handlePressed(user, context);
+      appBar: appBar(context: context, ref: ref, home: false),
+      bottomNavigationBar:
+          navigationBar(index: 1, context: context, ref: ref, home: false),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('users')
+              .doc(user?.uid)
+              .collection('messages')
+              .snapshots(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data.docs.length < 1) {
+                return Center(
+                  child: Text("No Chats Available !"),
+                );
+              }
+              return ListView.builder(
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (context, index) {
+                    var friendId = snapshot.data.docs[index].id;
+                    print("friendID: " + friendId);
+                    var lastMsg = snapshot.data.docs[index]['last_msg'];
+                    return FutureBuilder(
+                      future: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(friendId)
+                          .get(),
+                      builder: (context, AsyncSnapshot asyncSnapshot) {
+                        if (asyncSnapshot.hasData) {
+                          var friend = asyncSnapshot.data;
+                          return ListTile(
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(80),
+                              child: CachedNetworkImage(
+                                imageUrl: friend['profilImageURL'],
+                                placeholder: (conteext, url) =>
+                                    CircularProgressIndicator(),
+                                errorWidget: (context, url, error) => Icon(
+                                  Icons.error,
+                                ),
+                                height: 50,
+                              ),
+                            ),
+                            title: Text(friend['name']),
+                            subtitle: Container(
+                              child: Text(
+                                "$lastMsg",
+                                style: TextStyle(color: Colors.grey),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChatPageLeon(
+                                          friendId: friend['userID'],
+                                          friendName: friend['name'],
+                                          friendImage:
+                                              friend['profilImageURL'])));
                             },
-                            child: Column(children: [
-                              Row(children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: _buildAvatar(userModel),
-                                ),
-                                Expanded(
-                                  flex: 12,
-                                  child: Text("${userModel.name}"),
-                                ),
-                                SizedBox(
-                                    height: MediaQuery.of(context).size.height /
-                                        19.5),
-                              ])
-                            ]));
-                      });
-                }
-
-                /*
-                if (searchResult.length > 0) {
-                  return ListView.builder(itemBuilder: (context, index) {
-                    itemCount:
-                    searchResult.length;
-                    int ind = 0;
-
-                    while (snapshot.data![ind].id !=
-                        searchResult[index]["userID"]) {
-                      ind = ind + 1;
-                    }
-
-                    final user = snapshot.data![ind];
-                    final userModel = UserProvider()
-                        .getUserNameByUserID(
-                            searchResult[index]["userID"], userList!)
-                        .first;
-
-                    return FlatButton(
-                      onPressed: () {
-                        _handlePressed(user, context);
+                          );
+                        }
+                        return LinearProgressIndicator();
                       },
-                      child: Column(
-                        children: [
-                          Row(children: [
-                            Expanded(
-                              flex: 1,
-                              child: _buildAvatar(userModel),
-                            ),
-                            Expanded(
-                              flex: 12,
-                              child: Text("${searchResult[index]['name']}"),
-                            ),
-                          ]),
-                        ],
-                      ),
                     );
                   });
-                }
-                ;
-                */
-
-                ),
-          ),
-        ]));
-  }
-
-  Widget buildSearchBar() {
-    return Padding(
-      padding: EdgeInsets.only(top: 16, left: 16, right: 16),
-      child: TextField(
-        controller: searchController,
-        decoration: InputDecoration(
-          hintText: "Suche nach Nutzern...",
-          hintStyle: TextStyle(color: Colors.grey.shade600),
-          prefixIcon: IconButton(
-            onPressed: () {
-              onSearch();
-            },
-            icon: Icon(Icons.search),
-            color: Colors.grey.shade600,
-            iconSize: 20,
-          ),
-          filled: true,
-          fillColor: Colors.grey.shade100,
-          contentPadding: EdgeInsets.all(8),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.grey.shade100)),
-        ),
-      ),
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
     );
   }
 }
