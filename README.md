@@ -15,7 +15,6 @@ Um Codeänderungen im master-Branch zu Veröffentlichen:
 Firebase SetUp:
 https://stackoverflow.com/questions/23645220/firebase-tools-bash-firebase-command-not-found
 
-
 TODO für Christina & Verena
 Automatischer Code Formatter
 https://stackoverflow.com/questions/27092772/auto-code-formatting-in-android-studio

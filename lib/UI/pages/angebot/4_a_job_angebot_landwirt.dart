@@ -31,6 +31,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
   List<types.User> typesUserList = [];
   String auftraggeberID = "";
   var routeData;
+
   void _handlePressed(types.User otherUser, BuildContext context) async {
     final room = await FirebaseChatCore.instance.createRoom(otherUser);
 

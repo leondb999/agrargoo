@@ -175,7 +175,8 @@ AppBar appBar({
       title: Container(
         child: IconButton(
           tooltip: 'Helfer Übersicht',
-          icon: Image.asset('Images/agrargo_logo_large.png'),
+          icon: Image.network(
+              "https://firebasestorage.googleapis.com/v0/b/agrargo-2571b.appspot.com/o/logo_large.png?alt=media&token=d4af03b7-4191-495c-8d63-946be214fff8"),
           iconSize: MediaQuery.of(context).size.height * 0.08,
           color: Color(0xFF9FB98B),
           onPressed: () {
