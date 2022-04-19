@@ -38,6 +38,13 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                       crossAxisAlignment: CrossAxisAlignment
                           .center, //Center Column contents horizontally,
                       children: <Widget>[
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          child: Image.network(
+                              "https://firebasestorage.googleapis.com/v0/b/agrargo-2571b.appspot.com/o/logo_large.png?alt=media&token=d4af03b7-4191-495c-8d63-946be214fff8"),
+                        ),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1),
                         Center(
                             child: Container(
                                 width: MediaQuery.of(context).size.width / 1.65,
