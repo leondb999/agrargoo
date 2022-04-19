@@ -41,7 +41,7 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
 
   /*
   Widget _buildAvatar(UserModel userModel) {
-    final color = Color(0xFFA7BB7B);
+    final color = Color(0xFF9FB98B);
     final hasImage = userModel.profilImageURL != null;
     final name = userModel.name;
 
