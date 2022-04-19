@@ -62,7 +62,7 @@ class _JobangebotUebersichtPageState
                             shrinkWrap: true,
 
                             ///TODO Bug: Wenn eine Jobanzeige offline genommen wird gibt es in der Übersicht einen Error, da jetzt weniger jobanzeigen als jobAnzeigeList.length angezeigt werden (?)
-                            itemCount: jobAnzeigeList.length,
+                            itemCount: getOnlineJobanzeigen(jobAnzeigeList),
                             itemBuilder: (context, index) {
                               print(
                                   "jobAnzeigeList.length: ${jobAnzeigeList[8]}");
@@ -78,4 +78,16 @@ class _JobangebotUebersichtPageState
       ),
     );
   }
+}
+
+int getOnlineJobanzeigen(List<JobanzeigeModel> jobAnzeigeList) {
+  var list = [];
+  jobAnzeigeList.forEach((anzeige) {
+    if (anzeige.status == true) {
+      if (list.contains(anzeige) == false) {
+        list.add(anzeige);
+      }
+    }
+  });
+  return list.length;
 }
