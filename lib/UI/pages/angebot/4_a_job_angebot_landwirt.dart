@@ -372,7 +372,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                               */
                             },
                             style: ElevatedButton.styleFrom(
-                                primary: Color(0xFF9FB98B),
+                                primary: Color(0xFFA7BB7B),
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 50, vertical: 20),
                                 textStyle: TextStyle(

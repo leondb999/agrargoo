@@ -114,7 +114,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                   style: TextStyle(color: Colors.white),
                 ),
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color(0xFF9FB98B)),
+                  backgroundColor: MaterialStateProperty.all(Color(0xFFA7BB7B)),
                 ),
 
                 ///Todo implement CircularProgressindicator um dem Nutzer zu zeigen, dass das Profilbild grade am hochladen ist
@@ -202,7 +202,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                             ),
                             style: ButtonStyle(
                               backgroundColor:
-                                  MaterialStateProperty.all(Color(0xFF9FB98B)),
+                                  MaterialStateProperty.all(Color(0xFFA7BB7B)),
                             ),
                             // color: Colors.blue,
                           ),
@@ -450,7 +450,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                               ElevatedButton(
                                 child: Text("Erstelle deinen Hof"),
                                 style: ElevatedButton.styleFrom(
-                                    primary: Color(0xFF9FB98B),
+                                    primary: Color(0xFFA7BB7B),
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 50, vertical: 20),
                                     textStyle: TextStyle(

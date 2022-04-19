@@ -49,7 +49,7 @@ class _HelferUebersichtPageState extends ConsumerState<HelferUebersichtPage> {
                       style: TextStyle(
                           fontSize: 35.0,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF2E6C49)))),
+                          color: Color(0xFF586015)))),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             Expanded(

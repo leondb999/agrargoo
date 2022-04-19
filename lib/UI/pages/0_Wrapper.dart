@@ -29,7 +29,7 @@ class _WrapperState extends State<Wrapper> {
                                 fontFamily: 'Open Sans',
                                 fontSize: 50.0,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF2E6C49))))),
+                                color: Color(0xFF586015))))),
               ],
             ),
           ),

@@ -242,13 +242,13 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                                 style: TextStyle(
                                     fontSize: 35.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF2E6C49)))
+                                    color: Color(0xFF586015)))
                             : Text("Eine neue Anzeige hinzufügen",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 35.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF2E6C49)))),
+                                    color: Color(0xFF586015)))),
                     SizedBox(height: 80),
 
                     ///Titel Textfield()
@@ -313,7 +313,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                       ),
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Color(0xFF9FB98B)),
+                            MaterialStateProperty.all(Color(0xFFA7BB7B)),
                       ),
                       onPressed: () {
                         _showDateRangePicker(
@@ -359,7 +359,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                       ),
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Color(0xFF9FB98B)),
+                            MaterialStateProperty.all(Color(0xFFA7BB7B)),
                       ),
                       // color: Colors.blue,
                     ),
@@ -378,7 +378,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                             style: TextStyle(color: Colors.redAccent),
                           ),
                     Switch(
-                        activeColor: Color(0xFF9FB98B),
+                        activeColor: Color(0xFFA7BB7B),
                         value: isSwitched!,
                         onChanged: (value) {
                           setState(() {
@@ -404,7 +404,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                          primary: Color(0xFF9FB98B),
+                          primary: Color(0xFFA7BB7B),
                           padding: EdgeInsets.symmetric(
                               horizontal: 50, vertical: 20)),
                     ),

@@ -125,13 +125,13 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                                 style: TextStyle(
                                     fontSize: 35.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF2E6C49)))
+                                    color: Color(0xFF586015)))
                             : Text("Einen neuen Hof hinzufügen",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 35.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF2E6C49)))),
+                                    color: Color(0xFF586015)))),
                     SizedBox(height: 50),
 
                     ///Show Uploaded File
@@ -239,7 +239,7 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                          primary: Color(0xFF9FB98B),
+                          primary: Color(0xFFA7BB7B),
                           padding: EdgeInsets.symmetric(
                               horizontal: 50, vertical: 20)),
                     ),
@@ -269,7 +269,7 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Color(0xFF9FB98B),
+                          primary: Color(0xFFA7BB7B),
                           padding: EdgeInsets.symmetric(
                               horizontal: 50, vertical: 20),
                         )),

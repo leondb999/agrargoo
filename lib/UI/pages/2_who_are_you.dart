@@ -39,7 +39,7 @@ class _WhoAreYouState extends ConsumerState<WhoAreYou> {
                       fontFamily: 'Open Sans',
                       fontSize: 52.0,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF2E6C49)))),
+                      color: Color(0xFF586015)))),
           SizedBox(height: MediaQuery.of(context).size.height * 0.0515),
 
           ///Landwirt
@@ -67,7 +67,7 @@ class _WhoAreYouState extends ConsumerState<WhoAreYou> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF9FB98B),
+                    primary: Color(0xFFA7BB7B),
                     textStyle: TextStyle(
                         fontSize: MediaQuery.of(context).size.height * 0.03,
                         fontWeight: FontWeight.bold)),
@@ -93,7 +93,7 @@ class _WhoAreYouState extends ConsumerState<WhoAreYou> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF9FB98B),
+                    primary: Color(0xFFA7BB7B),
                     textStyle: TextStyle(
                         fontSize: MediaQuery.of(context).size.height * 0.03,
                         fontWeight: FontWeight.bold)),

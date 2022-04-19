@@ -83,7 +83,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                   height: 35.0,
                                   decoration: new BoxDecoration(
                                     color: Color(0xFF586015),
-                                    //color: Color(0xFF2E6C49),
+                                    //color: Color(0xFF586015),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Center(
@@ -113,7 +113,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                   height: 35.0,
                                   decoration: new BoxDecoration(
                                     color: Color(0xFF586015),
-                                    //color: Color(0xFF2E6C49),
+                                    //color: Color(0xFF586015),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Center(
@@ -142,7 +142,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                   height: 35.0,
                                   decoration: new BoxDecoration(
                                     color: Color(0xFF586015),
-                                    //color: Color(0xFF2E6C49),
+                                    //color: Color(0xFF586015),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Center(
@@ -179,7 +179,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                           child: Text('Los gehts!'),
                           style: ElevatedButton.styleFrom(
                               primary: Color(0xFFA7BB7B),
-                              //primary: Color(0xFF9FB98B),
+                              //primary: Color(0xFFA7BB7B),
                               padding: EdgeInsets.symmetric(
                                   horizontal: 50, vertical: 20),
                               textStyle: TextStyle(

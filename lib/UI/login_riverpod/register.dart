@@ -97,7 +97,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               style: TextStyle(
                                   fontSize: 40.0,
                                   fontWeight: FontWeight.bold,
-                                  color: Color(0xFF2E6C49)))),
+                                  color: Color(0xFF586015)))),
                       const Spacer(flex: 1),
 
                       ///Name Input Field
@@ -106,7 +106,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         textInputType: TextInputType.name,
                         hintText: 'Name',
                         icon: Icon(Icons.person,
-                            color: Color(0xFF9FB98B), size: 24),
+                            color: Color(0xFFA7BB7B), size: 24),
                         validateString: 'name',
                         obscureText: false,
                         autocorrect: true,
@@ -119,7 +119,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         textInputType: TextInputType.emailAddress,
                         hintText: 'Email Adresse',
                         icon: Icon(Icons.email_outlined,
-                            color: Color(0xFF9FB98B), size: 24),
+                            color: Color(0xFFA7BB7B), size: 24),
                         validateString: 'email',
                         obscureText: false,
                         autocorrect: true,
@@ -131,7 +131,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         controller: _password,
                         hintText: 'Passwort',
                         icon: Icon(CupertinoIcons.lock_circle,
-                            color: Color(0xFF9FB98B), size: 24),
+                            color: Color(0xFFA7BB7B), size: 24),
                         validateString: 'password',
                         obscureText: true,
                         autocorrect: true,
@@ -164,7 +164,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               },
                               child: Text("Wähle ein Geburtsdatum aus"),
                               style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFF9FB98B)))),
+                                  primary: Color(0xFFA7BB7B)))),
                       const Spacer(),
                     ],
                   ),
@@ -246,13 +246,13 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             'Registrieren',
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
-                          textColor: Color(0xFF2E6C49),
+                          textColor: Color(0xFF586015),
                           textTheme: ButtonTextTheme.primary,
                           minWidth: 100,
                           padding: const EdgeInsets.all(18),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
-                            side: BorderSide(color: Color(0xFF2E6C49)),
+                            side: BorderSide(color: Color(0xFF586015)),
                           ),
                         ),
                       ),
@@ -268,7 +268,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               TextSpan(
                                 text: 'Login',
                                 style: TextStyle(
-                                    fontSize: 15, color: Color(0xFF2E6C49)),
+                                    fontSize: 15, color: Color(0xFF586015)),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     Navigator.pushReplacementNamed(

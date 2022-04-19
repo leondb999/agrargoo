@@ -68,7 +68,7 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
   @override
   Widget build(BuildContext context) {
     //print("Room: ${widget.room}");
-    final color = Color(0xFF9FB98B);
+    final color = Color(0xFFA7BB7B);
     bool hasImage = false;
 
     if ('${widget.friendImage}' != "null") {
@@ -80,7 +80,7 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: Color(0xFF9FB98B), //change your color here
+          color: Color(0xFFA7BB7B), //change your color here
         ),
         toolbarHeight: MediaQuery.of(context).size.height * 0.09,
         backgroundColor: Colors.white,
@@ -96,7 +96,7 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
                   },
                   icon: Icon(
                     Icons.arrow_back,
-                    color: Color(0xFF9FB98B),
+                    color: Color(0xFFA7BB7B),
                   ),
                 ),
                 SizedBox(
