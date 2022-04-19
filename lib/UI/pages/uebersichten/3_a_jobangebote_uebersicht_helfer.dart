@@ -60,8 +60,12 @@ class _JobangebotUebersichtPageState
                         ? ListView.builder(
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
+
+                            ///TODO Bug: Wenn eine Jobanzeige offline genommen wird gibt es in der Übersicht einen Error, da jetzt weniger jobanzeigen als jobAnzeigeList.length angezeigt werden (?)
                             itemCount: jobAnzeigeList.length,
                             itemBuilder: (context, index) {
+                              print(
+                                  "jobAnzeigeList.length: ${jobAnzeigeList[8]}");
                               return jobAnzeigeCard(context,
                                   activeAnzeigeList[index], false, ref);
                             },

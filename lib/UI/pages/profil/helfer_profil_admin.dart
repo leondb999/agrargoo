@@ -59,6 +59,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
         .get()
         .then((value) {
       value.docs.forEach((doc) {
+        print("doc: $doc");
         QualifikationModel quali = QualifikationModel(
             qualifikationID: doc.id, qualifikationName: doc['name']);
         alleQualifikationenList.add(quali);
@@ -83,6 +84,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
         .get()
         .then((value) {
       value.docs.forEach((doc) {
+        print("docselected: $doc");
         QualifikationModel quali = QualifikationModel(
             qualifikationID: doc.id, qualifikationName: doc['name']);
         alleQualifikationenList.add(quali);
@@ -789,6 +791,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                                   }
                                                 });
                                               });
+                                              print("hi");
                                               print(
                                                   "selectedQualifikationList: $selectedQualifikationList");
                                               openFilterDialog(userLoggedIn);
