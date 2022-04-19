@@ -6,6 +6,7 @@ import 'package:agrargo/controllers/user_controller.dart';
 import 'package:agrargo/models/user_model.dart';
 import 'package:agrargo/provider/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,7 +24,6 @@ import 'package:searchfield/searchfield.dart';
 /// UserPage | Quelle: https://github.com/flyerhq/flutter_firebase_chat_core/blob/main/example/lib/users.dart
 class ChatUsersPage extends ConsumerStatefulWidget {
   static const routename = '/chat-users-page1';
-
   ChatUsersPage();
 
   @override
@@ -36,6 +36,8 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
   TextEditingController searchController = TextEditingController();
   List<Map> searchResult = [];
   bool isLoading = false;
+  Icon _searchIcon = new Icon(Icons.search);
+  User? user = FirebaseAuth.instance.currentUser;
 
   Widget _buildAvatar(UserModel userModel) {
     final color = Color(0xFF9FB98B);
@@ -60,8 +62,7 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
   }
 
   void _handlePressed(types.User otherUser, BuildContext context) async {
-    //final room = await FirebaseChatCore.instance.createRoom(otherUser);
-    ChatPageLeon.room = await FirebaseChatCore.instance.createRoom(otherUser);
+    //ChatPageLeon.room = await FirebaseChatCore.instance.createRoom(otherUser);
     final userList = ref.watch(userModelFirestoreControllerProvider);
     final userModel =
         UserProvider().getUserNameByUserID(otherUser.id, userList!).first;
@@ -119,6 +120,14 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
     });
   }
 
+  void getData() async {
+    final data = await FirebaseFirestore.instance
+        .collection("messages")
+        .orderBy("updatetAt", descending: true)
+        .limit(1)
+        .get();
+  }
+
   List<types.User> typesUserList = [];
 
   List<types.Room> userLoggedInRoomList = [];
@@ -149,9 +158,9 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore.instance.collection("messages").orderBy("createdAt");
     print("userLoggedInRoomList: ${userLoggedInRoomList}");
     print("typesUserList: $typesUserList");
-
     userLoggedInRoomList.forEach((room) {
       print("room: $room");
     });
@@ -170,6 +179,10 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
         UserProvider().getUserNameByUserID(userID, userList!).first;
     print("userLoggedIn: name: ${userLoggedIn.name}");
 
+    /*
+    ///Alle gespeicherten User in der Firestore Collection
+    final userList = ref.watch(userModelFirestoreControllerProvider);
+*/
     return Scaffold(
         appBar: appBar(context: context, ref: ref, home: false),
         bottomNavigationBar:
@@ -178,36 +191,65 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
           buildSearchBar(),
           SizedBox(height: MediaQuery.of(context).size.height / 50),
           Expanded(
-            child: StreamBuilder<List<types.User>>(
+            child: StreamBuilder(
               ///TODO knackpunkt
-              stream: FirebaseChatCore.instance
-                  .users() /*.where((event) {
-          bool findUser = false;
-          event.forEach((user) {
-            if (user.id == 'e3id9w9bPecKea74Qpx4qnPAi2R2') {
-              findUser = true;
-              return findUser;
-              break;
-            }
-            print("user: ${user.id}");
-          });
-          return findUser;
-        })*/
-              ,
+              stream: FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(user?.uid)
+                  .collection("messages")
+                  .snapshots(),
 
               ///FirebaseChatCore.instance.users(),
-              initialData: const [],
-              builder: (context, snapshot) {
-                if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(
-                      bottom: 200,
-                    ),
-                    child: const Text('Kein Nutzer'),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data.docs.length < 1) {
+                    return Container(
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.only(
+                        bottom: 200,
+                      ),
+                      child: const Text('Kein Nutzer'),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (context, index) {
+                      final user = snapshot.data![index];
+                      var friendId = snapshot.data.docs[index].id;
+                      // final room = snapshot.data![index];
+                      var lastMsg = snapshot.data![index]['last_msg'];
+
+                      final userModel = UserProvider()
+                          .getUserNameByUserID(user.id, userList!)
+                          .first;
+                      //  print("user.id: ${user.id}, userModel.name: ${userModel.name}");
+
+                      return FutureBuilder(
+                          future: FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(friendId)
+                              .get(),
+                          builder: (context, AsyncSnapshot asynSnapshot) {
+                            if (asynSnapshot.hasData) {
+                              var friend = asynSnapshot.data;
+                              return ListTile(
+                                leading: CircleAvatar(
+                                    child: _buildAvatar(userModel)),
+                                title: Text(friend['name']),
+                                subtitle: Text(
+                                  "$lastMsg",
+                                  style: TextStyle(color: Colors.grey),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            }
+                            return LinearProgressIndicator();
+                          });
+                    },
                   );
                 }
 
+                /*
                 if (searchResult.length > 0) {
                   return ListView.builder(itemBuilder: (context, index) {
                     itemCount:
@@ -222,7 +264,7 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
                     final user = snapshot.data![ind];
                     final userModel = UserProvider()
                         .getUserNameByUserID(
-                            searchResult[index]["userID"], userList)
+                            searchResult[index]["userID"], userList!)
                         .first;
 
                     return FlatButton(
@@ -247,48 +289,9 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
                   });
                 }
                 ;
-
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    final user = snapshot.data![index];
-
-                    final userModel = UserProvider()
-                        .getUserNameByUserID(user.id, userList)
-                        .first;
-                    //  print("user.id: ${user.id}, userModel.name: ${userModel.name}");
-
-                    return FlatButton(
-                      onPressed: () {
-                        _handlePressed(user, context);
-                      },
-                      child: Column(
-                        children: [
-                          Row(children: [
-                            Expanded(
-                              flex: 1,
-                              child: _buildAvatar(userModel),
-                            ),
-                            Expanded(
-                              flex: 12,
-                              child: Text("${userModel.name}"),
-                            ),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height / 19.5),
-                            /*Expanded(
-                              flex: 1,
-                              child:
-                                  //get room where ${userLoggedIn.UserId) == room.userIDs und userModel.UserId == room.userIDs
-                                  Text("{FirebaseChatCore.instance.room()}"),
-                            ),
-
-                             */
-                          ]),
-                        ],
-                      ),
-                    );
-                  },
+                */
+                return Center(
+                  child: CircularProgressIndicator(),
                 );
               },
             ),

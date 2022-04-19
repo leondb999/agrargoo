@@ -1,11 +1,15 @@
 import 'dart:io';
 import 'package:agrargo/provider/user_provider.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
+import 'package:agrargo/widgets/message_textfield.dart';
+import 'package:agrargo/widgets/single_message.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+//import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,18 +23,13 @@ import '../../../models/user_model.dart';
 
 ///Quelle: https://github.com/flyerhq/flutter_firebase_chat_core/blob/main/example/lib/chat.dart
 class ChatPageLeon extends ConsumerStatefulWidget {
-  static types.Room? room2;
-  static types.Room? room;
+  //static types.Room? room;
   final String? friendId;
   final String? friendName;
   final String? friendImage;
 
   const ChatPageLeon(
-      {Key? key,
-      //this.room,
-      this.friendId,
-      this.friendName,
-      this.friendImage})
+      {Key? key, this.friendId, this.friendName, this.friendImage})
       : super(key: key);
 
   static const routename = '/chat';
@@ -41,7 +40,17 @@ class ChatPageLeon extends ConsumerStatefulWidget {
 
 class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
   bool _isAttachmentUploading = false;
+  late DocumentSnapshot userData;
+  User? user = FirebaseAuth.instance.currentUser;
 
+  Future<void> getId() async {
+    userData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(UserProvider().userID)
+        .get();
+  }
+
+  /*
   void _handlePreviewDataFetched(
     types.TextMessage message,
     types.PreviewData previewData,
@@ -58,89 +67,127 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
       ChatPageLeon.room!.id,
     );
   }
-
-  void _setAttachmentUploading(bool uploading) {
-    setState(() {
-      _isAttachmentUploading = uploading;
-    });
-  }
-
+ */
   @override
   Widget build(BuildContext context) {
     //print("Room: ${widget.room}");
     final color = Color(0xFF9FB98B);
     bool hasImage = false;
-
     if ('${widget.friendImage}' != "null") {
       hasImage = true;
     }
-
     final name = '${widget.friendName}';
 
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Color(0xFF9FB98B), //change your color here
-        ),
-        toolbarHeight: MediaQuery.of(context).size.height * 0.09,
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        flexibleSpace: SafeArea(
-          child: Container(
-            padding: EdgeInsets.only(right: 16),
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Color(0xFF9FB98B),
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Color(0xFF9FB98B), //change your color here
+          ),
+          toolbarHeight: MediaQuery.of(context).size.height * 0.09,
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
+          flexibleSpace: SafeArea(
+            child: Container(
+              padding: EdgeInsets.only(right: 16),
+              child: Row(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Color(0xFF9FB98B),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 2,
-                ),
-                CircleAvatar(
-                  backgroundColor: hasImage ? Colors.transparent : color,
-                  backgroundImage:
-                      hasImage ? NetworkImage('${widget.friendImage}') : null,
-                  radius: 20,
-                  child: !hasImage
-                      ? Text(
-                          name.isEmpty ? '' : name[0].toUpperCase(),
-                          style: const TextStyle(color: Colors.white),
-                        )
-                      : null,
-                ),
-                SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        '${widget.friendName}',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                      SizedBox(
-                        height: 6,
-                      ),
-                    ],
+                  SizedBox(
+                    width: 2,
                   ),
-                ),
-              ],
+                  CircleAvatar(
+                    backgroundColor: hasImage ? Colors.transparent : color,
+                    backgroundImage:
+                        hasImage ? NetworkImage('${widget.friendImage}') : null,
+                    radius: 20,
+                    child: !hasImage
+                        ? Text(
+                            name.isEmpty ? '' : name[0].toUpperCase(),
+                            style: const TextStyle(color: Colors.white),
+                          )
+                        : null,
+                  ),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          '${widget.friendName}',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          height: 6,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      bottomNavigationBar:
-          navigationBar(index: 1, context: context, ref: ref, home: false),
-      body: StreamBuilder<types.Room>(
+        bottomNavigationBar:
+            navigationBar(index: 1, context: context, ref: ref, home: false),
+        body: Column(
+          children: [
+            Expanded(
+                child: Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25))),
+              child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(user?.uid)
+                      .collection("messages")
+                      .doc(widget.friendId)
+                      .collection("chats")
+                      .orderBy("date", descending: true)
+                      .snapshots(),
+                  builder: (context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data.docs.length < 1) {
+                        return Center(
+                          child: Text("Keine Nachricht bisher"),
+                        );
+                      }
+                      return ListView.builder(
+                          itemCount: snapshot.data.docs.length,
+                          reverse: true,
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            bool isMe = snapshot.data.docs[index]['senderId'] ==
+                                user?.uid;
+                            return SingleMessage(
+                                message: snapshot.data.docs[index]['message'],
+                                isMe: isMe);
+                          });
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  }),
+            )),
+            MessageTextField(user?.uid, widget.friendId),
+          ],
+        )
+
+        /*
+      StreamBuilder<types.Room>(
         initialData: ChatPageLeon.room!,
         stream: FirebaseChatCore.instance.room(ChatPageLeon.room!.id),
         builder: (context, snapshot) {
@@ -164,6 +211,7 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
           );
         },
       ),
-    );
+      */
+        );
   }
 }
