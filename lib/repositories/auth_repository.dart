@@ -12,7 +12,7 @@ import '../UI/pages/profil/landwirt_profil_admin.dart';
 abstract class BaseAuthRepository {
   Stream<User?> get authStateChanges;
   Future<void> signInAnonymously();
-  Future<void> signInEmailAndPW(
+  Future<bool> signInEmailAndPW(
       BuildContext context, String email, String password);
   Future<void> registerUserEmailAndPW(
     BuildContext context,
@@ -71,11 +71,12 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
-  Future<void> signInEmailAndPW(
+  Future<bool> signInEmailAndPW(
       BuildContext context, String email, String password) async {
     try {
       await _read(firebaseAuthProvider)
           .signInWithEmailAndPassword(email: email, password: password);
+      return true;
     } on FirebaseAuthException catch (e) {
       await showDialog(
         context: context,
@@ -92,6 +93,7 @@ class AuthRepository implements BaseAuthRepository {
         ),
       );
     }
+    return false;
   }
 
   @override

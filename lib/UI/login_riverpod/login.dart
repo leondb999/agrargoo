@@ -123,7 +123,7 @@ class _LoginState extends ConsumerState<LoginPage> {
                         margin: const EdgeInsets.symmetric(horizontal: 16),
                         width: double.infinity,
                         child: MaterialButton(
-                          onPressed: () {
+                          onPressed: () async {
                             ///Validate Login Input
 
                             if (!_formKey.currentState!.validate()) {
@@ -135,21 +135,29 @@ class _LoginState extends ConsumerState<LoginPage> {
 
                             ///SignIn Email & Password
                             ///TODO Fix Bug: After Landwirt logs in he is navigated to home Page
-                            ref
-                                .read(authControllerProvider.notifier)
-                                .signInEmail(
-                                    context, _email.text, _password.text);
+                            bool login = false;
+                            try {
+                              login = await ref
+                                  .read(authControllerProvider.notifier)
+                                  .signInEmail(
+                                      context, _email.text, _password.text);
+                            } catch (e) {
+                              print("Error loggin In: $e");
+                            }
+
                             print("_landwirt login: $_landwirt");
-                            if (_landwirt == true) {
-                              Navigator.pushNamed(
-                                context,
-                                LandwirtProfil.routename,
-                              );
-                            } else {
-                              Navigator.pushNamed(
-                                context,
-                                HelferProfil.routename,
-                              );
+                            if (login == true) {
+                              if (_landwirt == true) {
+                                Navigator.pushNamed(
+                                  context,
+                                  LandwirtProfil.routename,
+                                );
+                              } else {
+                                Navigator.pushNamed(
+                                  context,
+                                  HelferProfil.routename,
+                                );
+                              }
                             }
 
                             ///Login User in Firebase
