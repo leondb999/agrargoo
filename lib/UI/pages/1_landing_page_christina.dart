@@ -39,7 +39,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                           .center, //Center Column contents horizontally,
                       children: <Widget>[
                         Container(
-                          height: MediaQuery.of(context).size.height * 0.1,
+                          height: MediaQuery.of(context).size.height * 0.075,
                           child: Image.network(
                               "https://firebasestorage.googleapis.com/v0/b/agrargo-2571b.appspot.com/o/logo_large.png?alt=media&token=d4af03b7-4191-495c-8d63-946be214fff8"),
                         ),
@@ -55,7 +55,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                         fontFamily: 'Open Sans',
                                         fontSize: 40.0,
                                         fontWeight: FontWeight.bold,
-                                        color: Color(0xFF2E6C49))))),
+                                        color: Color(0xFF586015))))),
                         SizedBox(
                             height: MediaQuery.of(context).size.height / 100),
                         Container(
@@ -82,7 +82,8 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                   width: 35.0,
                                   height: 35.0,
                                   decoration: new BoxDecoration(
-                                    color: Color(0xFF2E6C49),
+                                    color: Color(0xFF586015),
+                                    //color: Color(0xFF2E6C49),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Center(
@@ -111,7 +112,8 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                   width: 35.0,
                                   height: 35.0,
                                   decoration: new BoxDecoration(
-                                    color: Color(0xFF2E6C49),
+                                    color: Color(0xFF586015),
+                                    //color: Color(0xFF2E6C49),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Center(
@@ -139,7 +141,8 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                   width: 35.0,
                                   height: 35.0,
                                   decoration: new BoxDecoration(
-                                    color: Color(0xFF2E6C49),
+                                    color: Color(0xFF586015),
+                                    //color: Color(0xFF2E6C49),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Center(
@@ -175,7 +178,8 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                           },
                           child: Text('Los gehts!'),
                           style: ElevatedButton.styleFrom(
-                              primary: Color(0xFF9FB98B),
+                              primary: Color(0xFFA7BB7B),
+                              //primary: Color(0xFF9FB98B),
                               padding: EdgeInsets.symmetric(
                                   horizontal: 50, vertical: 20),
                               textStyle: TextStyle(
