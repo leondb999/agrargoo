@@ -191,18 +191,16 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
           buildSearchBar(),
           SizedBox(height: MediaQuery.of(context).size.height / 50),
           Expanded(
-            child: StreamBuilder(
-              ///TODO knackpunkt
-              stream: FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(user?.uid)
-                  .collection("messages")
-                  .snapshots(),
+            child: StreamBuilder<List<types.User>>(
 
-              ///FirebaseChatCore.instance.users(),
-              builder: (context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data.docs.length < 1) {
+                ///TODO knackpunkt
+                stream: FirebaseChatCore.instance.users(),
+
+                ///FirebaseChatCore.instance.users(),
+
+                initialData: const [],
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return Container(
                       alignment: Alignment.center,
                       margin: const EdgeInsets.only(
@@ -212,41 +210,38 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
                     );
                   }
                   return ListView.builder(
-                    itemCount: snapshot.data.docs.length,
-                    itemBuilder: (context, index) {
-                      final user = snapshot.data![index];
-                      var friendId = snapshot.data.docs[index].id;
-                      // final room = snapshot.data![index];
-                      var lastMsg = snapshot.data![index]['last_msg'];
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (context, index) {
+                        final user = snapshot.data![index];
+                        var friendId = snapshot.data.docs[index].id;
+                        // final room = snapshot.data![index];
+                        var lastMsg = snapshot.data![index]['last_msg'];
 
-                      final userModel = UserProvider()
-                          .getUserNameByUserID(user.id, userList!)
-                          .first;
-                      //  print("user.id: ${user.id}, userModel.name: ${userModel.name}");
+                        final userModel = UserProvider()
+                            .getUserNameByUserID(user.id, userList)
+                            .first;
+                        //  print("user.id: ${user.id}, userModel.name: ${userModel.name}");
 
-                      return FutureBuilder(
-                          future: FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(friendId)
-                              .get(),
-                          builder: (context, AsyncSnapshot asynSnapshot) {
-                            if (asynSnapshot.hasData) {
-                              var friend = asynSnapshot.data;
-                              return ListTile(
-                                leading: CircleAvatar(
-                                    child: _buildAvatar(userModel)),
-                                title: Text(friend['name']),
-                                subtitle: Text(
-                                  "$lastMsg",
-                                  style: TextStyle(color: Colors.grey),
-                                  overflow: TextOverflow.ellipsis,
+                        return FlatButton(
+                            onPressed: () {
+                              _handlePressed(user, context);
+                            },
+                            child: Column(children: [
+                              Row(children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: _buildAvatar(userModel),
                                 ),
-                              );
-                            }
-                            return LinearProgressIndicator();
-                          });
-                    },
-                  );
+                                Expanded(
+                                  flex: 12,
+                                  child: Text("${userModel.name}"),
+                                ),
+                                SizedBox(
+                                    height: MediaQuery.of(context).size.height /
+                                        19.5),
+                              ])
+                            ]));
+                      });
                 }
 
                 /*
@@ -290,12 +285,9 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
                 }
                 ;
                 */
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            ),
-          )
+
+                ),
+          ),
         ]));
   }
 

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:agrargo/provider/user_provider.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
-import 'package:agrargo/widgets/message_textfield.dart';
 import 'package:agrargo/widgets/single_message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -16,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
+import 'package:agrargo/widgets/message_textfield.dart';
 
 import 'package:path_provider/path_provider.dart';
 
