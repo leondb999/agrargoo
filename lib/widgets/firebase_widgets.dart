@@ -57,6 +57,7 @@ Card hofCard({
                       'startDate': DateTime.now(),
                       'endDate': DateTime.now(),
                       'qualifikationList': [],
+                      "edit": false,
                     });
                   },
                   padding: EdgeInsets.all(15.0),
@@ -87,6 +88,7 @@ Card hofCard({
                 'besitzerID': hof.besitzerID,
                 'standort': hof.standort,
                 'hofImageURL': hof.hofImageURL,
+                "edit": true,
               });
             },
             child: Text(
@@ -151,6 +153,7 @@ Card jobAnzeigeCard(
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0),
         leading: Container(
+            height: MediaQuery.of(context).size.height * 0.7,
             padding: EdgeInsets.only(right: 12.0),
             decoration: new BoxDecoration(
                 border: new Border(
@@ -168,44 +171,51 @@ Card jobAnzeigeCard(
         subtitle: Row(
           children: [
             Column(children: <Widget>[
+              SizedBox(height: MediaQuery.of(context).size.height * 0.015),
               Row(
                 children: [
                   Icon(Icons.date_range, color: Colors.black12),
                   Text(
                       "Zeitraum: ${jobanzeige.startDate!.day}.${jobanzeige.startDate!.month}.${jobanzeige.endDate!.year}-${jobanzeige.endDate!.day}.${jobanzeige.endDate!.month}.${jobanzeige.endDate!.year}"),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.04),
+                  Icon(Icons.place, color: Colors.black12),
+                  Text(
+                      'Standort:${hof.first.standort}, Hof: ${hof.first.hofName}')
                 ],
               ),
-              Row(children: [
-                Icon(Icons.place, color: Colors.black12),
-                landwirtMode
-                    ? Text(
-                        'Hof: ${hof.first.hofName}, Standort:${hof.first.standort}')
-                    : Text("${hof.first.standort}"),
-              ]),
             ]),
-            SizedBox(width: MediaQuery.of(context).size.width * 0.04),
 
-            ///Liste der Qualifikationen der Anzeige
-
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                height: 100,
-                width: 150,
-                child: ListView.builder(
-                  itemCount: selectedQualifikationenList.length,
-                  itemBuilder: (context, index) {
-                    var qualifikation = selectedQualifikationenList[index];
-                    return Card(
-                      child: ListTile(
-                          title: Text(
-                        "${qualifikation.qualifikationName}",
-                      )),
-                    );
-                  },
-                ),
-              ),
-            ),
+            // ///Liste der Qualifikationen der Anzeige
+            // Expanded(
+            //   //alignment: Alignment.centerLeft,
+            //   child: SingleChildScrollView(
+            //     child: Container(
+            //       height: 165,
+            //       width: 700,
+            //       decoration: BoxDecoration(
+            //         border: Border.all(color: Colors.red),
+            //       ),
+            //       child: GridView.builder(
+            //         gridDelegate:
+            //             const SliverGridDelegateWithMaxCrossAxisExtent(
+            //                 maxCrossAxisExtent: 123,
+            //                 childAspectRatio: 2,
+            //                 crossAxisSpacing: 5,
+            //                 mainAxisSpacing: 10),
+            //         itemCount: selectedQualifikationenList.length,
+            //         itemBuilder: (context, index) {
+            //           var qualifikation = selectedQualifikationenList[index];
+            //           return Card(
+            //             child: ListTile(
+            //                 title: Text(
+            //               "${qualifikation.qualifikationName}",
+            //             )),
+            //           );
+            //         },
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         trailing: Column(
@@ -224,11 +234,13 @@ Card jobAnzeigeCard(
                           'auftraggeberID': jobanzeige.auftraggeberID,
                           'status': jobanzeige.status,
                           'titel': jobanzeige.titel,
+                          'beschreibung': jobanzeige.beschreibung,
                           'jobanzeigeID': jobanzeige.jobanzeigeID,
                           'stundenLohn': jobanzeige.stundenLohn,
                           'qualifikationList': jobanzeige.qualifikationList,
                           'startDate': jobanzeige.startDate,
                           'endDate': jobanzeige.endDate,
+                          "edit": true,
                         });
                       },
                       style: ElevatedButton.styleFrom(
@@ -270,6 +282,54 @@ Card helferCard(BuildContext context, UserModel userModelHelfer) {
     child: Container(
       decoration: BoxDecoration(color: Color(0xFF9FB98B)),
       child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 20.0),
+        leading: Container(
+            height: MediaQuery.of(context).size.height * 0.7,
+            padding: EdgeInsets.only(right: 12.0),
+            decoration: new BoxDecoration(
+                border: new Border(
+                    right: new BorderSide(width: 1.0, color: Colors.white54))),
+            child: CircleAvatar(
+              backgroundImage: userModelHelfer.profilImageURL != null
+                  ? NetworkImage(userModelHelfer.profilImageURL!)
+                  : NetworkImage(
+                      'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+            )),
+        title: Text(
+          "${userModelHelfer.name}",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Row(children: [
+          Column(children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).size.height * 0.005),
+            Row(
+              children: [
+                Icon(Icons.date_range, color: Colors.black12),
+                Text(
+                    "Verfügbarer Zeitraum: ${userModelHelfer.startDate!.day}.${userModelHelfer.startDate!.month}.${userModelHelfer.endDate!.year}-${userModelHelfer.endDate!.day}.${userModelHelfer.endDate!.month}.${userModelHelfer.endDate!.year}"),
+              ],
+            ),
+          ])
+        ]),
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            HelferProfilOeffentlich.routename,
+            arguments: {'userID': userModelHelfer.userID!},
+          );
+        },
+      ),
+    ),
+  );
+
+/*Card helferCard(BuildContext context, UserModel userModelHelfer) {
+  print("uuuuserModel: ${userModelHelfer.userID}");
+  return Card(
+    elevation: 6.0,
+    margin: new EdgeInsets.symmetric(horizontal: 70.0, vertical: 13.0),
+    child: Container(
+      decoration: BoxDecoration(color: Color(0xFF9FB98B)),
+      child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 35.0),
         title: Text("${userModelHelfer.name}"),
         subtitle: Row(
@@ -300,5 +360,5 @@ Card helferCard(BuildContext context, UserModel userModelHelfer) {
         },
       ),
     ),
-  );
+  );*/
 }

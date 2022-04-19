@@ -28,6 +28,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
 import 'UI/pages/1_landing_page_christina.dart';
 import 'UI/pages/chat/5_chat.dart';
+import 'UI/pages/impressum.dart';
 import 'widgets/layout_widgets.dart';
 import 'UI/login_riverpod/login.dart';
 import 'UI/pages/uebersichten/3_a_jobangebote_uebersicht_helfer.dart';
@@ -185,10 +186,11 @@ class MyApp extends StatelessWidget {
           '/helfer-uebersicht': (context) => HelferUebersichtPage(),
           '/add-edit-jobanzeige': (context) => AddEditJobanzeige(),
           '/add-hof': (context) => AddHofPage(),
-          //'/chat': (context) => ChatPageLeon(),
           '/landingpage': (context) => LandingPageCh(),
           '/chat-users-page1': (context) => ChatUsersPage(),
           '/helfer-profil-oeffentlich': (context) => HelferProfilOeffentlich(),
+          '/chat': (context) => ChatPageLeon(),
+          '/impressum': (context) => ImpressumPage(),
         },
       ),
     );

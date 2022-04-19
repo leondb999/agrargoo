@@ -27,8 +27,10 @@ class AddEditJobanzeige extends ConsumerStatefulWidget {
 class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
+  final beschreibungController = TextEditingController();
   final priceController = TextEditingController();
   var routeData;
+  bool? edit = false;
   void clearData() {
     nameController.text = '';
     priceController.text = '';
@@ -172,12 +174,14 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
         anzeige.auftraggeberID = userID;
         anzeige.status = isSwitched;
         anzeige.stundenLohn = routeData['stundenLohn'];
+        anzeige.beschreibung = routeData['beschreibung'];
         anzeige.qualifikationList = routeData['qualifikationList'];
         anzeige.startDate = routeData['startDate'];
         anzeige.endDate = routeData['endDate'];
         _currentPrice = routeData['stundenLohn'];
         _hofName = routeData['hofName'];
         _standort = routeData['standort'];
+        edit = routeData["edit"];
       });
       print("anzeige.stundenLohn: ${anzeige.stundenLohn}");
     }).then(
@@ -186,6 +190,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
           : Future.delayed(
               Duration.zero,
               () {
+                beschreibungController.text = routeData["beschreibung"];
                 nameController.text = routeData['titel'];
                 setState(() {
                   isSwitched = routeData['status'];
@@ -193,6 +198,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                 });
 
                 anzeige.titel = routeData['titel'];
+                anzeige.beschreibung = routeData['beschreibung'];
                 anzeige.status = routeData['status'];
                 anzeige.jobanzeigeID = routeData['jobanzeigeID'];
               },
@@ -229,13 +235,20 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    const Center(
-                        child: Text("Eine neue Anzeige hinzufügen",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 35.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF2E6C49)))),
+                    Center(
+                        child: edit == true
+                            ? Text("Anzeige bearbeiten",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 35.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF2E6C49)))
+                            : Text("Eine neue Anzeige hinzufügen",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 35.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF2E6C49)))),
                     SizedBox(height: 80),
 
                     ///Titel Textfield()
@@ -259,6 +272,27 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                       height: 20,
                     ),
 
+                    ///Beschreibung Textfield()
+                    TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Beschreibung der Anzeige';
+                          }
+                          return null;
+                        },
+                        controller: beschreibungController,
+                        decoration: InputDecoration(
+                            hintText: 'Bitte gib eine Beschreibung ein'),
+                        onChanged: (val) {
+                          // jobanzeigeProvider.changeJobanzeigeTitel(val),
+                          setState(() {
+                            anzeige.beschreibung = val;
+                          });
+                        }),
+                    SizedBox(
+                      height: 20,
+                    ),
+
                     ///StundenLohn NumberPicker()
                     Text('Stundenlohn: $_currentPrice€/h'),
                     NumberPicker(
@@ -272,7 +306,6 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                         });
                       },
                     ),
-
                     TextButton(
                       child: Text(
                         "Verfügbaren Zeitraum wählen",
@@ -379,23 +412,26 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
                     SizedBox(height: 20),
 
                     ///Delete Button
-                    ElevatedButton(
-                      child: Text('Löschen'),
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.redAccent,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 20)),
-                      onPressed: () {
-                        if (anzeige.jobanzeigeID != null) {
-                          ref
-                              .read(jobanzeigeModelFirestoreControllerProvider
-                                  .notifier)
-                              .removeJobanzeige(anzeige.jobanzeigeID!);
-                        }
+                    edit == true
+                        ? ElevatedButton(
+                            child: Text('Löschen'),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.redAccent,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 20)),
+                            onPressed: () {
+                              if (anzeige.jobanzeigeID != null) {
+                                ref
+                                    .read(
+                                        jobanzeigeModelFirestoreControllerProvider
+                                            .notifier)
+                                    .removeJobanzeige(anzeige.jobanzeigeID!);
+                              }
 
-                        Navigator.of(context).pop();
-                      },
-                    ),
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        : Text(""),
 
                     /*
                     Container(

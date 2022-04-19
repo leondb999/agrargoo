@@ -152,27 +152,7 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 25, 20, 4),
-                      child: Container(
-                        height: 60,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Name',
-                              style: TextStyle(color: Colors.white70),
-                            ),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            border:
-                                Border.all(width: 1.0, color: Colors.white70)),
-                      ),
-                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.15),
                     Row(
                       children: <Widget>[
                         SizedBox(
@@ -311,7 +291,6 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                         ),
                       ],
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                   ],
                 ),
               ),

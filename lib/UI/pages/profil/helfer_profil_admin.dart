@@ -228,6 +228,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
   Widget _buildEinstellungenAlertDialog(
       BuildContext context, String userID, UserModel userLoggedIn) {
     return new AlertDialog(
+      insetPadding: EdgeInsets.all(100),
       title: const Text(
         "Einstellungen",
         style: TextStyle(
@@ -809,9 +810,13 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                     ),
 
                                     ///Future Builder Qualifikationen Abfrage
+
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
                                         child: SingleChildScrollView(
                                           child:
                                               FutureBuilder<
@@ -838,56 +843,51 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                                         print(
                                                             "snapshot: ${data!.first.qualifikationName}");
 
-                                                        return Container(
-                                                          child: data.isEmpty
-                                                              ? Text(
-                                                                  "No qualifikationen selected yet")
-                                                              : SingleChildScrollView(
-                                                                  child: Row(
-                                                                      children:
-                                                                          data.map(
-                                                                    (qualifikation) {
-                                                                      //      print("hello");
-                                                                      return Container(
-                                                                        margin:
-                                                                            const EdgeInsets.all(15.0),
-                                                                        padding:
-                                                                            const EdgeInsets.all(3.0),
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          borderRadius: BorderRadius.only(
-                                                                              topLeft: Radius.circular(10),
-                                                                              topRight: Radius.circular(10),
-                                                                              bottomLeft: Radius.circular(10),
-                                                                              bottomRight: Radius.circular(10)),
-                                                                          border:
-                                                                              Border.all(color: Colors.grey),
-                                                                        ),
-                                                                        child:
-                                                                            Text(
-                                                                          "${qualifikation.qualifikationName}",
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontStyle:
-                                                                                FontStyle.normal,
-                                                                            fontFamily:
-                                                                                'Open Sans',
-                                                                            fontSize:
-                                                                                20.0,
-                                                                            fontWeight:
-                                                                                FontWeight.normal,
-                                                                            color:
-                                                                                Color(0xFF000000),
-                                                                          ),
-                                                                        ),
-                                                                      );
-                                                                    },
-                                                                  ).toList()),
-                                                                ),
-                                                        );
+                                                        return Column(
+                                                            children: [
+                                                              data.isEmpty
+                                                                  ? Text(
+                                                                      "Noch keine Qualifikationen ausgewählt")
+                                                                  : GridView.count(
+                                                                      shrinkWrap: true,
+                                                                      crossAxisCount: 4,
+                                                                      childAspectRatio: 4 / 2,
+                                                                      children: data.map(
+                                                                        (qualifikation) {
+                                                                          //      print("hello");
+                                                                          return Container(
+                                                                            margin:
+                                                                                const EdgeInsets.symmetric(horizontal: 17, vertical: 4),
+                                                                            padding:
+                                                                                const EdgeInsets.symmetric(vertical: 4, horizontal: 3),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                              border: Border.all(color: Colors.grey),
+                                                                            ),
+                                                                            child:
+                                                                                Text(
+                                                                              "${qualifikation.qualifikationName}",
+                                                                              style: TextStyle(
+                                                                                fontStyle: FontStyle.normal,
+                                                                                fontFamily: 'Open Sans',
+                                                                                fontSize: 20.0,
+                                                                                fontWeight: FontWeight.normal,
+                                                                                color: Color(0xFF000000),
+                                                                              ),
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                      ).toList()),
+                                                            ]);
                                                       }
-                                                    } else if (snapshot
-                                                        .hasError) {
+                                                    } else {
+                                                      Text(
+                                                        "Noch keine Qualifikationen ausgewählt!!",
+                                                      );
+                                                    }
+
+                                                    if (snapshot.hasError) {
                                                       return Text(
                                                           'Error while Loading Qualifikationen from Firestore');
                                                     }
@@ -896,6 +896,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
                                         ),
                                       ),
                                     ),
+
                                     SizedBox(
                                         height:
                                             MediaQuery.of(context).size.height *

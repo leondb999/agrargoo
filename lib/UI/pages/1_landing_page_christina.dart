@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'impressum.dart';
+
 class LandingPageCh extends ConsumerStatefulWidget {
   const LandingPageCh({Key? key}) : super(key: key);
   static const routename = '/landingpage';
@@ -172,6 +174,24 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                   fontSize: 20, fontWeight: FontWeight.bold)),
                         ))
                       ]),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushNamed(ImpressumPage.routename);
+                      },
+                      child: Text(
+                        "Impressum",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Color(0x0000000)),
+                      ),
+                      // color: Colors.blue,
+                    ),
+                  ),
                 ]))));
   }
 }

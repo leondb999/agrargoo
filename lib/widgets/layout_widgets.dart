@@ -25,11 +25,13 @@ import '../UI/pages/chat/chat_leon.dart';
 import '../UI/pages/uebersichten/3_a_jobangebote_uebersicht_helfer.dart';
 import '../UI/pages/uebersichten/3_b_helfer_übersicht_landwirt.dart';
 
-BottomNavigationBar navigationBar(
-    {required int index,
-    required BuildContext context,
-    required WidgetRef ref,
-    required bool home}) {
+BottomNavigationBar navigationBar({
+  required int index,
+  required BuildContext context,
+  required WidgetRef ref,
+  required bool home,
+  //required bool helfer,
+}) {
   User? user = ref.read(authControllerProvider);
 
   /// ALle User
@@ -126,7 +128,13 @@ BottomNavigationBar navigationBar(
               Navigator.of(context).pushNamed(ChatUsersPage.routename);
             } else {
               ///User ist ausgeloggt
-              Navigator.of(context).pushNamed(WhoAreYou.routename);
+              // Navigator.of(context).pushNamed(WhoAreYou.routename);
+
+              Navigator.pushNamed(
+                context,
+                LoginPage.routename,
+                arguments: {'landwirt': false},
+              );
             }
             break;
 
@@ -143,7 +151,13 @@ BottomNavigationBar navigationBar(
               }
             } else {
               ///User ist ausgeloggt
-              Navigator.of(context).pushNamed(WhoAreYou.routename);
+              //Navigator.of(context).pushNamed(WhoAreYou.routename);
+
+              Navigator.pushNamed(
+                context,
+                LoginPage.routename,
+                arguments: {'landwirt': false},
+              );
             }
 
             break;
