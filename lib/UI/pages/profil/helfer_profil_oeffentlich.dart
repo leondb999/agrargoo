@@ -46,25 +46,37 @@ class _HelferProfilOeffentlichState
   List<types.User> typesUserList = [];
 
   void _handlePressed(types.User otherUser, BuildContext context) async {
-    ChatPageLeon.room = await FirebaseChatCore.instance.createRoom(otherUser);
+    //final room = await FirebaseChatCore.instance.createRoom(otherUser);
+    //ChatPageLeon.room = await FirebaseChatCore.instance.createRoom(otherUser);
     final userList = ref.watch(userModelFirestoreControllerProvider);
     final userModel =
         UserProvider().getUserNameByUserID(otherUser.id, userList!).first;
 
-    /// 'createdAt': FieldValue.serverTimestamp(),
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChatPageLeon(
-          friendName: "${userModel.name}",
-          friendId: "${userModel.userID}",
-          friendImage: "${userModel.profilImageURL}",
+    if (userModel.profilImageURL != null) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ChatPageLeon(
+            friendName: "${userModel.name}",
+            friendId: "${userModel.userID}",
+            friendImage: "${userModel.profilImageURL}",
+          ),
         ),
-      ),
-    );
-  }
+      );
+    }
 
-  ///Alle Qualifikationen Firebase
-  List<QualifikationModel>? fireQualifikationList = [];
+    if (userModel.profilImageURL == null) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ChatPageLeon(
+            friendName: "${userModel.name}",
+            friendId: "${userModel.userID}",
+          ),
+        ),
+      );
+    }
+
+    ///Alle Qualifikationen Firebase
+    List<QualifikationModel>? fireQualifikationList = [];
 
   ///Ausgewählte Qualifikationen Firebase
   List<QualifikationModel>? fireSelectedQualifikationList = [];
@@ -253,7 +265,7 @@ class _HelferProfilOeffentlichState
                                       "typesUserList: ${typesUserList.first}");
                                 },
                                 style: ElevatedButton.styleFrom(
-                                    primary: Color(0xFFA7BB7B),
+                                    primary: Color(0xFF9FB98B),
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 50, vertical: 20),
                                     textStyle: TextStyle(
@@ -607,5 +619,12 @@ class _HelferProfilOeffentlichState
         ],
       ),
     );
+  }
+}
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
   }
 }

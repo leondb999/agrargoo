@@ -13,9 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/hof_controller.dart';
-import '../../../controllers/qualifikation_controller.dart';
 import '../../../controllers/user_controller.dart';
-import '../../../provider/qualifikation_provider.dart';
 import '../../../provider/user_provider.dart';
 import '../../../repositories/firestore_hof_model_riverpod_repository.dart';
 import '../../../repositories/firestore_jobanzeige_model_riverpod_repository.dart';
@@ -37,31 +35,43 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
   var routeData;
 
   void _handlePressed(types.User otherUser, BuildContext context) async {
-    ChatPageLeon.room = await FirebaseChatCore.instance.createRoom(otherUser);
+    //final room = await FirebaseChatCore.instance.createRoom(otherUser);
+    //ChatPageLeon.room = await FirebaseChatCore.instance.createRoom(otherUser);
     final userList = ref.watch(userModelFirestoreControllerProvider);
     final userModel =
         UserProvider().getUserNameByUserID(otherUser.id, userList!).first;
 
-    /// 'createdAt': FieldValue.serverTimestamp(),
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChatPageLeon(
-          friendName: "${userModel.name}",
-          friendId: "${userModel.userID}",
-          friendImage: "${userModel.profilImageURL}",
+    if (userModel.profilImageURL != null) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ChatPageLeon(
+            friendName: "${userModel.name}",
+            friendId: "${userModel.userID}",
+            friendImage: "${userModel.profilImageURL}",
+          ),
         ),
-      ),
-    );
-  }
+      );
+    }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Future.delayed(Duration(microseconds: 10), () async {
-      ///Get jobanzeigeID form Route
-      routeData =
-          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    if (userModel.profilImageURL == null) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ChatPageLeon(
+            friendName: "${userModel.name}",
+            friendId: "${userModel.userID}",
+          ),
+        ),
+      );
+    }
+
+    @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      Future.delayed(Duration(microseconds: 10), () async {
+        ///Get jobanzeigeID form Route
+        routeData =
+            ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
       setState(() {
         _jobanzeigeID = routeData['jobanzeige_ID'];
@@ -332,21 +342,22 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                           margin: const EdgeInsets.all(15.0),
                           padding: const EdgeInsets.all(7.0),
 
-                          ///Bewerben Button
-                          child: ElevatedButton(
-                            child: Text('Bewerben'),
-                            onPressed: () {
-                              ///TODO Implement Navigation to Jobangebot
-                              ///User Logged In
-                              authControllerState != null
-                                  ? _handlePressed(typesUserList.first, context)
-                                  : Navigator.pushNamed(
-                                      context,
-                                      LoginPage.routename,
-                                      arguments: {'landwirt': false},
-                                    );
-                              print("typesUserList: ${typesUserList.first}");
-                              /*
+                            ///Bewerben Button
+                            child: ElevatedButton(
+                              child: Text('Bewerben'),
+                              onPressed: () {
+                                ///TODO Implement Navigation to Jobangebot
+                                ///User Logged In
+                                authControllerState != null
+                                    ? _handlePressed(
+                                        typesUserList.first, context)
+                                    : Navigator.pushNamed(
+                                        context,
+                                        LoginPage.routename,
+                                        arguments: {'landwirt': false},
+                                      );
+                                print("typesUserList: ${typesUserList.first}");
+                                /*
                               void _handlePressed(types.User otherUser,
                                   BuildContext context) async {
                                 final room = await FirebaseChatCore.instance
@@ -370,22 +381,30 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                                           builder: (context) => Chat()))
                                   :
                               */
-                            },
-                            style: ElevatedButton.styleFrom(
-                                primary: Color(0xFFA7BB7B),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 20),
-                                textStyle: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold)),
-                          )),
-                    ]),
-                  ),
-                ],
-              ),
-            ]),
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  primary: Color(0xFF9FB98B),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 50, vertical: 20),
+                                  textStyle: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                            )),
+                      ]),
+                    ),
+                  ],
+                ),
+              ]),
+            ),
           ),
-        ),
-      ]),
-    );
+        ]),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
   }
 }
