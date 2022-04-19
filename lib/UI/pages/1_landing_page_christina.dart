@@ -30,7 +30,8 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                 child: Row(children: [
                   Container(
                     height: MediaQuery.of(context).size.height * 0.91,
-                    child: Image.asset('images/landing2.jpg'),
+                    child: Image.network(
+                        'https://firebasestorage.googleapis.com/v0/b/agrargo-2571b.appspot.com/o/landing2.jpg?alt=media&token=45800aef-3899-48ce-a48f-b6b87f532f4f'),
                   ),
                   Column(
                       mainAxisAlignment: MainAxisAlignment.center,
