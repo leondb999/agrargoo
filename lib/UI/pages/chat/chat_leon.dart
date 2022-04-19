@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:agrargo/provider/user_provider.dart';
 import 'package:agrargo/widgets/layout_widgets.dart';
+import 'package:agrargo/widgets/single_message.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
+import 'package:agrargo/widgets/message_textfield.dart';
 
 import 'package:path_provider/path_provider.dart';
 
@@ -25,11 +29,7 @@ class ChatPageLeon extends ConsumerStatefulWidget {
   final String? friendImage;
 
   const ChatPageLeon(
-      {Key? key,
-      //this.room,
-      this.friendId,
-      this.friendName,
-      this.friendImage})
+      {Key? key, this.friendId, this.friendName, this.friendImage})
       : super(key: key);
 
   static const routename = '/chat';
@@ -50,13 +50,6 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
         .get();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-}
-
   /*
   void _handlePreviewDataFetched(
     types.TextMessage message,
@@ -74,29 +67,21 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
       ChatPageLeon.room!.id,
     );
   }
-
-  void _setAttachmentUploading(bool uploading) {
-    setState(() {
-      _isAttachmentUploading = uploading;
-    });
-  }
-
+ */
   @override
   Widget build(BuildContext context) {
     //print("Room: ${widget.room}");
-    final color = Color(0xFFA7BB7B);
+    final color = Color(0xFF9FB98B);
     bool hasImage = false;
-
     if ('${widget.friendImage}' != "null") {
       hasImage = true;
     }
-
     final name = '${widget.friendName}';
 
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
-            color: Color(0xFFA7BB7B), //change your color here
+            color: Color(0xFF9FB98B), //change your color here
           ),
           toolbarHeight: MediaQuery.of(context).size.height * 0.09,
           backgroundColor: Colors.white,
@@ -226,6 +211,7 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
           );
         },
       ),
-    );
+      */
+        );
   }
 }
