@@ -100,6 +100,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
         selectedDateRange = result;
         anzeige.startDate = result.start;
         anzeige.endDate = result.end;
+        anzeige.stundenLohn = 10;
 
         print("selectedDateRange: $selectedDateRange");
       });
@@ -178,6 +179,7 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
         anzeige.qualifikationList = routeData['qualifikationList'];
         anzeige.startDate = routeData['startDate'];
         anzeige.endDate = routeData['endDate'];
+        anzeige.stundenLohn = 10;
         _currentPrice = routeData['stundenLohn'];
         _hofName = routeData['hofName'];
         _standort = routeData['standort'];
