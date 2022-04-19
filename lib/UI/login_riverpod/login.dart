@@ -8,6 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../widgets/layout_widgets.dart';
+import '../pages/angebot/4_a_job_angebot_landwirt.dart';
 import '../pages/profil/landwirt_profil_admin.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -25,7 +26,8 @@ class _LoginState extends ConsumerState<LoginPage> {
   final _password = TextEditingController();
   bool? _landwirt;
   var routeData;
-
+  var jobanzeige_ID = "";
+  var auftraggeberID;
 /*
   checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
@@ -36,6 +38,7 @@ class _LoginState extends ConsumerState<LoginPage> {
     });
   }
 */
+
   @override
   void initState() {
     // TODO: implement initState
@@ -44,8 +47,11 @@ class _LoginState extends ConsumerState<LoginPage> {
       routeData =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       print("routeData: $routeData");
+
       setState(() {
         _landwirt = routeData['landwirt'];
+        jobanzeige_ID = routeData['jobanzeige_ID'];
+        auftraggeberID = routeData['auftraggeberID'];
       });
     });
   }
@@ -146,17 +152,29 @@ class _LoginState extends ConsumerState<LoginPage> {
                             }
 
                             print("_landwirt login: $_landwirt");
+
                             if (login == true) {
-                              if (_landwirt == true) {
+                              if (jobanzeige_ID.isNotEmpty) {
                                 Navigator.pushNamed(
                                   context,
-                                  LandwirtProfil.routename,
+                                  Jobangebot.routename,
+                                  arguments: {
+                                    'jobanzeige_ID': jobanzeige_ID,
+                                    'auftraggeberID': auftraggeberID,
+                                  },
                                 );
                               } else {
-                                Navigator.pushNamed(
-                                  context,
-                                  HelferProfil.routename,
-                                );
+                                if (_landwirt == true) {
+                                  Navigator.pushNamed(
+                                    context,
+                                    LandwirtProfil.routename,
+                                  );
+                                } else {
+                                  Navigator.pushNamed(
+                                    context,
+                                    HelferProfil.routename,
+                                  );
+                                }
                               }
                             }
 

@@ -356,8 +356,15 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
                                   : Navigator.pushNamed(
                                       context,
                                       LoginPage.routename,
-                                      arguments: {'landwirt': false},
+                                      arguments: {
+                                        'landwirt': false,
+                                        'jobanzeige_ID':
+                                            jobanzeige.jobanzeigeID!,
+                                        'auftraggeberID':
+                                            jobanzeige.auftraggeberID,
+                                      },
                                     );
+
                               print("typesUserList: ${typesUserList.first}");
                               /*
                               void _handlePressed(types.User otherUser,
