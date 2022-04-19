@@ -44,7 +44,6 @@ Card hofCard({
             Column(
               children: [
                 SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                Text("HofID: ${hof.hofID}"),
                 Text("Standort: ${hof.standort}"),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                 FlatButton(
@@ -180,7 +179,8 @@ Card jobAnzeigeCard(
                   SizedBox(width: MediaQuery.of(context).size.width * 0.04),
                   Icon(Icons.place, color: Colors.black12),
                   Text(
-                      'Standort:${hof.first.standort}, Hof: ${hof.first.hofName}')
+                    'Standort:${hof.first.standort}, Hof: ${hof.first.hofName}',
+                  )
                 ],
               ),
             ]),
@@ -280,7 +280,7 @@ Card helferCard(BuildContext context, UserModel userModelHelfer) {
     elevation: 6.0,
     margin: new EdgeInsets.symmetric(horizontal: 70.0, vertical: 13.0),
     child: Container(
-      decoration: BoxDecoration(color: Color(0xFF9FB98B)),
+      decoration: BoxDecoration(color: Color(0xFFA7BB7B)),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 20.0),
         leading: Container(
