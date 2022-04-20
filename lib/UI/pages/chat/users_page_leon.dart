@@ -24,7 +24,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 /// UserPage | Quelle: https://github.com/flyerhq/flutter_firebase_chat_core/blob/main/example/lib/users.dart
 class ChatUsersPage extends ConsumerStatefulWidget {
   static const routename = '/chats-uebersicht';
-
+  static User? user = FirebaseAuth.instance.currentUser;
   ChatUsersPage();
 
   @override
@@ -94,6 +94,18 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
 
     /// 'createdAt': FieldValue.serverTimestamp(),
   }
+*/
+
+  late UserModel um;
+  @override
+  Future<void> getUserModel() async {
+    DocumentSnapshot userData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user?.uid)
+        .get();
+    UserModel userModel = UserModel.fromJson(userData);
+    um = userModel;
+  }
 
   void onSearch() async {
     setState(() {
@@ -122,8 +134,9 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
     });
   }
 
-  List<types.User> typesUserList = [];
+  /*
 
+ List<types.User> typesUserList = [];
   List<types.Room> userLoggedInRoomList = [];
 
 
@@ -156,6 +169,7 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
 
   @override
   Widget build(BuildContext context) {
+    //UserModel um = getUser(user);
     /*
     print("userLoggedInRoomList: ${userLoggedInRoomList}");
     print("typesUserList: $typesUserList");
@@ -211,9 +225,32 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
                       builder: (context, AsyncSnapshot asyncSnapshot) {
                         if (asyncSnapshot.hasData) {
                           var friend = asyncSnapshot.data;
+                          final color = Color(0xFF9FB98B);
+                          bool hasImage = false;
+                          if (friend['profilImageURL'] != null) {
+                            hasImage = true;
+                          }
                           return ListTile(
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(80),
+                              child: CircleAvatar(
+                                backgroundColor:
+                                    hasImage ? Colors.transparent : color,
+                                backgroundImage: hasImage
+                                    ? NetworkImage(friend['profilImageURL'])
+                                    : null,
+                                radius: 20,
+                                child: !hasImage
+                                    ? Text(
+                                        friend['name'].isEmpty
+                                            ? ''
+                                            : friend['name'][0].toUpperCase(),
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      )
+                                    : null,
+                              ),
+                              /*
                               child: CachedNetworkImage(
                                 imageUrl: friend['profilImageURL'],
                                 placeholder: (conteext, url) =>
@@ -223,6 +260,8 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
                                 ),
                                 height: 50,
                               ),
+
+                               */
                             ),
                             title: Text(friend['name']),
                             subtitle: Container(
@@ -253,6 +292,41 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
               child: CircularProgressIndicator(),
             );
           }),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Color(0xFFA7BB7B),
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SearchScreen()));
+        },
+      ),
+    );
+  }
+
+  Widget buildSearchBar() {
+    return Padding(
+      padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+      child: TextField(
+        controller: searchController,
+        decoration: InputDecoration(
+          hintText: "Suche nach Nutzern...",
+          hintStyle: TextStyle(color: Colors.grey.shade600),
+          prefixIcon: IconButton(
+            onPressed: () {
+              onSearch();
+            },
+            icon: Icon(Icons.search),
+            color: Colors.grey.shade600,
+            iconSize: 20,
+          ),
+          filled: true,
+          fillColor: Colors.grey.shade100,
+          contentPadding: EdgeInsets.all(8),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: Colors.grey.shade100)),
+        ),
+      ),
     );
   }
 }
