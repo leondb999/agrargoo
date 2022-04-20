@@ -47,14 +47,14 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                             height: MediaQuery.of(context).size.height * 0.08),
                         Center(
                             child: Container(
-                                width: MediaQuery.of(context).size.width / 1.75,
+                                width: MediaQuery.of(context).size.width / 1.85,
                                 child: Text(
                                     "Auf Job- oder Helfersuche in der Landwirtschaft?",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontStyle: FontStyle.italic,
                                         fontFamily: 'Open Sans',
-                                        fontSize: 45.0,
+                                        fontSize: 40.0,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF586015))))),
                         SizedBox(
