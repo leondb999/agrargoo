@@ -182,6 +182,7 @@ AppBar appBar({
       iconTheme: IconThemeData(
         color: Color(0xFF9FB98B), //change your color here
       ),
+      automaticallyImplyLeading: false,
       toolbarHeight: MediaQuery.of(context).size.height * 0.09,
       backgroundColor: Colors.white,
 

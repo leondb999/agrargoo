@@ -107,7 +107,7 @@ Widget _activeAnzeige(bool status) {
     x = Text('Active',
         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold));
   } else {
-    x = Text('inactive', style: TextStyle(color: Colors.white));
+    x = Text('inactive', style: TextStyle(color: Colors.black87));
   }
   return x;
 }
@@ -148,25 +148,37 @@ Card jobAnzeigeCard(
     elevation: 6.0,
     margin: new EdgeInsets.symmetric(horizontal: 70.0, vertical: 13.0),
     child: Container(
-      decoration: BoxDecoration(color: Color(0xFFA7BB7B)),
+      decoration: jobanzeige.status == true
+          ? BoxDecoration(color: Color(0xFFA7BB7B))
+          : BoxDecoration(color: Color(0xFFc4ccb4)),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0),
         leading: Container(
             height: MediaQuery.of(context).size.height * 0.7,
             padding: EdgeInsets.only(right: 12.0),
-            decoration: new BoxDecoration(
-                border: new Border(
-                    right: new BorderSide(width: 1.0, color: Colors.white54))),
+            decoration: jobanzeige.status == true
+                ? new BoxDecoration(
+                    border: new Border(
+                        right:
+                            new BorderSide(width: 1.0, color: Colors.white54)))
+                : new BoxDecoration(
+                    border: new Border(
+                        right:
+                            new BorderSide(width: 1.0, color: Colors.black45))),
             child: CircleAvatar(
               backgroundImage: hof.first.hofImageURL != null
                   ? NetworkImage(hof.first.hofImageURL!)
                   : NetworkImage(
                       'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
             )),
-        title: Text(
-          jobanzeige.titel!,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
+        title: jobanzeige.status == true
+            ? Text(jobanzeige.titel!,
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
+            : Text(jobanzeige.titel!,
+                style: TextStyle(
+                  color: Colors.black87,
+                )),
         subtitle: Row(
           children: [
             Column(children: <Widget>[

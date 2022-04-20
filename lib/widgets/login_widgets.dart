@@ -26,7 +26,7 @@ Container customTextFormField({
         switch (validateString) {
           case 'name':
             if (value!.isEmpty) {
-              return 'Name can\'t be empty';
+              return 'Name darf nicht leer sein';
             }
             return null;
           case 'email':
@@ -35,16 +35,16 @@ Container customTextFormField({
             //if (value!.isEmpty || !value.contains('@')) {
             //return 'Enter a invalid Email';}
             if (value!.isEmpty) {
-              return 'Email can\'t be emptyy';
+              return 'E-Mail darf nicht leer sein';
             } else if (!emailRegExp.hasMatch(value)) {
-              return 'Enter a correct email';
+              return 'Gib eine korrekte E-Mailadresse ein';
             }
             return null;
           case 'password':
             if (value!.isEmpty) {
-              return 'Password can\'t be empty';
+              return 'Passwort darf nicht leer sein';
             } else if (value.length < 8) {
-              return 'Enter a password with length at least 8';
+              return 'Dein Passwort muss mind. 8 Zeichen lang sein';
             }
             return null;
         }

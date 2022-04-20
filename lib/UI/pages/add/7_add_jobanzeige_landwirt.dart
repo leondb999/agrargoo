@@ -18,7 +18,7 @@ import '../../../widgets/layout_widgets.dart';
 ///https://github.com/Mashood97/flutter_firestore/blob/master/lib/screens/edit_add_product.dart
 class AddEditJobanzeige extends ConsumerStatefulWidget {
   const AddEditJobanzeige({Key? key}) : super(key: key);
-  static const routename = '/add-edit-jobanzeige';
+  static const routename = '/jobanzeige-hinzufuegen-bearbeiten';
 
   @override
   _AddEditJobanzeigeState createState() => _AddEditJobanzeigeState();
