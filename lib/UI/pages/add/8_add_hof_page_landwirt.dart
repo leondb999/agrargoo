@@ -19,7 +19,7 @@ import '../../../widgets/layout_widgets.dart';
 
 class AddHofPage extends ConsumerStatefulWidget {
   const AddHofPage({Key? key}) : super(key: key);
-  static const routename = '/add-hof';
+  static const routename = '/hof-hinzufuegen-bearbeiten';
 
   @override
   _AddHofPageState createState() => _AddHofPageState();
