@@ -15,7 +15,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/hof_controller.dart';
+import '../../../controllers/qualifikation_controller.dart';
 import '../../../controllers/user_controller.dart';
+import '../../../provider/qualifikation_provider.dart';
 import '../../../provider/user_provider.dart';
 import '../../../repositories/firestore_hof_model_riverpod_repository.dart';
 import '../../../repositories/firestore_jobanzeige_model_riverpod_repository.dart';
