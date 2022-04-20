@@ -154,6 +154,12 @@ class _LoginState extends ConsumerState<LoginPage> {
                             print("_landwirt login: $_landwirt");
 
                             if (login == true) {
+                              if (_landwirt == true) {
+                                Navigator.pushNamed(
+                                  context,
+                                  LandwirtProfil.routename,
+                                );
+                              }
                               if (jobanzeige_ID.isNotEmpty) {
                                 Navigator.pushNamed(
                                   context,
