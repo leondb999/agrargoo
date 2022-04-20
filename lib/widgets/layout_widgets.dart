@@ -217,7 +217,7 @@ AppBar appBar({
         user != null
 
             ///Sign Out Button
-            ? ElevatedButton(
+            ? /*ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     fixedSize: const Size(95, 5), primary: Colors.white),
                 onPressed: () {
@@ -230,6 +230,18 @@ AppBar appBar({
                         fontSize: 13.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.amber[800])),
+              )*/
+            IconButton(
+                tooltip: 'Ausloggen',
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => LandingPageCh()),
+                      (route) => false);
+                },
+                icon: Icon(Icons.logout),
+                color: Colors.amber[800],
               )
             : SizedBox(),
       ]);
