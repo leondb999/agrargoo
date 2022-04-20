@@ -53,4 +53,19 @@ class UserModel {
             (firestoreMap['startDate'] as Timestamp).toDate().toString()),
         endDate = DateTime.parse(
             (firestoreMap['endDate'] as Timestamp).toDate().toString());
+
+  factory UserModel.fromJson(DocumentSnapshot snapshot) {
+    return UserModel(
+      userID: snapshot['userID'],
+      name: snapshot['name'],
+      email: snapshot['email'],
+      landwirt: snapshot['landwirt'],
+      profilImageURL: snapshot['profilImageURL'],
+      birthDate: snapshot['birthDate'],
+      qualifikationList: snapshot[' qualifikationList'],
+      erfahrungen: snapshot['erfahrungen'],
+      startDate: snapshot['startDate'],
+      endDate: snapshot['endDate'],
+    );
+  }
 }

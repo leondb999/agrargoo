@@ -49,6 +49,19 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  /*
+  Future<UserModel> userSignedIn()async {
+    User? user = FirebaseAuth.instance.currentUser;
+    DocumentSnapshot userData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user?.uid)
+        .get();
+    UserModel userModel = UserModel.fromJson(userData);
+    return(userModel);
+  }
+
+   */
+
   @override
   Widget build(BuildContext context) {
     final firestoreService = FireStoreService();
