@@ -47,14 +47,14 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                             height: MediaQuery.of(context).size.height * 0.08),
                         Center(
                             child: Container(
-                                width: MediaQuery.of(context).size.width / 1.85,
+                                width: MediaQuery.of(context).size.width / 1.65,
                                 child: Text(
                                     "Auf Job- oder Helfersuche in der Landwirtschaft?",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontStyle: FontStyle.italic,
                                         fontFamily: 'Open Sans',
-                                        fontSize: 40.0,
+                                        fontSize: 39.0,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF586015))))),
                         SizedBox(
@@ -66,7 +66,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                     style: TextStyle(
                                         fontStyle: FontStyle.italic,
                                         fontFamily: 'Open Sans',
-                                        fontSize: 32.0,
+                                        fontSize: 31.0,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black)))),
                         SizedBox(
@@ -92,7 +92,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                     "1.",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20.0,
+                                      fontSize: 19.5,
                                     ),
                                   ))),
                               SizedBox(width: 10),
@@ -102,7 +102,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                     "Registrieren",
                                     style: TextStyle(
                                       fontFamily: 'Open Sans',
-                                      fontSize: 28.0,
+                                      fontSize: 27.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -122,7 +122,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                     "2.",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20.0,
+                                      fontSize: 19.5,
                                     ),
                                   ))),
                               SizedBox(width: 10),
@@ -131,7 +131,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                   child: Text(
                                     "Match finden",
                                     style: TextStyle(
-                                      fontSize: 28.0,
+                                      fontSize: 27.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -151,7 +151,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                     "3.",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20.0,
+                                      fontSize: 19.5,
                                     ),
                                   ))),
                               SizedBox(width: 10),
@@ -160,7 +160,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                   child: Text(
                                     "Durchstarten",
                                     style: TextStyle(
-                                      fontSize: 28.0,
+                                      fontSize: 27.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
