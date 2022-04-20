@@ -202,8 +202,8 @@ class MyApp extends StatelessWidget {
           '/chats-uebersicht': (context) => ChatUsersPage(),
           '/chat': (context) => ChatPageLeon(),
           '/impressum': (context) => ImpressumPage(),
-          '/home': (context) => HomeScreen(),
-          '/test': (context) => TestScreen(),
+          //'/home': (context) => HomeScreen(),
+          //'/test': (context) => TestScreen(),
         },
       ),
     );

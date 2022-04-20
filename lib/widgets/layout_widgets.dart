@@ -185,7 +185,6 @@ AppBar appBar({
       automaticallyImplyLeading: false,
       toolbarHeight: MediaQuery.of(context).size.height * 0.09,
       backgroundColor: Colors.white,
-      automaticallyImplyLeading: false,
 
       ///Home Button
       title: Container(

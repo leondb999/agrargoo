@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:agrargo/UI/pages/chat/chat_leon.dart';
+import 'package:agrargo/UI/pages/chat/search_screen.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/controllers/user_controller.dart';
 import 'package:agrargo/models/user_model.dart';
