@@ -47,8 +47,9 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                             height: MediaQuery.of(context).size.height * 0.08),
                         Center(
                             child: Container(
-                                width: MediaQuery.of(context).size.width / 1.65,
-                                child: Text("Auf Job- oder Helfersuche?",
+                                width: MediaQuery.of(context).size.width / 1.75,
+                                child: Text(
+                                    "Auf Job- oder Helfersuche in der Landwirtschaft?",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontStyle: FontStyle.italic,
@@ -57,7 +58,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF586015))))),
                         SizedBox(
-                            height: MediaQuery.of(context).size.height / 100),
+                            height: MediaQuery.of(context).size.height / 90),
                         Container(
                             child: Center(
                                 child: Text("In 3 Schritten zum Erfolg",
@@ -98,7 +99,7 @@ class _LandingPageChState extends ConsumerState<LandingPageCh> {
                               Container(
                                 child: Center(
                                   child: Text(
-                                    "Deine Wünsche",
+                                    "Registrieren",
                                     style: TextStyle(
                                       fontFamily: 'Open Sans',
                                       fontSize: 28.0,

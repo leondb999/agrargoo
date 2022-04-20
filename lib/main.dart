@@ -199,7 +199,7 @@ class MyApp extends StatelessWidget {
               AddEditJobanzeige(),
           '/hof-hinzufuegen-bearbeiten': (context) => AddHofPage(),
           '/landingpage': (context) => LandingPageCh(),
-          '/chats-uebersicht': (context) => ChatUsersPage(),
+          '/chat-users-page1': (context) => ChatUsersPage(),
           '/chat': (context) => ChatPageLeon(),
           '/impressum': (context) => ImpressumPage(),
           //'/home': (context) => HomeScreen(),

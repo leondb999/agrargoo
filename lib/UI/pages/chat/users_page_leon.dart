@@ -24,7 +24,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 /// UserPage | Quelle: https://github.com/flyerhq/flutter_firebase_chat_core/blob/main/example/lib/users.dart
 class ChatUsersPage extends ConsumerStatefulWidget {
-  static const routename = '/chats-uebersicht';
+  static const routename = '/chat-users-page1';
   static User? user = FirebaseAuth.instance.currentUser;
   ChatUsersPage();
 
