@@ -50,6 +50,7 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       print("routeData: $routeData");
       String? userID = ref.read(authControllerProvider.notifier).state?.uid;
+      print("userID: $userID");
       setState(() {
         hofModel.besitzerID = userID;
       });
@@ -216,12 +217,14 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
 
                           Uint8List fileBytes = picked.files.first.bytes!;
                           FirebaseStorage storage = FirebaseStorage.instance;
-                          Reference reference =
-                              storage.ref("${hofProvider.hofID}$fileExtension");
-                          UploadTask task = FirebaseStorage.instance
-                              .ref("${hofProvider.hofID}$fileExtension")
-                              .putData(fileBytes);
+                          //var profilBeschreibung = "${hofProvider.hofID}HOF";
+                          var profilBeschreibung = "${userID}HOF";
 
+                          UploadTask task = FirebaseStorage.instance
+                              .ref("$profilBeschreibung$fileExtension")
+                              .putData(fileBytes);
+                          Reference reference =
+                              storage.ref("$profilBeschreibung$fileExtension");
                           task.snapshotEvents.listen((event) {
                             var x = ((event.bytesTransferred.toDouble() /
                                     event.totalBytes.toDouble()) *
@@ -231,7 +234,7 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                             });
                           });
                           String url = await reference.getDownloadURL();
-
+                          print("  hofModel.hofImageURL : $url");
                           setState(() {
                             uploadedImageURL = url;
                             hofModel.hofImageURL = url;
