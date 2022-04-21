@@ -23,6 +23,7 @@ abstract class BaseAuthRepository {
     DateTime birthDate,
     DateTime startDate,
     DateTime endDate,
+    String profilImageURL,
   );
   Future<void> updateUserName(String name);
   User? getCurrentUser();
@@ -106,6 +107,7 @@ class AuthRepository implements BaseAuthRepository {
     DateTime birthDate,
     DateTime startDate,
     DateTime endDate,
+    String profilImageURL,
   ) async {
     print("registerUserEmailAndPW");
     try {
@@ -130,6 +132,7 @@ class AuthRepository implements BaseAuthRepository {
             'erfahrungen': "",
             'startDate': startDate,
             'endDate': endDate,
+            'profilImageURL': profilImageURL,
           }).then((value) {
             ///Landwirt Profil Page
             if (landwirt == true) {

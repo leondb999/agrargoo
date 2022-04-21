@@ -51,6 +51,7 @@ class AuthController extends StateNotifier<User?> {
     DateTime birthDate,
     DateTime startDate,
     DateTime endDate,
+    String profilImageURL,
   ) async {
     await _read(authRepositoryProvider).registerUserEmailAndPW(
       context,
@@ -61,6 +62,7 @@ class AuthController extends StateNotifier<User?> {
       birthDate,
       startDate,
       endDate,
+      profilImageURL,
     );
   }
 

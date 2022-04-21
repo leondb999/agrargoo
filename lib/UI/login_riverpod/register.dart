@@ -41,6 +41,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   DateTime selectedDate = DateTime(1800);
   DateDuration ageYears = DateDuration();
   DateTimeRange? selectedDateRange;
+  String profilImageURL =
+      "https://db3pap003files.storage.live.com/y4mXTCAYwPu3CNX67zXxTldRszq9NrkI_VDjkf3ckAkuZgv9BBmPgwGfQOeR9KZ8-jKnj-cuD8EKl7H4vIGN-Lp8JyrxVhtpB_J9KfhV_TlbtSmO2zyHmJuf4Yl1zZmpuORX8KLSoQ5PFQXOcpVhCGpJOA_90u-D9P7p3O2NyLDlziMF_yZIcekH05jop5Eb56f?width=250&height=68&cropmode=none";
+
   @override
   void initState() {
     // TODO: implement initState
@@ -226,6 +229,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                   selectedDate,
                                   startDate,
                                   endDate,
+                                  profilImageURL,
                                 );
 
                             ///Login User in Firebase
