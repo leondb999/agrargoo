@@ -257,8 +257,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: true),
-      bottomNavigationBar:
-          navigationBar(index: 0, context: context, ref: ref, home: true),
+      bottomNavigationBar: navigationBar(
+        index: 0,
+        context: context,
+        ref: ref,
+      ),
       body: SafeArea(
         child: Column(
           children: [

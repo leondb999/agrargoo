@@ -19,7 +19,7 @@ class _ImpressumPageState extends ConsumerState<ImpressumPage> {
         appBar: appBar(context: context, ref: ref, home: false),
         resizeToAvoidBottomInset: false,
         bottomNavigationBar:
-            navigationBar(index: 0, context: context, ref: ref, home: false),
+            navigationBar(index: 0, context: context, ref: ref),
         body: Center(
           child: Container(
             width: MediaQuery.of(context).size.width * 0.97,

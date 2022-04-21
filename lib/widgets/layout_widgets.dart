@@ -29,8 +29,6 @@ BottomNavigationBar navigationBar({
   required int index,
   required BuildContext context,
   required WidgetRef ref,
-  required bool home,
-  //required bool helfer,
 }) {
   User? user = ref.read(authControllerProvider);
 
@@ -44,124 +42,71 @@ BottomNavigationBar navigationBar({
   print("userModel: $userModel");
 
   return BottomNavigationBar(
-    items: home
-        ? [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
-          ]
-        : [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
-          ],
+    items: [
+      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+      BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
+      BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
+    ],
     currentIndex: index,
     selectedItemColor: Colors.amber[800],
     onTap: (index) {
-      if (home == true) {
-        switch (index) {
+      switch (index) {
 
-          ///Home Page
-          case 0:
-            Navigator.of(context).pushNamed(JobangebotUebersichtPage.routename);
-            break;
-
-          ///Profil Page
-          case 1:
-            /*
-            if (user != null) {
-              Navigator.of(context).pushNamed(HomeScreen.routename);
+        ///Home Page
+        case 0:
+          if (user != null) {
+            ///User LoggedIn
+            if (userModel.first.landwirt == true) {
+              /// User ist ein Landwirt
+              Navigator.of(context).pushNamed(HelferUebersichtPage.routename);
             } else {
-              Navigator.of(context).pushNamed(WhoAreYou.routename);
-            }
-            */
-
-            if (user != null) {
-              ///User LoggedIn
-              if (userModel.first.landwirt == true) {
-                print("profil Index ");
-
-                /// User ist ein Landwirt
-                Navigator.of(context).pushNamed(LandwirtProfil.routename);
-              } else {
-                ///User ist kein Landwirt
-                Navigator.of(context).pushNamed(HelferProfil.routename);
-              }
-            } else {
-              ///User ist ausgeloggt
-
-              Navigator.pushNamed(
-                context,
-                LoginPage.routename,
-                arguments: {'landwirt': false},
-              );
-
-              //Navigator.of(context).pushNamed(WhoAreYou.routename);
-            }
-            break;
-        }
-      } else {
-        switch (index) {
-
-          ///Home Page
-          case 0:
-            if (user != null) {
-              ///User LoggedIn
-              if (userModel.first.landwirt == true) {
-                /// User ist ein Landwirt
-                Navigator.of(context).pushNamed(HelferUebersichtPage.routename);
-              } else {
-                ///User ist kein Landwirt
-                Navigator.of(context)
-                    .pushNamed(JobangebotUebersichtPage.routename);
-              }
-            } else {
-              ///User ist ausgeloggt
+              ///User ist kein Landwirt
               Navigator.of(context)
                   .pushNamed(JobangebotUebersichtPage.routename);
             }
-            break;
+          } else {
+            ///User ist ausgeloggt
+            Navigator.of(context).pushNamed(JobangebotUebersichtPage.routename);
+          }
+          break;
 
-          ///Chat Page
-          case 1:
-            if (user != null) {
-              ///User ist eingeloggt
-              Navigator.of(context).pushNamed(ChatUsersPage.routename);
+        ///Chat Page
+        case 1:
+          if (user != null) {
+            ///User ist eingeloggt
+            Navigator.of(context).pushNamed(ChatUsersPage.routename);
+          } else {
+            ///User ist ausgeloggt
+
+            Navigator.pushNamed(
+              context,
+              LoginPage.routename,
+              arguments: {'landwirt': false, 'chat_navigation': true},
+            );
+          }
+          break;
+
+        ///Profil Page
+        case 2:
+          if (user != null) {
+            ///User LoggedIn
+            if (userModel.first.landwirt == true) {
+              /// User ist ein Landwirt
+              Navigator.of(context).pushNamed(LandwirtProfil.routename);
             } else {
-              ///User ist ausgeloggt
-              // Navigator.of(context).pushNamed(WhoAreYou.routename);
-
-              Navigator.pushNamed(
-                context,
-                LoginPage.routename,
-                arguments: {'landwirt': false},
-              );
+              ///User ist kein Landwirt
+              Navigator.of(context).pushNamed(HelferProfil.routename);
             }
-            break;
-
-          ///Profil Page
-          case 2:
-            if (user != null) {
-              ///User LoggedIn
-              if (userModel.first.landwirt == true) {
-                /// User ist ein Landwirt
-                Navigator.of(context).pushNamed(LandwirtProfil.routename);
-              } else {
-                ///User ist kein Landwirt
-                Navigator.of(context).pushNamed(HelferProfil.routename);
-              }
-            } else {
-              ///User ist ausgeloggt
-              //Navigator.of(context).pushNamed(WhoAreYou.routename);
-
-              Navigator.pushNamed(
-                context,
-                LoginPage.routename,
-                arguments: {'landwirt': false},
-              );
-            }
-
-            break;
-        }
+          } else {
+            ///User ist ausgeloggt
+            //Navigator.of(context).pushNamed(WhoAreYou.routename);
+            Navigator.pushNamed(
+              context,
+              LoginPage.routename,
+              arguments: {'landwirt': false, 'profil_navigation': true},
+            );
+          }
+          break;
       }
     },
   );

@@ -1,4 +1,5 @@
 import 'package:agrargo/UI/login_riverpod/register.dart';
+import 'package:agrargo/UI/pages/chat/users_page_leon.dart';
 import 'package:agrargo/UI/pages/profil/helfer_profil_admin.dart';
 import 'package:agrargo/controllers/auth_controller.dart';
 import 'package:agrargo/widgets/login_widgets.dart';
@@ -28,6 +29,8 @@ class _LoginState extends ConsumerState<LoginPage> {
   var routeData;
   var jobanzeige_ID = "";
   var auftraggeberID;
+  var chat_navigation = false;
+  var profil_navigation = false;
 /*
   checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
@@ -47,11 +50,22 @@ class _LoginState extends ConsumerState<LoginPage> {
       routeData =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       print("routeData: $routeData");
-
       setState(() {
         _landwirt = routeData['landwirt'];
-        jobanzeige_ID = routeData['jobanzeige_ID'];
-        auftraggeberID = routeData['auftraggeberID'];
+
+        ///BottomNavigationBar Case 1: user klicks auf Chat field
+        if (routeData['chat_navigation'] != null) {
+          chat_navigation = routeData['chat_navigation'];
+        }
+
+        ///BottomNavigationBar Case 2: user klicks auf Profil field
+        if (routeData['profil_navigation'] != null) {
+          profil_navigation = routeData['profil_navigation'];
+        }
+        if (routeData['jobanzeige_ID'] != null) {
+          jobanzeige_ID = routeData['jobanzeige_ID'];
+          auftraggeberID = routeData['auftraggeberID'];
+        }
       });
     });
   }
@@ -160,7 +174,21 @@ class _LoginState extends ConsumerState<LoginPage> {
                                   LandwirtProfil.routename,
                                 );
                               }
+                              print(
+                                  "Navigation: profil_navigation: $profil_navigation");
+
+                              /// Helfer Navigation (case 1: Chat)
+                              if (chat_navigation == true) {
+                                print(
+                                    "Navigation: chat_navigation: $chat_navigation");
+                                Navigator.pushNamed(
+                                    context, ChatUsersPage.routename);
+                              }
+
+                              /// Helfer Navigation, wenn User vorher auf den Bewerbenbutten gedrückt hat
                               if (jobanzeige_ID.isNotEmpty) {
+                                print(
+                                    "Navigation: jobanzeige_ID: $jobanzeige_ID");
                                 Navigator.pushNamed(
                                   context,
                                   Jobangebot.routename,
@@ -169,18 +197,16 @@ class _LoginState extends ConsumerState<LoginPage> {
                                     'auftraggeberID': auftraggeberID,
                                   },
                                 );
-                              } else {
-                                if (_landwirt == true) {
-                                  Navigator.pushNamed(
-                                    context,
-                                    LandwirtProfil.routename,
-                                  );
-                                } else {
-                                  Navigator.pushNamed(
-                                    context,
-                                    HelferProfil.routename,
-                                  );
-                                }
+                              }
+
+                              ///User (Helfer) drückt auf Profil Button
+                              if (profil_navigation == true) {
+                                print(
+                                    "Navigation: profil_navigation: $profil_navigation");
+                                Navigator.pushNamed(
+                                  context,
+                                  HelferProfil.routename,
+                                );
                               }
                             }
 

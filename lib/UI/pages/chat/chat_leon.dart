@@ -140,7 +140,7 @@ class _ChatPageLeonState extends ConsumerState<ChatPageLeon> {
           ),
         ),
         bottomNavigationBar:
-            navigationBar(index: 1, context: context, ref: ref, home: false),
+            navigationBar(index: 1, context: context, ref: ref),
         body: Column(
           children: [
             Expanded(

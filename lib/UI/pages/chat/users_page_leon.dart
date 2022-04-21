@@ -197,8 +197,7 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
      */
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
-      bottomNavigationBar:
-          navigationBar(index: 1, context: context, ref: ref, home: false),
+      bottomNavigationBar: navigationBar(index: 1, context: context, ref: ref),
       body: Column(children: [
         SizedBox(height: MediaQuery.of(context).size.height / 50),
         Container(

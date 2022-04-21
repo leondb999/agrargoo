@@ -583,8 +583,7 @@ class _HelferProfilState extends ConsumerState<HelferProfil> {
 
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
-      bottomNavigationBar:
-          navigationBar(index: 2, context: context, ref: ref, home: false),
+      bottomNavigationBar: navigationBar(index: 2, context: context, ref: ref),
       resizeToAvoidBottomInset: false,
       body: Container(
         child: authControllerState == null

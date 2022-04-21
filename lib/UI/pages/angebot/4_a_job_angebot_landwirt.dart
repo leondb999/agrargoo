@@ -152,8 +152,7 @@ class _JobangebotState extends ConsumerState<Jobangebot> {
     return Scaffold(
       appBar: appBar(context: context, ref: ref, home: false),
       resizeToAvoidBottomInset: false,
-      bottomNavigationBar:
-          navigationBar(index: 0, context: context, ref: ref, home: false),
+      bottomNavigationBar: navigationBar(index: 0, context: context, ref: ref),
       body: Column(children: [
         Column(children: [
           SizedBox(height: MediaQuery.of(context).size.height * 0.015),
