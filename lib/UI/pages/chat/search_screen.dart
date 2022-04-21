@@ -37,7 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
         return;
       }
       value.docs.forEach((user) {
-        if (user.data()['id'] != user?.id) {
+        if (user.data()['id'] != user.id) {
           searchResult.add(user.data());
         }
       });
@@ -56,7 +56,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text("No User Found")));
           value.docs.forEach((user) {
-            if (user.data()['id'] != user?.id) {
+            if (user.data()['id'] != user.id) {
               nutzer.add(user.data());
             }
           });
