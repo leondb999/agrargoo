@@ -106,51 +106,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   icon: Icon(Icons.search))
             ],
           ),
-          Expanded(
-              child: ListView.builder(
-            itemCount: nutzer.length,
-            itemBuilder: (context, index) {
-              final color = Color(0xFF9FB98B);
-              bool hasImage = false;
-              if (searchResult[index]['profilImageURL'] != null) {
-                hasImage = true;
-              }
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: hasImage ? Colors.transparent : color,
-                  backgroundImage: hasImage
-                      ? NetworkImage(nutzer[index]['profilImageURL'])
-                      : null,
-                  radius: 20,
-                  child: !hasImage
-                      ? Text(
-                          nutzer[index]['name'].isEmpty
-                              ? ''
-                              : nutzer[index]['name'][0].toUpperCase(),
-                          style: const TextStyle(color: Colors.white),
-                        )
-                      : null,
-                ),
-                title: Text(nutzer[index]['name']),
-                subtitle: Text(nutzer[index]['email']),
-                trailing: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        searchController.text = "";
-                      });
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ChatPageLeon(
-                                  friendId: nutzer[index]['userID'],
-                                  friendName: nutzer[index]['name'],
-                                  friendImage: nutzer[index]
-                                      ['profilImageURL'])));
-                    },
-                    icon: Icon(Icons.message)),
-              );
-            },
-          )),
           if (searchResult.length > 0)
             Expanded(
                 child: ListView.builder(
