@@ -172,39 +172,41 @@ class _AddEditJobanzeigeState extends ConsumerState<AddEditJobanzeige> {
       ///Hof Daten | um eine Jobanzeige zu einem Hof & User zuzuordnen, werden beim laden der Seite automaitsch HofID, UserID in der anzeige gespeichert
       setState(() {
         anzeige.hofID = routeData['hofID'];
-        anzeige.auftraggeberID = userID;
-        anzeige.status = isSwitched;
-        anzeige.stundenLohn = routeData['stundenLohn'];
-        anzeige.beschreibung = routeData['beschreibung'];
-        anzeige.qualifikationList = routeData['qualifikationList'];
-        anzeige.startDate = routeData['startDate'];
-        anzeige.endDate = routeData['endDate'];
-        anzeige.stundenLohn = 10;
-        _currentPrice = routeData['stundenLohn'];
         _hofName = routeData['hofName'];
         _standort = routeData['standort'];
+        anzeige.startDate = routeData['startDate'];
+        anzeige.endDate = routeData['endDate'];
         edit = routeData["edit"];
+        anzeige.auftraggeberID = userID;
+        anzeige.status = isSwitched;
+        anzeige.qualifikationList = routeData['qualifikationList'];
+        if (edit == true) {
+          anzeige.beschreibung = routeData['beschreibung'];
+          anzeige.stundenLohn = routeData['stundenLohn'];
+          _currentPrice = routeData['stundenLohn'];
+        }
+        anzeige.stundenLohn = 10;
       });
       print("anzeige.stundenLohn: ${anzeige.stundenLohn}");
     }).then(
-      (value) => routeData == null
-          ? Future.delayed(Duration.zero, () {})
-          : Future.delayed(
-              Duration.zero,
-              () {
-                beschreibungController.text = routeData["beschreibung"];
-                nameController.text = routeData['titel'];
-                setState(() {
-                  isSwitched = routeData['status'];
-                  checkStatus = routeData['status'];
-                });
+      (value) => Future.delayed(
+        Duration.zero,
+        () {
+          if (edit == true) {
+            beschreibungController.text = routeData["beschreibung"];
+            nameController.text = routeData['titel'];
+            setState(() {
+              isSwitched = routeData['status'];
+              checkStatus = routeData['status'];
+            });
 
-                anzeige.titel = routeData['titel'];
-                anzeige.beschreibung = routeData['beschreibung'];
-                anzeige.status = routeData['status'];
-                anzeige.jobanzeigeID = routeData['jobanzeigeID'];
-              },
-            ),
+            anzeige.titel = routeData['titel'];
+            anzeige.beschreibung = routeData['beschreibung'];
+            anzeige.status = routeData['status'];
+            anzeige.jobanzeigeID = routeData['jobanzeigeID'];
+          }
+        },
+      ),
     );
   }
 
