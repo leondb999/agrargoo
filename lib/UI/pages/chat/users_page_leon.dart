@@ -199,59 +199,70 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
       appBar: appBar(context: context, ref: ref, home: false),
       bottomNavigationBar:
           navigationBar(index: 1, context: context, ref: ref, home: false),
-      body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('users')
-              .doc(user?.uid)
-              .collection('messages')
-              .snapshots(),
-          builder: (context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data.docs.length < 1) {
-                return Center(
-                  child: Text("No Chats Available !"),
-                );
-              }
-              return ListView.builder(
-                  itemCount: snapshot.data.docs.length,
-                  itemBuilder: (context, index) {
-                    var friendId = snapshot.data.docs[index].id;
-                    print("friendID: " + friendId);
-                    var lastMsg = snapshot.data.docs[index]['last_msg'];
-                    return FutureBuilder(
-                      future: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(friendId)
-                          .get(),
-                      builder: (context, AsyncSnapshot asyncSnapshot) {
-                        if (asyncSnapshot.hasData) {
-                          var friend = asyncSnapshot.data;
-                          final color = Color(0xFF9FB98B);
-                          bool hasImage = false;
-                          if (friend['profilImageURL'] != null) {
-                            hasImage = true;
-                          }
-                          return ListTile(
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(80),
-                              child: CircleAvatar(
-                                backgroundColor:
-                                    hasImage ? Colors.transparent : color,
-                                backgroundImage: hasImage
-                                    ? NetworkImage(friend['profilImageURL'])
-                                    : null,
-                                radius: 20,
-                                child: !hasImage
-                                    ? Text(
-                                        friend['name'].isEmpty
-                                            ? ''
-                                            : friend['name'][0].toUpperCase(),
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      )
-                                    : null,
-                              ),
-                              /*
+      body: Column(children: [
+        SizedBox(height: MediaQuery.of(context).size.height / 50),
+        Container(
+          child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: 50),
+              child: Text(
+                  "Verknüpfe dich mit Landwirten und Helfern und gehe neue Arbeitsverhältnisse ein",
+                  style: TextStyle(fontSize: 20, color: Color(0xFFA7BB7B)))),
+        ),
+        SizedBox(height: MediaQuery.of(context).size.height / 50),
+        Expanded(
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(user?.uid)
+                  .collection('messages')
+                  .snapshots(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data.docs.length < 1) {
+                    return Center(
+                      child: Text("Du hast noch keine offenen Chats"),
+                    );
+                  }
+                  return ListView.builder(
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (context, index) {
+                        var friendId = snapshot.data.docs[index].id;
+                        var lastMsg = snapshot.data.docs[index]['last_msg'];
+                        return FutureBuilder(
+                          future: FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(friendId)
+                              .get(),
+                          builder: (context, AsyncSnapshot asyncSnapshot) {
+                            if (asyncSnapshot.hasData) {
+                              var friend = asyncSnapshot.data;
+                              final color = Color(0xFF9FB98B);
+                              bool hasImage = false;
+                              if (friend['profilImageURL'] != null) {
+                                hasImage = true;
+                              }
+                              return ListTile(
+                                leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(80),
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                        hasImage ? Colors.transparent : color,
+                                    backgroundImage: hasImage
+                                        ? NetworkImage(friend['profilImageURL'])
+                                        : null,
+                                    radius: 20,
+                                    child: !hasImage
+                                        ? Text(
+                                            friend['name'].isEmpty
+                                                ? ''
+                                                : friend['name'][0]
+                                                    .toUpperCase(),
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          )
+                                        : null,
+                                  ),
+                                  /*
                               child: CachedNetworkImage(
                                 imageUrl: friend['profilImageURL'],
                                 placeholder: (conteext, url) =>
@@ -263,36 +274,38 @@ class _ChatUsersPageState extends ConsumerState<ChatUsersPage> {
                               ),
 
                                */
-                            ),
-                            title: Text(friend['name']),
-                            subtitle: Container(
-                              child: Text(
-                                "$lastMsg",
-                                style: TextStyle(color: Colors.grey),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ChatPageLeon(
-                                          friendId: friend['userID'],
-                                          friendName: friend['name'],
-                                          friendImage:
-                                              friend['profilImageURL'])));
-                            },
-                          );
-                        }
-                        return LinearProgressIndicator();
-                      },
-                    );
-                  });
-            }
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }),
+                                ),
+                                title: Text(friend['name']),
+                                subtitle: Container(
+                                  child: Text(
+                                    "$lastMsg",
+                                    style: TextStyle(color: Colors.grey),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ChatPageLeon(
+                                              friendId: friend['userID'],
+                                              friendName: friend['name'],
+                                              friendImage:
+                                                  friend['profilImageURL'])));
+                                },
+                              );
+                            }
+                            return LinearProgressIndicator();
+                          },
+                        );
+                      });
+                }
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }),
+        )
+      ]),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Color(0xFFA7BB7B),

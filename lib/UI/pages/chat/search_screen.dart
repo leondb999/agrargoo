@@ -15,6 +15,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController searchController = TextEditingController();
   List<Map> searchResult = [];
+  List<Map> nutzer = [];
   bool isLoading = false;
 
   void onSearch() async {
@@ -42,6 +43,24 @@ class _SearchScreenState extends State<SearchScreen> {
       });
       setState(() {
         isLoading = false;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(microseconds: 10), () async {
+      await FirebaseFirestore.instance.collection('users').get().then((value) {
+        if (value.docs.length < 1) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("No User Found")));
+          value.docs.forEach((user) {
+            if (user.data()['id'] != user?.id) {
+              nutzer.add(user.data());
+            }
+          });
+        }
       });
     });
   }
@@ -87,6 +106,51 @@ class _SearchScreenState extends State<SearchScreen> {
                   icon: Icon(Icons.search))
             ],
           ),
+          Expanded(
+              child: ListView.builder(
+            itemCount: nutzer.length,
+            itemBuilder: (context, index) {
+              final color = Color(0xFF9FB98B);
+              bool hasImage = false;
+              if (searchResult[index]['profilImageURL'] != null) {
+                hasImage = true;
+              }
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: hasImage ? Colors.transparent : color,
+                  backgroundImage: hasImage
+                      ? NetworkImage(nutzer[index]['profilImageURL'])
+                      : null,
+                  radius: 20,
+                  child: !hasImage
+                      ? Text(
+                          nutzer[index]['name'].isEmpty
+                              ? ''
+                              : nutzer[index]['name'][0].toUpperCase(),
+                          style: const TextStyle(color: Colors.white),
+                        )
+                      : null,
+                ),
+                title: Text(nutzer[index]['name']),
+                subtitle: Text(nutzer[index]['email']),
+                trailing: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        searchController.text = "";
+                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChatPageLeon(
+                                  friendId: nutzer[index]['userID'],
+                                  friendName: nutzer[index]['name'],
+                                  friendImage: nutzer[index]
+                                      ['profilImageURL'])));
+                    },
+                    icon: Icon(Icons.message)),
+              );
+            },
+          )),
           if (searchResult.length > 0)
             Expanded(
                 child: ListView.builder(
