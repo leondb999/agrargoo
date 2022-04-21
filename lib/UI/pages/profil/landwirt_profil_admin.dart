@@ -456,8 +456,11 @@ class _LandwirtProfilState extends ConsumerState<LandwirtProfil> {
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold)),
                                 onPressed: () {
-                                  Navigator.of(context)
-                                      .pushNamed(AddHofPage.routename);
+                                  Navigator.of(context).pushNamed(
+                                      AddHofPage.routename,
+                                      arguments: {
+                                        'edit': false,
+                                      });
                                 },
                               ),
                             ],

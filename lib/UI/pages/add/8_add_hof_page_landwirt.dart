@@ -68,20 +68,22 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
           : Future.delayed(
               Duration.zero,
               () {
-                ///Befülle Input Felder
-                nameController.text = routeData['hofName'];
-                standortController.text = routeData['standort'];
+                if (routeData['edit'] == true) {
+                  ///Befülle Input Felder
+                  nameController.text = routeData['hofName'];
+                  standortController.text = routeData['standort'];
 
-                ///Befülle Hofmodel mit Daten aus dem vorherigen Screen (über Route)
-                hofModel.hofID = routeData['hofID'];
-                hofModel.hofName = routeData['hofName'];
-                hofModel.standort = routeData['standort'];
-                hofModel.hofImageURL = routeData['hofImageURL'];
+                  ///Befülle Hofmodel mit Daten aus dem vorherigen Screen (über Route)
+                  hofModel.hofID = routeData['hofID'];
+                  hofModel.hofName = routeData['hofName'];
+                  hofModel.standort = routeData['standort'];
+                  hofModel.hofImageURL = routeData['hofImageURL'];
 
-                setState(() {
-                  uploadedImageURL = routeData['hofImageURL'];
-                  edit = routeData["edit"];
-                });
+                  setState(() {
+                    uploadedImageURL = routeData['hofImageURL'];
+                    edit = routeData["edit"];
+                  });
+                }
               },
             ),
     );
