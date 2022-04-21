@@ -225,8 +225,7 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                           UploadTask task = FirebaseStorage.instance
                               .ref("$profilBeschreibung$fileExtension")
                               .putData(fileBytes);
-                          Reference reference =
-                              storage.ref("$profilBeschreibung$fileExtension");
+
                           task.snapshotEvents.listen((event) {
                             var x = ((event.bytesTransferred.toDouble() /
                                     event.totalBytes.toDouble()) *
@@ -235,6 +234,8 @@ class _AddHofPageState extends ConsumerState<AddHofPage> {
                               progress = x;
                             });
                           });
+                          Reference reference =
+                              storage.ref("$profilBeschreibung$fileExtension");
                           String url = await reference.getDownloadURL();
                           print("  hofModel.hofImageURL : $url");
                           setState(() {
